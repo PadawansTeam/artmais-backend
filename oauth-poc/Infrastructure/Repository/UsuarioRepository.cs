@@ -19,9 +19,11 @@ namespace oauth_poc.Infrastructure.Repository
             var query = from usuario in _context.Usuario
                         where usuario.Email.Equals(email)
                         && usuario.Senha.Equals(senha)
-                        select new Usuario { ID = usuario.ID, Email = usuario.Email, Senha = usuario.Senha };
+                        select new Usuario { ID = usuario.ID, Nome = usuario.Nome, Sobrenome = usuario.Sobrenome,
+                            NomeSocial = usuario.NomeSocial, Email = usuario.Email, Senha = usuario.Senha,
+                            DataCadastro = usuario.DataCadastro };
 
             return query.FirstOrDefault();
-        } 
+        }
     }
 }
