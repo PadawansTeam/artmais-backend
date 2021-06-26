@@ -1,0 +1,14 @@
+obj/
+bin/
+Debug/
+Release/
+TestResults/
+Bin/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.idea/*
+.vs/*
+/aspnet_client/
+/Bin
+*.user
