@@ -26,7 +26,7 @@ namespace oauth_poc.Core.SignIn
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, usuario.NomeSocial),
+                    new Claim(ClaimTypes.Name, usuario.SocialName),
                     new Claim(ClaimTypes.Email, usuario.Email),
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),

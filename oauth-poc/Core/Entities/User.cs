@@ -12,21 +12,21 @@ namespace oauth_poc.Core.Entities
         public int ID { get; set; }
 
         [Column("nome")]
-        public string Nome { get; set; }
+        public string Name { get; set; }
 
         [Column("sobrenome")]
-        public string Sobrenome { get; set; }
+        public string Surname { get; set; }
 
         [Column("nomesocial")]
-        public string NomeSocial { get; set; }
+        public string SocialName { get; set; }
 
         [Column("email")]
         public string Email { get; set; }
 
         [Column("senha")]
-        public string Senha { get; set; }
+        public string Password { get; set; }
 
         [Column("datacadastro")]
-        public DateTime DataCadastro { get; set; }
+        public DateTime RegisterDate { get; set; }
     }
 }

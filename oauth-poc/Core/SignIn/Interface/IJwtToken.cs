@@ -4,6 +4,6 @@ namespace oauth_poc.Core.SignIn.Interface
 {
     public interface IJwtToken
     {
-        public string GenerateToken(Usuario usuario);
+        public string GenerateToken(User usuario);
     }
 }

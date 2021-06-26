@@ -21,7 +21,7 @@ namespace oauth_poc.Util
             var hash = shaM.ComputeHash(Encoding.UTF8.GetBytes($"{convertedSalt}{password}"));
             var convertedHash = Convert.ToBase64String(hash);
 
-            return $"{convertedSalt}/{convertedHash}";
+            return $"{convertedSalt}{convertedHash}";
         }
     }
 }

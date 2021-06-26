@@ -5,14 +5,14 @@ namespace oauth_poc.Core.SignUp
     public class SignUpRequest
     {
         [Required]
-        public string Nome { get; set; }
+        public string Name { get; set; }
         [Required]
-        public string Sobrenome { get; set; }
+        public string Surname { get; set; }
         [Required]
-        public string NomeSocial { get; set; }
+        public string SocialName { get; set; }
         [Required]
         public string Email { get; set; }
         [Required]
-        public string Senha { get; set; }
+        public string Password { get; set; }
     }
 }

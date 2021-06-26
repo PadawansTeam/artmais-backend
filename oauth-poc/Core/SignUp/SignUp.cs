@@ -18,10 +18,10 @@ namespace oauth_poc.Core.SignUp
 
         public string Create(SignUpRequest signUpRequest)
         {
-            signUpRequest.Senha = PasswordUtil.Encrypt(signUpRequest.Senha);
-            var usuario = _usuarioRepository.Create(signUpRequest);
+            signUpRequest.Password = PasswordUtil.Encrypt(signUpRequest.Password);
+            var user = _usuarioRepository.Create(signUpRequest);
 
-            return _jwtToken.GenerateToken(usuario);
+            return _jwtToken.GenerateToken(user);
         }
     }
 }
