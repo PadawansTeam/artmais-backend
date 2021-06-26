@@ -7,13 +7,13 @@ namespace oauth_poc.Core.SignIn
 {
     public class SignIn : ISignIn
     {
-        public SignIn(IUsuarioRepository usuarioRepository, IJwtToken jwtToken)
+        public SignIn(IUserRepository usuarioRepository, IJwtToken jwtToken)
         {
             _usuarioRepository = usuarioRepository;
             _jwtToken = jwtToken;
         }
 
-        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IUserRepository _usuarioRepository;
         private readonly IJwtToken _jwtToken;
 
         public string Authenticate(SigInRequest sigInRequest)

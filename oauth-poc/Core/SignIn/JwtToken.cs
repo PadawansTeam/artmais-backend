@@ -18,7 +18,7 @@ namespace oauth_poc.Core.SignIn
 
         public IConfiguration Configuration { get; }
 
-        public string GenerateToken(Usuario usuario)
+        public string GenerateToken(User usuario)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue("Secret", ""));

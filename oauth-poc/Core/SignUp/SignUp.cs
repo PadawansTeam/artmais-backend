@@ -7,13 +7,13 @@ namespace oauth_poc.Core.SignUp
 {
     public class SignUp : ISignUp
     {
-        public SignUp(IUsuarioRepository usuarioRepository, IJwtToken jwtToken)
+        public SignUp(IUserRepository usuarioRepository, IJwtToken jwtToken)
         {
             _usuarioRepository = usuarioRepository;
             _jwtToken = jwtToken;
         }
 
-        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IUserRepository _usuarioRepository;
         private readonly IJwtToken _jwtToken;
 
         public string Create(SignUpRequest signUpRequest)

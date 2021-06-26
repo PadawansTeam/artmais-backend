@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace oauth_poc.Core.Entities
 {
     [Table("usuario")]
-    public class Usuario
+    public class User
     {
         [Column("id")]
         [Key]

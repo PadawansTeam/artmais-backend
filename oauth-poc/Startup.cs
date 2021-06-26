@@ -59,7 +59,7 @@ namespace oauth_poc
                 options => options.UseNpgsql(Configuration.GetConnectionString("DbContext")));
 
             //Repository
-            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             //SignIn
             services.AddScoped<ISignIn, SignIn>();
