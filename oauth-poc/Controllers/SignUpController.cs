@@ -17,7 +17,7 @@ namespace oauth_poc.Controllers
         private readonly ISignUp _signUp;
 
         [HttpPost]
-        public ActionResult<string> Create(SignUpRequest signUpRequest)
+        public ActionResult<dynamic> Create(SignUpRequest signUpRequest)
         {
             try
             {

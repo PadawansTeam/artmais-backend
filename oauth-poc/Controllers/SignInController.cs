@@ -17,7 +17,7 @@ namespace oauth_poc.Controllers
         private readonly ISignIn _signIn;
 
         [HttpPost]
-        public ActionResult<string> Authenticate(SigInRequest sigInRequest)
+        public ActionResult<dynamic> Authenticate(SigInRequest sigInRequest)
         {
             try
             {
