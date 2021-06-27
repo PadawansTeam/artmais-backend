@@ -18,7 +18,7 @@ namespace oauth_poc.Core.SignIn
 
         public IConfiguration Configuration { get; }
 
-        public dynamic GenerateToken(User usuario)
+        public string GenerateToken(User usuario)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue("Secret", ""));
@@ -33,7 +33,7 @@ namespace oauth_poc.Core.SignIn
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return new { token = tokenHandler.WriteToken(token) };
+            return tokenHandler.WriteToken(token);
         }
     }
 }

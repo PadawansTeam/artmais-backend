@@ -21,7 +21,7 @@ namespace oauth_poc.Controllers
         {
             try
             {
-                return Ok(_signUp.Create(signUpRequest));
+                return Ok(new { token = _signUp.Create(signUpRequest) });
             }
             catch(Exception ex)
             {

@@ -21,9 +21,9 @@ namespace oauth_poc.Controllers
         {
             try
             {
-                return Ok(_signIn.Authenticate(sigInRequest));
+                return Ok(new { token = _signIn.Authenticate(sigInRequest) });
             }
-            catch(Unauthorized ex)
+            catch (Unauthorized ex)
             {
                 return UnprocessableEntity(ex.Message);
             }
