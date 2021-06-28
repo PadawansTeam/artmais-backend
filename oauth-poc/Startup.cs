@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using oauth_poc.Core.SignIn;
@@ -22,14 +21,15 @@ namespace oauth_poc
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var key = Encoding.ASCII.GetBytes(Configuration.GetValue("Secret", ""));
+
+            var key = Encoding.ASCII.GetBytes(this.Configuration.GetValue("Secret", ""));
 
             services.AddAuthentication(x =>
             {
@@ -49,6 +49,16 @@ namespace oauth_poc
             }
             );
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AllowAny",
+                                  builder =>
+                                  {
+                                      builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+                                  });
+            });
+
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -56,7 +66,7 @@ namespace oauth_poc
             });
 
             services.AddDbContext<AuthContext>(
-                options => options.UseNpgsql(Configuration.GetConnectionString("DbContext")));
+                options => options.UseNpgsql(this.Configuration.GetConnectionString("DbContext")));
 
             //Repository
             services.AddScoped<IUserRepository, UserRepository>();
@@ -76,7 +86,7 @@ namespace oauth_poc
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "oauth_poc v1"));
 
             app.UseHttpsRedirection();
-
+            app.UseCors("AllowAny");
             app.UseRouting();
 
             app.UseAuthentication();
