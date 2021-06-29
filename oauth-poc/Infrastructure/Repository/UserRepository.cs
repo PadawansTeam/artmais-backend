@@ -2,6 +2,7 @@
 using oauth_poc.Core.SignUp;
 using oauth_poc.Infrastructure.Data;
 using oauth_poc.Infrastructure.Repository.Interface;
+using System;
 using System.Linq;
 
 namespace oauth_poc.Infrastructure.Repository
@@ -23,7 +24,8 @@ namespace oauth_poc.Infrastructure.Repository
                 Surname = signUpRequest.Surname,
                 SocialName = signUpRequest.SocialName,
                 Email = signUpRequest.Email,
-                Password = signUpRequest.Password
+                Password = signUpRequest.Password,
+                RegisterDate = DateTime.Now
             };
 
             _context.User.Add(usuario);

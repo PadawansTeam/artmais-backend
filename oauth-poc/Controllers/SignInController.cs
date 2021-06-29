@@ -25,7 +25,7 @@ namespace oauth_poc.Controllers
             }
             catch (Unauthorized ex)
             {
-                return UnprocessableEntity(ex.Message);
+                return UnprocessableEntity(new { message = ex.Message });
             }
         }
     }

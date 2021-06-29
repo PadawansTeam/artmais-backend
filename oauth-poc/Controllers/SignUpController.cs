@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using oauth_poc.Core.SignUp;
 using oauth_poc.Core.SignUp.Interface;
-using System;
+using oauth_poc.Exceptions;
 
 namespace oauth_poc.Controllers
 {
@@ -23,9 +23,9 @@ namespace oauth_poc.Controllers
             {
                 return Ok(new { token = _signUp.Create(signUpRequest) });
             }
-            catch(Exception ex)
+            catch(EmailAlreadyInUse ex)
             {
-                return UnprocessableEntity(ex.Message);
+                return UnprocessableEntity(new { message = ex.Message });
             }
         }
     }
