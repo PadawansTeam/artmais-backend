@@ -65,7 +65,7 @@ namespace artmais_backend
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "artmais_backend", Version = "v1" });
             });
 
-            services.AddDbContext<AuthContext>(
+            services.AddDbContext<DbContext>(
                 options => options.UseNpgsql(this.Configuration.GetConnectionString("DbContext")));
 
             //Repository

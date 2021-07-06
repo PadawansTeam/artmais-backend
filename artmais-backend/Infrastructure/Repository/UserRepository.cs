@@ -9,29 +9,27 @@ namespace artmais_backend.Infrastructure.Repository
 {
     public class UserRepository : IUserRepository
     {
-        public UserRepository(AuthContext context)
+        public UserRepository(ArtplusContext context)
         {
             _context = context;
         }
 
-        private readonly AuthContext _context;
+        private readonly ArtplusContext _context;
 
         public User Create(SignUpRequest signUpRequest)
         {
-            var usuario = new User
+            var user = new User
             {
                 Name = signUpRequest.Name,
-                Surname = signUpRequest.Surname,
-                SocialName = signUpRequest.SocialName,
                 Email = signUpRequest.Email,
                 Password = signUpRequest.Password,
                 RegisterDate = DateTime.Now
             };
 
-            _context.User.Add(usuario);
+            _context.User.Add(user);
             _context.SaveChanges();
 
-            return usuario;
+            return user;
         }
 
         public User GetUsuarioByEmail(string email)
@@ -42,8 +40,6 @@ namespace artmais_backend.Infrastructure.Repository
                         {
                             ID = usuario.ID,
                             Name = usuario.Name,
-                            Surname = usuario.Surname,
-                            SocialName = usuario.SocialName,
                             Email = usuario.Email,
                             Password = usuario.Password,
                             RegisterDate = usuario.RegisterDate
