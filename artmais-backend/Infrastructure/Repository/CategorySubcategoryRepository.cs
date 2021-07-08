@@ -1,6 +1,8 @@
 ﻿using artmais_backend.Core.Entities;
+using artmais_backend.Core.SignUp;
 using artmais_backend.Infrastructure.Data;
 using artmais_backend.Infrastructure.Repository.Interface;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace artmais_backend.Infrastructure.Repository
@@ -14,30 +16,50 @@ namespace artmais_backend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public void Create(string otherCategory, string otherSubcategory)
+        public Subcategory Create(string userCategory, string userSubcategory)
         {
-            var categorySubcategory = new CategorySubcategory
-            {
-                Category = new Category { UserCategory = otherCategory, OtherCategory = 1 },
-                Subcategory = new Subcategory { UserSubcategory = otherSubcategory, OtherSubcategory = 1 }
-            };
-
-            _context.CategorySubcategory.Add(categorySubcategory);
+            var category = new Category { UserCategory = userCategory, OtherCategory = 1 };
+            _context.Category.Add(category);
             _context.SaveChanges();
+
+            var subcategory = new Subcategory { UserSubcategory = userSubcategory, OtherSubcategory = 1, CategoryID = category.CategoryID };
+            _context.Subcategory.Add(subcategory);
+            _context.SaveChanges();
+
+            return subcategory;
         }
 
-        public CategorySubcategory GetCategorySubcategory()
+        public IEnumerable<CategorySubcategoryDto> GetCategoryAndSubcategory()
         {
-            var query = from categorysubcategory in _context.CategorySubcategory
-                        where categorysubcategory.Category.OtherCategory.Equals(0)
-                        && categorysubcategory.Subcategory.Equals(0)
-                        select new CategorySubcategory
+            var dtos = new List<CategorySubcategoryDto>();
+
+            var result = (from subcategory in _context.Subcategory
+                          join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+                          where subcategory.OtherSubcategory.Equals(0)
+                          && category.OtherCategory.Equals(0)
+                          select new { Category = category.UserCategory, Subcategory = subcategory.UserSubcategory }).ToList();
+
+            var groupedResults = result.GroupBy(s => s.Category)
+                .Select(s => new CategorySubcategoryDto { Category = s.Key, Subcategory = s.Select(s => s.Subcategory).ToList() });
+
+            foreach (var group in groupedResults)
+            {
+                dtos.Add(group);
+            }
+
+            return dtos;
+        }
+
+        public Subcategory GetSubcategoryBySubcategory(string userSubcategory)
+        {
+            var query = from subcategory in _context.Subcategory
+                        where subcategory.UserSubcategory.Equals(userSubcategory)
+                        select new Subcategory
                         {
-                            ID = categorysubcategory.ID,
-                            CategoryID = categorysubcategory.CategoryID,
-                            Category = categorysubcategory.Category,
-                            SubcategoryID = categorysubcategory.SubcategoryID,
-                            Subcategory = categorysubcategory.Subcategory,
+                            SubcategoryID = subcategory.SubcategoryID,
+                            UserSubcategory = subcategory.UserSubcategory,
+                            OtherSubcategory = subcategory.OtherSubcategory,
+                            CategoryID = subcategory.CategoryID,
                         };
 
             return query.FirstOrDefault();

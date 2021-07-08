@@ -20,9 +20,14 @@ namespace artmais_backend.Infrastructure.Repository
         {
             var user = new User
             {
+                SubcategoryID = signUpRequest.SubcategoryID,
                 Name = signUpRequest.Name,
                 Email = signUpRequest.Email,
                 Password = signUpRequest.Password,
+                Description = signUpRequest.Description,
+                Username = signUpRequest.Username,
+                BirthDate = signUpRequest.BirthDate,
+                Role = signUpRequest.Role,
                 RegisterDate = DateTime.Now
             };
 
@@ -34,15 +39,20 @@ namespace artmais_backend.Infrastructure.Repository
 
         public User GetUsuarioByEmail(string email)
         {
-            var query = from usuario in _context.User
-                        where usuario.Email.Equals(email)
+            var query = from user in _context.User
+                        where user.Email.Equals(email)
                         select new User
                         {
-                            ID = usuario.ID,
-                            Name = usuario.Name,
-                            Email = usuario.Email,
-                            Password = usuario.Password,
-                            RegisterDate = usuario.RegisterDate
+                            UserID = user.UserID,
+                            SubcategoryID = user.SubcategoryID,
+                            Name = user.Name,
+                            Email = user.Email,
+                            Password = user.Password,
+                            Description = user.Description,
+                            Username = user.Username,
+                            BirthDate = user.BirthDate,
+                            Role = user.Role,
+                            RegisterDate = user.RegisterDate
                         };
 
             return query.FirstOrDefault();

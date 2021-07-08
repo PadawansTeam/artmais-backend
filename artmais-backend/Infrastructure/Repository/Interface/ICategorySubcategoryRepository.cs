@@ -1,10 +1,13 @@
 ﻿using artmais_backend.Core.Entities;
+using artmais_backend.Core.SignUp;
+using System.Collections.Generic;
 
 namespace artmais_backend.Infrastructure.Repository.Interface
 {
     public interface ICategorySubcategoryRepository
     {
-        public void Create(string otherCategory, string otherSubcategory);
-        public CategorySubcategory GetCategorySubcategory();
+        public Subcategory Create(string userCategory, string userSubcategory);
+        public IEnumerable<CategorySubcategoryDto> GetCategoryAndSubcategory();
+        public Subcategory GetSubcategoryBySubcategory(string userSubcategory);
     }
 }
