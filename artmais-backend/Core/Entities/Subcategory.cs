@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace artmais_backend.Core.Entities
@@ -9,7 +8,7 @@ namespace artmais_backend.Core.Entities
     {
         [Key]
         [Column("idsubcategoria")]
-        public int ID { get; set; }
+        public int SubcategoryID { get; set; }
 
         [Column("subcategoriausuario")]
         public string UserSubcategory { get; set; }
@@ -17,6 +16,10 @@ namespace artmais_backend.Core.Entities
         [Column("subcategoriaoutro")]
         public int OtherSubcategory { get; set; }
 
-        public IList<CategorySubcategory> CategorySubcategory { get; set; }
+        [Column("idcategoria")]
+        public int CategoryID { get; set; }
+
+        [ForeignKey("CategoryID")]
+        public Category Category { get; set; }
     }
 }

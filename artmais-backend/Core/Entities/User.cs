@@ -9,13 +9,13 @@ namespace artmais_backend.Core.Entities
     {
         [Column("idusuario")]
         [Key]
-        public int ID { get; set; }
+        public int UserID { get; set; }
 
-        [Column("idcategoriasubcategoria")]
-        public int CategorySubcategoryID { get; set; }
+        [Column("idsubcategoria")]
+        public int SubcategoryID { get; set; }
 
-        [ForeignKey("idcategoriasubcategoria")]
-        public CategorySubcategory CategorySubcategory { get; set; }
+        [ForeignKey("SubcategoryID")]
+        public Subcategory Subcategory { get; set; }
 
         [Column("nome")]
         public string Name { get; set; }
@@ -27,13 +27,13 @@ namespace artmais_backend.Core.Entities
         public string Password { get; set; }
 
         [Column("descricao")]
-        public string Descricao { get; set; }
+        public string Description { get; set; }
 
-        [Column("username")]
+        [Column("nomeusuario")]
         public string Username { get; set; }
 
         [Column("datanasc")]
-        public DateTime DataNascimento { get; set; }
+        public DateTime BirthDate { get; set; }
 
         [Column("datacadastro")]
         public DateTime RegisterDate { get; set; }
