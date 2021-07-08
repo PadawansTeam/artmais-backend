@@ -2,6 +2,7 @@
 using artmais_backend.Core.SignUp;
 using artmais_backend.Core.SignUp.Interface;
 using artmais_backend.Exceptions;
+using artmais_backend.Core.Entities;
 
 namespace artmais_backend.Controllers
 {
@@ -15,6 +16,12 @@ namespace artmais_backend.Controllers
         }
 
         private readonly ISignUp _signUp;
+
+        [HttpGet]
+        public ActionResult<CategorySubcategoryDto> Index()
+        {
+            return Ok(_signUp.Index());
+        }
 
         [HttpPost]
         public ActionResult<dynamic> Create(SignUpRequest signUpRequest)
