@@ -29,7 +29,7 @@ namespace artmais_backend.Core.SignIn
                     new Claim(ClaimTypes.NameIdentifier, usuario.UserID.ToString()),
                     new Claim(ClaimTypes.Role, usuario.Role),
                 }),
-                Expires = DateTime.UtcNow.AddHours(2),
+                Expires = DateTime.UtcNow.AddHours(24),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
