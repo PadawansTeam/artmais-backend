@@ -7,18 +7,18 @@ namespace ArtmaisBackend.Core.SignIn
 {
     public class SignIn : ISignIn
     {
-        public SignIn(IUserRepository usuarioRepository, IJwtToken jwtToken)
+        public SignIn(IUserRepository userRepository, IJwtToken jwtToken)
         {
-            _usuarioRepository = usuarioRepository;
+            _userRepository = userRepository;
             _jwtToken = jwtToken;
         }
 
-        private readonly IUserRepository _usuarioRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IJwtToken _jwtToken;
 
         public string Authenticate(SigInRequest sigInRequest)
         {
-            var user = _usuarioRepository.GetUsuarioByEmail(sigInRequest.Email);
+            var user = _userRepository.GetUsuarioByEmail(sigInRequest.Email);
 
             if (user == null)
                 throw new Unauthorized("Usuário e/ou senha inválidos");

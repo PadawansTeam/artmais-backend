@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using System;
+﻿using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -17,7 +16,7 @@ namespace ArtmaisBackend.Util
                 rng.GetBytes(salt);
             }
             var convertedSalt = userSalt != "" ? userSalt : Convert.ToBase64String(salt);
-            
+
             var hash = shaM.ComputeHash(Encoding.UTF8.GetBytes($"{convertedSalt}{password}"));
             var convertedHash = Convert.ToBase64String(hash);
 
