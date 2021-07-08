@@ -1,0 +1,26 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  build:
+    name: Build and run unit tests
+    env:
+      ARTMAIS_TESTS: ./ArtmaisBackend.Tests/ArtmaisBackend.Tests.csproj
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+      - run: dotnet build ${{ env.ARTMAIS_TESTS }}
+
+      - name: Execute Unit Tests
+        run: dotnet test ${{ env.ARTMAIS_TESTS }} --verbosity minimal
