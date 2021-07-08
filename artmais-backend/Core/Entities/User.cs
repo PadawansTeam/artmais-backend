@@ -7,18 +7,18 @@ namespace artmais_backend.Core.Entities
     [Table("usuario")]
     public class User
     {
-        [Column("id")]
+        [Column("idusuario")]
         [Key]
-        public int ID { get; set; }
+        public int UserID { get; set; }
+
+        [Column("idsubcategoria")]
+        public int SubcategoryID { get; set; }
+
+        [ForeignKey("SubcategoryID")]
+        public Subcategory Subcategory { get; set; }
 
         [Column("nome")]
         public string Name { get; set; }
-
-        [Column("sobrenome")]
-        public string Surname { get; set; }
-
-        [Column("nomesocial")]
-        public string SocialName { get; set; }
 
         [Column("email")]
         public string Email { get; set; }
@@ -26,7 +26,19 @@ namespace artmais_backend.Core.Entities
         [Column("senha")]
         public string Password { get; set; }
 
+        [Column("descricao")]
+        public string Description { get; set; }
+
+        [Column("nomeusuario")]
+        public string Username { get; set; }
+
+        [Column("datanasc")]
+        public DateTime BirthDate { get; set; }
+
         [Column("datacadastro")]
         public DateTime RegisterDate { get; set; }
+
+        [Column("role")]
+        public string Role { get; set; }
     }
 }
