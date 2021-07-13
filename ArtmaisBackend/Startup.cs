@@ -14,6 +14,8 @@ using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System.Text;
+using ArtmaisBackend.Core.Profile.Interface;
+using ArtmaisBackend.Core.Profile;
 
 namespace ArtmaisBackend
 {
@@ -75,6 +77,9 @@ namespace ArtmaisBackend
             //SignIn
             services.AddScoped<ISignIn, SignIn>();
             services.AddScoped<IJwtToken, JwtToken>();
+
+            //Profile
+            services.AddScoped<IInterest, Interest>();
 
             //SignUp
             services.AddScoped<ISignUp, SignUp>();
