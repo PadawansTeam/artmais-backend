@@ -28,7 +28,7 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
             };
 
             var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(r => r.GetUsuarioByEmail("joao@gmail.com")).Returns(user);
+            userRepositoryMock.Setup(r => r.GetUserByEmail("joao@gmail.com")).Returns(user);
 
             var jwtTokenMock = new Mock<IJwtToken>();
             jwtTokenMock.Setup(j => j.GenerateToken(user)).Returns("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ");
@@ -48,7 +48,7 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
             };
 
             var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(r => r.GetUsuarioByEmail("joao@gmail.com")).Returns((User)null);
+            userRepositoryMock.Setup(r => r.GetUserByEmail("joao@gmail.com")).Returns((User)null);
 
             var jwtTokenMock = new Mock<IJwtToken>();
 
@@ -75,7 +75,7 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
             };
 
             var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(r => r.GetUsuarioByEmail("joao@gmail.com")).Returns(user);
+            userRepositoryMock.Setup(r => r.GetUserByEmail("joao@gmail.com")).Returns(user);
 
             var jwtTokenMock = new Mock<IJwtToken>();
             jwtTokenMock.Setup(j => j.GenerateToken(user)).Returns("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ");

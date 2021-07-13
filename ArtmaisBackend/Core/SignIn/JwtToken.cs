@@ -35,5 +35,14 @@ namespace ArtmaisBackend.Core.SignIn
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        public UserJwtData ReadToken(ClaimsPrincipal userClaims)
+        {
+            return new UserJwtData
+            {
+                UserID = int.Parse(userClaims.FindFirstValue(ClaimTypes.NameIdentifier)),
+                Role = userClaims.FindFirstValue(ClaimTypes.Role)
+            };
+        }
     }
 }

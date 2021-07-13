@@ -73,13 +73,15 @@ namespace ArtmaisBackend
             //Repository
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICategorySubcategoryRepository, CategorySubcategoryRepository>();
+            services.AddScoped<IInterestRepository, InterestRepository>();
 
             //SignIn
             services.AddScoped<ISignIn, SignIn>();
             services.AddScoped<IJwtToken, JwtToken>();
 
             //Profile
-            services.AddScoped<IInterest, Interest>();
+            services.AddScoped<IInterestMediator, InterestMediator>();
+            services.AddScoped<IRecomendationMediator, RecomendationMediator>();
 
             //SignUp
             services.AddScoped<ISignUp, SignUp>();
