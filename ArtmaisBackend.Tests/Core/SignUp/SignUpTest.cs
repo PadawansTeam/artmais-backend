@@ -73,7 +73,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
             };
 
             var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(r => r.GetUsuarioByEmail("joao@gmail.com")).Returns((User)null);
+            userRepositoryMock.Setup(r => r.GetUserByEmail("joao@gmail.com")).Returns((User)null);
             userRepositoryMock.Setup(r => r.Create(request)).Returns(user);
 
             var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
@@ -112,7 +112,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
             };
 
             var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(r => r.GetUsuarioByEmail("joao@gmail.com")).Returns(user);
+            userRepositoryMock.Setup(r => r.GetUserByEmail("joao@gmail.com")).Returns(user);
 
             var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
 

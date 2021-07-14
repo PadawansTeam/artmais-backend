@@ -1,8 +1,10 @@
 ﻿using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.Profile;
 using ArtmaisBackend.Core.SignUp;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ArtmaisBackend.Infrastructure.Repository
@@ -37,7 +39,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return user;
         }
 
-        public User GetUsuarioByEmail(string email)
+        public User GetUserByEmail(string email)
         {
             var query = from user in _context.User
                         where user.Email.Equals(email)
@@ -56,6 +58,26 @@ namespace ArtmaisBackend.Infrastructure.Repository
                         };
 
             return query.FirstOrDefault();
+        }
+
+        public IEnumerable<RecomendationDto> GetUsersByInterest(int userId)
+        {
+            var results = (from user in _context.User
+                           join interest in _context.Interest on user.SubcategoryID equals interest.SubcategoryID
+                           join subcategory in _context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID
+                           join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+                           where interest.UserID.Equals(userId)
+                           && !user.UserID.Equals(userId)
+                           && subcategory.OtherSubcategory.Equals(0)
+                           select new RecomendationDto
+                           {
+                               Username = user.Username,
+                               UserPicture = user.UserPicture,
+                               Category = category.UserCategory,
+                               Subcategory = subcategory.UserSubcategory
+                           }).ToList();
+
+            return results;
         }
     }
 }

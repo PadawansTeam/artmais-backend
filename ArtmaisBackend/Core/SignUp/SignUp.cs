@@ -27,7 +27,7 @@ namespace ArtmaisBackend.Core.SignUp
 
         public string Create(SignUpRequest signUpRequest)
         {
-            var existentUser = _usuarioRepository.GetUsuarioByEmail(signUpRequest.Email);
+            var existentUser = _usuarioRepository.GetUserByEmail(signUpRequest.Email);
 
             if (existentUser != null)
                 throw new EmailAlreadyInUse("E-mail já utilizado");

@@ -1,4 +1,5 @@
 ﻿using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.Profile;
 using ArtmaisBackend.Core.SignUp;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
@@ -63,6 +64,34 @@ namespace ArtmaisBackend.Infrastructure.Repository
                         };
 
             return query.FirstOrDefault();
+        }
+
+        public IEnumerable<SubcategoryDto> GetSubcategory()
+        {
+            var results = (from subcategory in _context.Subcategory
+                           where subcategory.OtherSubcategory.Equals(0)
+                           select new SubcategoryDto
+                           {
+                               SubcategoryID = subcategory.SubcategoryID,
+                               Subcategory = subcategory.UserSubcategory,
+                           }).ToList();
+
+            return results;
+        }
+
+        public IEnumerable<SubcategoryDto> GetSubcategoryByInterestAndUserId(int userId)
+        {
+            var results = (from subcategory in _context.Subcategory
+                           join interest in _context.Interest on subcategory.SubcategoryID equals interest.SubcategoryID
+                           where subcategory.OtherSubcategory.Equals(0)
+                           && interest.UserID.Equals(userId)
+                           select new SubcategoryDto
+                           {
+                               SubcategoryID = subcategory.SubcategoryID,
+                               Subcategory = subcategory.UserSubcategory,
+                           }).ToList();
+
+            return results;
         }
     }
 }

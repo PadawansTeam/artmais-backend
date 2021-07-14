@@ -18,7 +18,7 @@ namespace ArtmaisBackend.Core.SignIn
 
         public string Authenticate(SigInRequest sigInRequest)
         {
-            var user = _userRepository.GetUsuarioByEmail(sigInRequest.Email);
+            var user = _userRepository.GetUserByEmail(sigInRequest.Email);
 
             if (user == null)
                 throw new Unauthorized("Usuário e/ou senha inválidos");
