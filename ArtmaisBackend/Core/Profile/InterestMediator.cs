@@ -1,8 +1,6 @@
-﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Profile.Interface;
+﻿using ArtmaisBackend.Core.Profile.Interface;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
-using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace ArtmaisBackend.Core.Profile
@@ -20,15 +18,23 @@ namespace ArtmaisBackend.Core.Profile
         private readonly IInterestRepository _interestRepository;
         private readonly IJwtToken _jwtToken;
 
-        public IEnumerable<SubcategoryDto> Index()
-        {
-            return _categorySubcategoryRepository.GetSubcategory();
-        }
-
-        public IEnumerable<Interest> Create(InterestRequest interestRequest, ClaimsPrincipal userClaims)
+        public InterestDto Index(ClaimsPrincipal userClaims)
         {
             var userJwtData = _jwtToken.ReadToken(userClaims);
-            return _interestRepository.Create(interestRequest, userJwtData.UserID);
+
+            var dto = new InterestDto
+            {
+                Interests = _categorySubcategoryRepository.GetSubcategoryByInterestAndUserId(userJwtData.UserID),
+                Subcategories = _categorySubcategoryRepository.GetSubcategory()
+            };
+
+            return dto;
+        }
+
+        public dynamic Create(InterestRequest interestRequest, ClaimsPrincipal userClaims)
+        {
+            var userJwtData = _jwtToken.ReadToken(userClaims);
+            return _interestRepository.DeleteAllAndCreateAll(interestRequest, userJwtData.UserID);
         }
     }
 }

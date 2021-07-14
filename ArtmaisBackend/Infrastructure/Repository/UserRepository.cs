@@ -60,7 +60,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<RecomendationDto> GetUsersByInterest(int userId, int otherCategorySubcategory = 0)
+        public IEnumerable<RecomendationDto> GetUsersByInterest(int userId)
         {
             var results = (from user in _context.User
                            join interest in _context.Interest on user.SubcategoryID equals interest.SubcategoryID
@@ -68,7 +68,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                            join category in _context.Category on subcategory.CategoryID equals category.CategoryID
                            where interest.UserID.Equals(userId)
                            && !user.UserID.Equals(userId)
-                           && subcategory.OtherSubcategory.Equals(otherCategorySubcategory)
+                           && subcategory.OtherSubcategory.Equals(0)
                            select new RecomendationDto
                            {
                                Username = user.Username,

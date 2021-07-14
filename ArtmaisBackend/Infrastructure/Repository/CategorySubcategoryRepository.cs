@@ -68,26 +68,30 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public IEnumerable<SubcategoryDto> GetSubcategory()
         {
-            var dtos = new List<SubcategoryDto>();
-
             var results = (from subcategory in _context.Subcategory
-                          where subcategory.OtherSubcategory.Equals(0)
-                          select new Subcategory
-                          {
-                              SubcategoryID = subcategory.SubcategoryID,
-                              UserSubcategory = subcategory.UserSubcategory,
-                          }).ToList();
+                           where subcategory.OtherSubcategory.Equals(0)
+                           select new SubcategoryDto
+                           {
+                               SubcategoryID = subcategory.SubcategoryID,
+                               Subcategory = subcategory.UserSubcategory,
+                           }).ToList();
 
-            foreach(var result in results)
-            {
-                dtos.Add(new SubcategoryDto
-                {
-                    SubcategoryID = result.SubcategoryID,
-                    Subcategory = result.UserSubcategory
-                });
-            }
+            return results;
+        }
 
-            return dtos;
+        public IEnumerable<SubcategoryDto> GetSubcategoryByInterestAndUserId(int userId)
+        {
+            var results = (from subcategory in _context.Subcategory
+                           join interest in _context.Interest on subcategory.SubcategoryID equals interest.SubcategoryID
+                           where subcategory.OtherSubcategory.Equals(0)
+                           && interest.UserID.Equals(userId)
+                           select new SubcategoryDto
+                           {
+                               SubcategoryID = subcategory.SubcategoryID,
+                               Subcategory = subcategory.UserSubcategory,
+                           }).ToList();
+
+            return results;
         }
     }
 }

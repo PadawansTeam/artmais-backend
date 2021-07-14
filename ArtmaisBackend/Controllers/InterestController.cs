@@ -2,7 +2,6 @@
 using ArtmaisBackend.Core.Profile;
 using ArtmaisBackend.Core.Profile.Interface;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 
 namespace ArtmaisBackend.Controllers
@@ -19,13 +18,20 @@ namespace ArtmaisBackend.Controllers
         private readonly IInterestMediator _interest;
 
         [HttpGet]
-        public ActionResult<IEnumerable<SubcategoryDto>> Index()
+        public ActionResult<InterestDto> Index()
         {
-            return Ok(_interest.Index());
+            try
+            {
+                return Ok(_interest.Index(User));
+            }
+            catch
+            {
+                return Forbid();
+            }
         }
 
         [HttpPost]
-        public ActionResult<IEnumerable<Interest>> Create([FromBody] InterestRequest interestRequest)
+        public ActionResult<dynamic> Create([FromBody] InterestRequest interestRequest)
         {
             try
             {
@@ -34,7 +40,7 @@ namespace ArtmaisBackend.Controllers
             catch
             {
                 return Forbid();
-            }         
+            }
         }
     }
 }
