@@ -16,6 +16,7 @@ namespace ArtmaisBackend.Controllers
 
         private readonly IRecomendationMediator _recomendationMediator;
 
+        [HttpGet]
         public ActionResult<IEnumerable<RecomendationDto>> Index()
         {
             try
