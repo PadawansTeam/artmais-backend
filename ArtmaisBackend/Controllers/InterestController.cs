@@ -1,8 +1,6 @@
-﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Profile;
+﻿using ArtmaisBackend.Core.Profile;
 using ArtmaisBackend.Core.Profile.Interface;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 namespace ArtmaisBackend.Controllers
 {
@@ -31,7 +29,7 @@ namespace ArtmaisBackend.Controllers
         }
 
         [HttpPost]
-        public ActionResult<dynamic> Create([FromBody] InterestRequest interestRequest)
+        public ActionResult<dynamic> Create(InterestRequest interestRequest)
         {
             try
             {
