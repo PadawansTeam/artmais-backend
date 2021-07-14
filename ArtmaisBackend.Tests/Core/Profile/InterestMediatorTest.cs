@@ -1,5 +1,4 @@
-﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Profile;
+﻿using ArtmaisBackend.Core.Profile;
 using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
