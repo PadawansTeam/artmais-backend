@@ -1,4 +1,6 @@
 ﻿using ArtmaisBackend.Core.Profile;
+using ArtmaisBackend.Core.Profile.Dto;
+using ArtmaisBackend.Core.Profile.Mediator;
 using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;

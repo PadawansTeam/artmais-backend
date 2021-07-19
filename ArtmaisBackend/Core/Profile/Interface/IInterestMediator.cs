@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using ArtmaisBackend.Core.Profile.Dto;
+using System.Security.Claims;
 
 namespace ArtmaisBackend.Core.Profile.Interface
 {

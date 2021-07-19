@@ -1,9 +1,10 @@
-﻿using ArtmaisBackend.Core.Profile.Interface;
+﻿using ArtmaisBackend.Core.Profile.Dto;
+using ArtmaisBackend.Core.Profile.Interface;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System.Security.Claims;
 
-namespace ArtmaisBackend.Core.Profile
+namespace ArtmaisBackend.Core.Profile.Mediator
 {
     public class InterestMediator : IInterestMediator
     {

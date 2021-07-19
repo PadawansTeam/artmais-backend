@@ -10,6 +10,7 @@ namespace ArtmaisBackend.Infrastructure.Data
         public DbSet<Category> Category { get; set; }
         public DbSet<Subcategory> Subcategory { get; set; }
         public DbSet<Interest> Interest { get; set; }
+        public DbSet<Contact> Contact { get; set; }
     }
 }
 

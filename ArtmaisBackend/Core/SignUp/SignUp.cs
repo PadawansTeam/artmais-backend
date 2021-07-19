@@ -1,4 +1,5 @@
 ﻿using ArtmaisBackend.Core.SignIn.Interface;
+using ArtmaisBackend.Core.SignUp.Dto;
 using ArtmaisBackend.Core.SignUp.Interface;
 using ArtmaisBackend.Exceptions;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
@@ -30,7 +31,7 @@ namespace ArtmaisBackend.Core.SignUp
             var existentUser = _usuarioRepository.GetUserByEmail(signUpRequest.Email);
 
             if (existentUser != null)
-                throw new EmailAlreadyInUse("E-mail já utilizado");
+                throw new EmailAlreadyInUse("E-mail já utilizado.");
 
             var existentSubcategory = _categorySubcategoryRepository
                 .GetSubcategoryBySubcategory(signUpRequest.Subcategory);

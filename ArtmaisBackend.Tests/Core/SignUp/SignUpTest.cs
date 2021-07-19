@@ -1,6 +1,7 @@
 ﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Core.SignUp;
+using ArtmaisBackend.Core.SignUp.Dto;
 using ArtmaisBackend.Exceptions;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Moq;

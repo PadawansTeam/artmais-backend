@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ArtmaisBackend.Core.SignUp.Dto;
+using System.Collections.Generic;
 
 namespace ArtmaisBackend.Core.SignUp.Interface
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ArtmaisBackend.Core.Profile
+namespace ArtmaisBackend.Core.Profile.Dto
 {
     public class InterestDto
     {

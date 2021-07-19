@@ -8,14 +8,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Interface;
-using ArtmaisBackend.Core.SignUp;
 using ArtmaisBackend.Core.SignUp.Interface;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System.Text;
 using ArtmaisBackend.Core.Profile.Interface;
-using ArtmaisBackend.Core.Profile;
+using ArtmaisBackend.Core.Profile.Mediator;
+using ArtmaisBackend.Core.SignUp;
 
 namespace ArtmaisBackend
 {

@@ -7,8 +7,8 @@ namespace ArtmaisBackend.Core.Entities
     [Table("usuario")]
     public class User
     {
-        [Column("idusuario")]
         [Key]
+        [Column("idusuario")]
         public int UserID { get; set; }
 
         [Column("idsubcategoria")]

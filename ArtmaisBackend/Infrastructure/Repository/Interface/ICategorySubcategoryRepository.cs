@@ -1,6 +1,6 @@
 ﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Profile;
-using ArtmaisBackend.Core.SignUp;
+using ArtmaisBackend.Core.Profile.Dto;
+using ArtmaisBackend.Core.SignUp.Dto;
 using System.Collections.Generic;
 
 namespace ArtmaisBackend.Infrastructure.Repository.Interface

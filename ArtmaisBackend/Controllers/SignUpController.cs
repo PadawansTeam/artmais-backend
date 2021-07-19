@@ -3,6 +3,7 @@ using ArtmaisBackend.Core.SignUp;
 using ArtmaisBackend.Core.SignUp.Interface;
 using ArtmaisBackend.Exceptions;
 using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.SignUp.Dto;
 
 namespace ArtmaisBackend.Controllers
 {
