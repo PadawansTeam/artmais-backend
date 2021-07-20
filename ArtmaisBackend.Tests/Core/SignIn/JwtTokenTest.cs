@@ -1,5 +1,6 @@
 ﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.SignIn;
+using ArtmaisBackend.Core.SignIn.Service;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
                 .AddInMemoryCollection(inMemorySettings)
                 .Build();
 
-            var jwtToken = new JwtToken(configuration);
+            var jwtToken = new JwtTokenService(configuration);
 
             Assert.NotNull(jwtToken.GenerateToken(user));
         }
@@ -56,7 +57,7 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
                 .AddInMemoryCollection(inMemorySettings)
                 .Build();
 
-            var jwtToken = new JwtToken(configuration);
+            var jwtToken = new JwtTokenService(configuration);
             var token = jwtToken.GenerateToken(user);
 
             var validations = new TokenValidationParameters

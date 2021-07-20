@@ -3,11 +3,11 @@ using ArtmaisBackend.Exceptions;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using ArtmaisBackend.Util;
 
-namespace ArtmaisBackend.Core.SignIn
+namespace ArtmaisBackend.Core.SignIn.Service
 {
-    public class SignIn : ISignIn
+    public class SignInService : ISignIn
     {
-        public SignIn(IUserRepository userRepository, IJwtToken jwtToken)
+        public SignInService(IUserRepository userRepository, IJwtToken jwtToken)
         {
             _userRepository = userRepository;
             _jwtToken = jwtToken;

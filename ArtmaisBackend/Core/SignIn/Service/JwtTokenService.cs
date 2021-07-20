@@ -7,11 +7,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace ArtmaisBackend.Core.SignIn
+namespace ArtmaisBackend.Core.SignIn.Service
 {
-    public class JwtToken : IJwtToken
+    public class JwtTokenService : IJwtToken
     {
-        public JwtToken(IConfiguration configuration)
+        public JwtTokenService(IConfiguration configuration)
         {
             Configuration = configuration;
         }

@@ -1,9 +1,9 @@
 using ArtmaisBackend.Core.Profile.Interface;
 using ArtmaisBackend.Core.Profile.Mediator;
-using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Interface;
-using ArtmaisBackend.Core.SignUp;
+using ArtmaisBackend.Core.SignIn.Service;
 using ArtmaisBackend.Core.SignUp.Interface;
+using ArtmaisBackend.Core.SignUp.Service;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository;
@@ -80,15 +80,15 @@ namespace ArtmaisBackend
             services.AddScoped<IInterestRepository, InterestRepository>();
 
             //SignIn
-            services.AddScoped<ISignIn, SignIn>();
-            services.AddScoped<IJwtToken, JwtToken>();
+            services.AddScoped<ISignIn, SignInService>();
+            services.AddScoped<IJwtToken, JwtTokenService>();
 
             //Profile
             services.AddScoped<IInterestMediator, InterestMediator>();
             services.AddScoped<IRecomendationMediator, RecomendationMediator>();
 
             //SignUp
-            services.AddScoped<ISignUp, SignUp>();
+            services.AddScoped<ISignUp, SignUpService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
