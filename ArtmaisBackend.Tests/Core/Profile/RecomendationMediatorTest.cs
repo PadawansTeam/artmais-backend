@@ -19,6 +19,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
                 {
                     Username = "Joao",
                     UserPicture = "",
+                    BackgroundPicture = "",
                     Category = "Tatuador(a)",
                     Subcategory = "Aquarela"
                 },
@@ -26,6 +27,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
                 {
                     Username = "Gabriela",
                     UserPicture = "",
+                    BackgroundPicture = "",
                     Category = "Tatuador(a)",
                     Subcategory = "Black Work"
                 }
