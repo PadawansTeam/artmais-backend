@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ArtmaisBackend.Core.SignUp;
+﻿using ArtmaisBackend.Core.SignUp;
 using ArtmaisBackend.Core.SignUp.Interface;
 using ArtmaisBackend.Exceptions;
-using ArtmaisBackend.Core.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ArtmaisBackend.Controllers
 {
@@ -30,7 +29,11 @@ namespace ArtmaisBackend.Controllers
             {
                 return Ok(new { token = _signUp.Create(signUpRequest) });
             }
-            catch(EmailAlreadyInUse ex)
+            catch (EmailAlreadyInUse ex)
+            {
+                return UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (UsernameAlreadyInUse ex)
             {
                 return UnprocessableEntity(new { message = ex.Message });
             }

@@ -80,5 +80,26 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
             return results;
         }
+
+        public User GetUserByUsername(string username)
+        {
+            var query = from user in _context.User
+                        where user.Username.Equals(username)
+                        select new User
+                        {
+                            UserID = user.UserID,
+                            SubcategoryID = user.SubcategoryID,
+                            Name = user.Name,
+                            Email = user.Email,
+                            Password = user.Password,
+                            Description = user.Description,
+                            Username = user.Username,
+                            BirthDate = user.BirthDate,
+                            Role = user.Role,
+                            RegisterDate = user.RegisterDate
+                        };
+
+            return query.FirstOrDefault();
+        }
     }
 }
