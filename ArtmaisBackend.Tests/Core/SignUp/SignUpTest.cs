@@ -14,7 +14,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
 {
     public class SignUpTest
     {
-        [Fact]
+        [Fact(DisplayName = "Should be validate GetCategoryAndSubcategory method returns a list of category subcategory")]
         public void IndexReturnsCategorySubcategoryDto()
         {
             var categorySubcategory = new List<CategorySubcategoryDto>
@@ -44,7 +44,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
             Assert.IsAssignableFrom<IEnumerable<CategorySubcategoryDto>>(result);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Shouldn't be null when user is create")]
         public void CreateReturnsToken()
         {
             var request = new SignUpRequest
@@ -89,7 +89,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
             Assert.NotNull(signup.Create(request));
         }
 
-        [Fact]
+        [Fact(DisplayName = "Should be throw when email already exist")]
         public void CreateThrowsEmailAlreadyInUse()
         {
             var request = new SignUpRequest

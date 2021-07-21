@@ -28,6 +28,7 @@ namespace ArtmaisBackend.Core.SignIn.Service
                 {
                     new Claim(ClaimTypes.NameIdentifier, usuario.UserID.ToString()),
                     new Claim(ClaimTypes.Role, usuario.Role),
+                    new Claim(ClaimTypes.Name, usuario.Username),
                 }),
                 Expires = DateTime.UtcNow.AddHours(24),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -41,7 +42,8 @@ namespace ArtmaisBackend.Core.SignIn.Service
             return new UserJwtData
             {
                 UserID = int.Parse(userClaims.FindFirstValue(ClaimTypes.NameIdentifier)),
-                Role = userClaims.FindFirstValue(ClaimTypes.Role)
+                Role = userClaims.FindFirstValue(ClaimTypes.Role),
+                UserName = userClaims.FindFirstValue(ClaimTypes.Name)
             };
         }
     }

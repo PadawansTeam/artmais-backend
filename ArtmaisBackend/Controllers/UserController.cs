@@ -22,7 +22,7 @@ namespace ArtmaisBackend.Controllers
         public ActionResult<ShareLinkDto> GetUserById()
         {
             var user = this._jwtToken.ReadToken(this.User);
-            var result = this._userService.GetShareLinkAsync(user.UserID);
+            var result = this._userService.GetShareLinkAsync(user.UserID, user.UserName);
             return this.Ok(result);
         }
     }

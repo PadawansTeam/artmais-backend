@@ -5,6 +5,6 @@ namespace ArtmaisBackend.Core.Users.Interface
 {
     public interface IUserService
     {
-        Task<ShareLinkDto> GetShareLinkAsync(int userId);
+        Task<ShareLinkDto> GetShareLinkAsync(int userId, string userName);
     }
 }

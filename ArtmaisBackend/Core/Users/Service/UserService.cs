@@ -1,8 +1,10 @@
 ﻿using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
+using ArtmaisBackend.Infrastructure;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Microsoft.Extensions.Options;
+using System;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Users.Service
@@ -19,19 +21,26 @@ namespace ArtmaisBackend.Core.Users.Service
         private readonly IContactRepository _contactRepository;
         private readonly SocialMediaConfiguration _socialMediaConfiguration;
 
-        public async Task<ShareLinkDto> GetShareLinkAsync(int userId)
+        public async Task<ShareLinkDto> GetShareLinkAsync(int userId, string userName)
         {
-            var contact = await this._contactRepository.GetContactByUserAsync(userId);
-            var shareLinkDto = new ShareLinkDto
+            try
             {
-                Facebook = $"{_socialMediaConfiguration.Facebook}/dsadhsaudha{contact.Facebook}",
-                Twitter = $"{_socialMediaConfiguration.Twitter}/dsadhsaudha{contact.Twitter}",
-                MainPhone = $"{_socialMediaConfiguration.Whatsapp}/dsadhsaudha{contact.MainPhone}",
-                SecundaryPhone = $"{_socialMediaConfiguration.Whatsapp}/dsadhsaudha{contact.SecundaryPhone}",
-                ThirdPhone = $"{_socialMediaConfiguration.Whatsapp}/dsadhsaudha{contact.ThirdPhone}"
-            };
+                var contact = await this._contactRepository.GetContactByUserAsync(userId);
+                var shareLinkDto = new ShareLinkDto
+                {
+                    Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{userName}{ShareLinkMessages.MessageShareLink}",
+                    Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{userName}{ShareLinkMessages.MessageShareLink}",
+                    Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}{this._socialMediaConfiguration.ArtMais}{userName}{ShareLinkMessages.MessageShareLink}",
+                    WhatsappContact = $"{this._socialMediaConfiguration.Whatsapp}?phone={contact?.MainPhone}{this._socialMediaConfiguration.ArtMais}/{userName}{ShareLinkMessages.MessageComunication}",
+                    Instagram = ""
+                };
 
-            return shareLinkDto;
+                return shareLinkDto;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }

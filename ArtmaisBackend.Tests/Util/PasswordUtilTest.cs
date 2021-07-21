@@ -5,7 +5,7 @@ namespace ArtmaisBackend.Tests.Util
 {
     public class PasswordUtilTest
     {
-        [Fact]
+        [Fact(DisplayName = "Shoud be validated hashed password using the encryption method")]
         public void EncryptReturnsHash()
         {
             var result = PasswordUtil.Encrypt("123456789", "05ZqadUMOvuD8CAL+jffYg==");
