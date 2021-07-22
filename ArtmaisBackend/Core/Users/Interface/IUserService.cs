@@ -5,10 +5,10 @@ namespace ArtmaisBackend.Core.Users.Interface
 {
     public interface IUserService
     {
-        ShareLinkDto GetShareLink(UserRequest usernameRequest, string userName);
+        ShareLinkDto GetShareLink(UserRequest userId, int userIdProfile);
 
-        ShareProfileBaseDto GetShareProfile(UserRequest usernameRequest);
+        ShareProfileBaseDto GetShareProfile(UserRequest userId);
 
-        UserDto GetUserInfoById(int id);
+        UserDto GetUserInfoById(int? id);
     }
 }

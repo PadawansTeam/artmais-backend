@@ -1,7 +1,10 @@
-﻿namespace ArtmaisBackend.Core.Users.Request
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace ArtmaisBackend.Core.Users.Request
 {
     public class UserRequest
     {
-        public string Username { get; set; }
+        [FromQuery(Name = "Id")]
+        public int? Id { get; set; }
     }
 }

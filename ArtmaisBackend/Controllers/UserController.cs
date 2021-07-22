@@ -25,22 +25,32 @@ namespace ArtmaisBackend.Controllers
         {
             var user = this._jwtToken.ReadToken(this.User);
             var result = this._userService.GetUserInfoById(user.UserID);
-            return this.Ok(result);
+
+            if (result == null) 
+                return this.UnprocessableEntity();
+            else
+                return this.Ok(result);
         }
 
         [HttpGet("ShareLink")]
-        public ActionResult<ShareLinkDto> GetUserByIdToShareLink([FromQuery] UserRequest userRequest)
+        public ActionResult<ShareLinkDto> GetUserByIdToShareLink([FromQuery] UserRequest id)
         {
             var user = this._jwtToken.ReadToken(this.User);
-            var result = this._userService.GetShareLink(userRequest, user.UserName);
-            return this.Ok(result);
+            var result = this._userService.GetShareLink(id, user.UserID);
+            if (result == null)
+                return this.UnprocessableEntity();
+            else
+                return this.Ok(result);
         }
 
         [HttpGet("ShareProfile")]
-        public ActionResult<ShareProfileBaseDto> GetUserByIdToShareProfile([FromQuery] UserRequest userRequest)
+        public ActionResult<ShareProfileBaseDto> GetUserByIdToShareProfile([FromQuery] UserRequest id)
         {
-            var result = this._userService.GetShareProfile(userRequest);
-            return this.Ok(result);
+            var result = this._userService.GetShareProfile(id);
+            if (result == null)
+                return this.UnprocessableEntity();
+            else
+                return this.Ok(result);
         }
     }
 }

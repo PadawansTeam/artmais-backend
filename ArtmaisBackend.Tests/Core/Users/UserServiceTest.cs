@@ -8,7 +8,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
 using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ArtmaisBackend.Tests.Core.Users
@@ -20,7 +19,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         {
             var request = new UserRequest
             {
-                Username = "userName"
+                Id = 3
             };
 
             var mockContactRepository = new Mock<IContactRepository>();
@@ -28,7 +27,10 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserByUsername((It.IsAny<string>()))).Returns(new User { });
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User 
+            { 
+                Username = "userName"
+            });
 
             mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact { });
 
@@ -42,10 +44,10 @@ namespace ArtmaisBackend.Tests.Core.Users
             }
             );
 
-            var userNameProfile = "userName";
+            var userIdProfile = 3;
             var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
-            var result = userService.GetShareLink(request, userNameProfile);
+            var result = userService.GetShareLink(request, userIdProfile);
 
             result.Twitter.Should().BeEquivalentTo("https://twitter.com/intent/tweet?text=https://artmais-frontend.herokuapp.com/userName%20Este%20é%20meu%20perfil%20na%20Plataforma%20Art%2B,%20visiti-o%20para%20conhecer%20o%20meu%20trabalho.");
             result.Facebook.Should().BeEquivalentTo("https://www.facebook.com/sharer/sharer.php?u=https://artmais-frontend.herokuapp.com/userName%20Este%20é%20meu%20perfil%20na%20Plataforma%20Art%2B,%20visiti-o%20para%20conhecer%20o%20meu%20trabalho.");
@@ -59,7 +61,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         {
             var request = new UserRequest
             {
-                Username = "userName"
+                Id = 3
             };
 
             var mockContactRepository = new Mock<IContactRepository>();
@@ -67,7 +69,11 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserByUsername((It.IsAny<string>()))).Returns(new User { });
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User 
+            { 
+                Username = "userNameProfile"
+            });
+
 
             mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact
             {
@@ -83,10 +89,10 @@ namespace ArtmaisBackend.Tests.Core.Users
             }
             );
 
-            var userNameProfile = "userNameProfile";
+            var userIdProfile = 2;
             var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
-            var result = userService.GetShareLink(request, userNameProfile);
+            var result = userService.GetShareLink(request, userIdProfile);
 
             result.Twitter.Should().BeEquivalentTo("https://twitter.com/intent/tweet?text=https://artmais-frontend.herokuapp.com/userNameProfile%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
             result.Facebook.Should().BeEquivalentTo("https://www.facebook.com/sharer/sharer.php?u=https://artmais-frontend.herokuapp.com/userNameProfile%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
@@ -105,7 +111,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserByUsername((It.IsAny<string>()))).Returns(new User { });
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User { });
 
             mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact { });
 
@@ -122,7 +128,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         {
             var request = new UserRequest
             {
-                Username = "Username"
+                Id = 3
             };
 
             var mockContactRepository = new Mock<IContactRepository>();
@@ -130,7 +136,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserByUsername((It.IsAny<string>()))).Returns(new User { });
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User { });
 
             mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact
             {
