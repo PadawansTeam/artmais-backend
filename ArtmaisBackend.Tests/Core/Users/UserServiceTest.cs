@@ -3,6 +3,7 @@ using ArtmaisBackend.Core.Users.Request;
 using ArtmaisBackend.Core.Users.Service;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -25,6 +26,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserByUsername((It.IsAny<string>()))).Returns(new User { });
 
@@ -41,7 +43,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             );
 
             var userNameProfile = "userName";
-            var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object);
+            var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
             var result = userService.GetShareLink(request, userNameProfile);
 
@@ -63,6 +65,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserByUsername((It.IsAny<string>()))).Returns(new User { });
 
@@ -81,7 +84,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             );
 
             var userNameProfile = "userNameProfile";
-            var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object);
+            var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
             var result = userService.GetShareLink(request, userNameProfile);
 
@@ -100,6 +103,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserByUsername((It.IsAny<string>()))).Returns(new User { });
 
@@ -107,7 +111,7 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object);
+            var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
             Action act = () => userService.GetShareProfile(request);
             act.Should().Throw<ArgumentNullException>();
@@ -124,6 +128,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserByUsername((It.IsAny<string>()))).Returns(new User { });
 
@@ -142,7 +147,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             }
             );
 
-            var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object);
+            var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
             var result = userService.GetShareProfile(request);
 
@@ -159,6 +164,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserByUsername((It.IsAny<string>()))).Returns(new User { });
 
@@ -166,7 +172,7 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object);
+            var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
             Action act = () => userService.GetShareProfile(request);
             act.Should().Throw<ArgumentNullException>();

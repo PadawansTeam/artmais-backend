@@ -158,7 +158,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
 
             var jwtTokenMock = new Mock<IJwtToken>();
 
-            var signup = new SignUp(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
+            var signup = new SignUpService(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
 
             Assert.Throws<UsernameAlreadyInUse>(() => signup.Create(request));
         }
