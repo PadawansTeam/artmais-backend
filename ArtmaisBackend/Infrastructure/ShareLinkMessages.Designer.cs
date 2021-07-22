@@ -81,9 +81,9 @@ namespace ArtmaisBackend.Infrastructure {
         /// <summary>
         ///   Looks up a localized string similar to %20Este%20é%20meu%20perfil%20na%20Plataforma%20Art%2B,%20visiti-o%20para%20conhecer%20o%20meu%20trabalho..
         /// </summary>
-        public static string MessageSharePerfil {
+        public static string MessageShareProfile {
             get {
-                return ResourceManager.GetString("MessageSharePerfil", resourceCulture);
+                return ResourceManager.GetString("MessageShareProfile", resourceCulture);
             }
         }
     }

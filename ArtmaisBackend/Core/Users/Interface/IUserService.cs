@@ -7,6 +7,6 @@ namespace ArtmaisBackend.Core.Users.Interface
     {
         ShareLinkDto GetShareLink(UsernameRequest usernameRequest, string userName);
 
-        SharePerfilBaseDto GetShareProfile(UsernameRequest usernameRequest);
+        ShareProfileBaseDto GetShareProfile(UsernameRequest usernameRequest);
     }
 }

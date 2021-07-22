@@ -28,7 +28,7 @@ namespace ArtmaisBackend.Controllers
         }
 
         [HttpGet]
-        public ActionResult<ShareLinkDto> GetUserByIdToSharePerfil(UsernameRequest usernameRequest)
+        public ActionResult<ShareLinkDto> GetUserByIdToShareProfile(UsernameRequest usernameRequest)
         {
             var result = this._userService.GetShareProfile(usernameRequest);
             return this.Ok(result);

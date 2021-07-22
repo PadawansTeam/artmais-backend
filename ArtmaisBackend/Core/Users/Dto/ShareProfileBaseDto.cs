@@ -1,6 +1,6 @@
 ﻿namespace ArtmaisBackend.Core.Users.Dto
 {
-    public class SharePerfilBaseDto
+    public class ShareProfileBaseDto
     {
         public string? Facebook { get; set; }
         public string? Instagram { get; set; }

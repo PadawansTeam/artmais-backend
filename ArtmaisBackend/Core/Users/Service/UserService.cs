@@ -23,7 +23,7 @@ namespace ArtmaisBackend.Core.Users.Service
         private readonly SocialMediaConfiguration _socialMediaConfiguration;
         private readonly IUserRepository _userRepository;
 
-        public ShareLinkDto GetShareLink(UsernameRequest usernameRequest, string userNamePerfil)
+        public ShareLinkDto GetShareLink(UsernameRequest usernameRequest, string userNameProfile)
         {
             if (string.IsNullOrEmpty(usernameRequest.Username)) throw new ArgumentNullException();
 
@@ -33,13 +33,13 @@ namespace ArtmaisBackend.Core.Users.Service
             var contact = this._contactRepository.GetContactByUser(user.UserID);
             if (contact is null) throw new ArgumentNullException();
 
-            if (userNamePerfil.Equals(usernameRequest.Username))
+            if (userNameProfile.Equals(usernameRequest.Username))
             {
                 var shareLinkDto = new ShareLinkDto
                 {
-                    Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{usernameRequest.Username}{ShareLinkMessages.MessageSharePerfil}",
-                    Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{usernameRequest.Username}{ShareLinkMessages.MessageSharePerfil}",
-                    Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}text={this._socialMediaConfiguration.ArtMais}{usernameRequest.Username}{ShareLinkMessages.MessageSharePerfil}"
+                    Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{usernameRequest.Username}{ShareLinkMessages.MessageShareProfile}",
+                    Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{usernameRequest.Username}{ShareLinkMessages.MessageShareProfile}",
+                    Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}text={this._socialMediaConfiguration.ArtMais}{usernameRequest.Username}{ShareLinkMessages.MessageShareProfile}"
                 };
                 return shareLinkDto;
             }
@@ -47,9 +47,9 @@ namespace ArtmaisBackend.Core.Users.Service
             {
                 var shareLinkDto = new ShareLinkDto
                 {
-                    Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{userNamePerfil}{ShareLinkMessages.MessageShareLink}",
-                    Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{userNamePerfil}{ShareLinkMessages.MessageShareLink}",
-                    Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}text={this._socialMediaConfiguration.ArtMais}{userNamePerfil}{ShareLinkMessages.MessageShareLink}",
+                    Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{userNameProfile}{ShareLinkMessages.MessageShareLink}",
+                    Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{userNameProfile}{ShareLinkMessages.MessageShareLink}",
+                    Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}text={this._socialMediaConfiguration.ArtMais}{userNameProfile}{ShareLinkMessages.MessageShareLink}",
                     WhatsappContact = $"{this._socialMediaConfiguration.Whatsapp}?phone={contact?.MainPhone}&text={ShareLinkMessages.MessageComunication}"
                 };
 
@@ -57,7 +57,7 @@ namespace ArtmaisBackend.Core.Users.Service
             }
         }
 
-        public SharePerfilBaseDto GetShareProfile(UsernameRequest usernameRequest)
+        public ShareProfileBaseDto GetShareProfile(UsernameRequest usernameRequest)
         {
             if (string.IsNullOrEmpty(usernameRequest.Username)) throw new ArgumentNullException();
 
@@ -69,11 +69,11 @@ namespace ArtmaisBackend.Core.Users.Service
 
             if (contact is null) throw new ArgumentNullException();
 
-            var shareProfileDto = new SharePerfilBaseDto
+            var shareProfileDto = new ShareProfileBaseDto
             {
-                Facebook = $"{this._socialMediaConfiguration.FacebookPerfil}{contact?.Facebook}",
-                Twitter = $"{this._socialMediaConfiguration.TwitterPerfil}{contact?.Twitter}",
-                Instagram = $"{this._socialMediaConfiguration.InstagramPerfil}{contact?.Instagram}",
+                Facebook = $"{this._socialMediaConfiguration.FacebookProfile }{contact?.Facebook}",
+                Twitter = $"{this._socialMediaConfiguration.TwitterProfile }{contact?.Twitter}",
+                Instagram = $"{this._socialMediaConfiguration.InstagramProfile }{contact?.Instagram}",
             };
 
             return shareProfileDto;

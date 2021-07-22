@@ -6,8 +6,8 @@
         public string Twitter { get; set; }
         public string Whatsapp { get; set; }
         public string ArtMais { get; set; }
-        public string InstagramPerfil { get; set; }
-        public string FacebookPerfil { get; set; }
-        public string TwitterPerfil { get; set; }
+        public string InstagramProfile { get; set; }
+        public string FacebookProfile { get; set; }
+        public string TwitterProfile { get; set; }
     }
 }
