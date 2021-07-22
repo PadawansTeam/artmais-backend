@@ -28,6 +28,13 @@ namespace ArtmaisBackend.Controllers
             return this.Ok(result);
         }
 
+        [HttpGet("{userId}")]
+        public ActionResult<UserDto> GetUserInfo(int userId)
+        {
+            var result = this._userService.GetUserInfoById(userId);
+            return this.Ok(result);
+        }
+
         [HttpGet("ShareLink")]
         public ActionResult<ShareLinkDto> GetUserByIdToShareLink([FromQuery] UserRequest userRequest)
         {
