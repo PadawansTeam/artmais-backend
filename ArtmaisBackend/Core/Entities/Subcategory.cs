@@ -11,15 +11,15 @@ namespace ArtmaisBackend.Core.Entities
         public int SubcategoryID { get; set; }
 
         [Column("subcategoriausuario")]
-        public string UserSubcategory { get; set; }
+        public string? UserSubcategory { get; set; }
 
         [Column("subcategoriaoutro")]
-        public int OtherSubcategory { get; set; }
+        public int? OtherSubcategory { get; set; }
 
         [Column("idcategoria")]
-        public int CategoryID { get; set; }
+        public int? CategoryID { get; set; }
 
         [ForeignKey("CategoryID")]
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
     }
 }

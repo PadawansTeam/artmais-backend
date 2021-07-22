@@ -12,27 +12,29 @@ namespace ArtmaisBackend.Core.Entities
         [Key]
         [Column("idcontatos")]
         public int ContactID { get; set; }
+        [Column("ididusuario")]
+        public int? userID { get; set; }
 
         [ForeignKey("UserID")]
-        public User User { get; set; }
+        public User? User { get; set; }
 
         [Column("facebook")]
-        public string Facebook { get; set; }
+        public string? Facebook { get; set; }
 
         [Column("instagram")]
-        public string Instagram { get; set; }
+        public string? Instagram { get; set; }
 
         [Column("twitter")]
-        public string Twitter { get; set; }
+        public string? Twitter { get; set; }
 
         [Column("telefone_1")]
-        public string MainPhone { get; set; }
+        public string? MainPhone { get; set; }
 
         [Column("telefone_2")]
-        public string SecundaryPhone { get; set; }
+        public string? SecundaryPhone { get; set; }
 
         [Column("telefone_3")]
-        public string ThirdPhone { get; set; }
+        public string? ThirdPhone { get; set; }
 
     }
 }

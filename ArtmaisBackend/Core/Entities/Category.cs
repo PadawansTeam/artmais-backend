@@ -11,9 +11,9 @@ namespace ArtmaisBackend.Core.Entities
         public int CategoryID { get; set; }
 
         [Column("categoriausuario")]
-        public string UserCategory { get; set; }
+        public string? UserCategory { get; set; }
 
         [Column("categoriaoutro")]
-        public int OtherCategory { get; set; }
+        public int? OtherCategory { get; set; }
     }
 }
