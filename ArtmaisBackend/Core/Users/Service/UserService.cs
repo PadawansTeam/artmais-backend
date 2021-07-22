@@ -5,7 +5,6 @@ using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
 using Microsoft.Extensions.Options;
-using System;
 
 namespace ArtmaisBackend.Core.Users.Service
 {
@@ -25,16 +24,16 @@ namespace ArtmaisBackend.Core.Users.Service
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public ShareLinkDto GetShareLink(int? userId, int userIdProfile)
+        public ShareLinkDto? GetShareLink(int? userId, int userIdProfile)
         {
-            if (userId is null) throw new ArgumentNullException();
+            if (userId is null) return null;
 
             var user = this._userRepository.GetUserById(userId);
             var userProfile = this._userRepository.GetUserById(userIdProfile);
-            if (user is null) throw new ArgumentNullException();
+            if (user is null) return null;
 
             var contact = this._contactRepository.GetContactByUser(user.UserID);
-            if (contact is null) throw new ArgumentNullException();
+            if (contact is null) return null;
 
             if (userIdProfile.Equals(userId))
             {
@@ -60,17 +59,17 @@ namespace ArtmaisBackend.Core.Users.Service
             }
         }
 
-        public ShareProfileBaseDto GetShareProfile(int? userId)
+        public ShareProfileBaseDto? GetShareProfile(int? userId)
         {
-            if (userId is null) throw new ArgumentNullException();
+            if (userId is null) return null;
 
             var user = this._userRepository.GetUserById(userId);
 
-            if (user is null) throw new ArgumentNullException();
+            if (user is null) return null;
 
             var contact = this._contactRepository.GetContactByUser(user.UserID);
 
-            if (contact is null) throw new ArgumentNullException();
+            if (contact is null) return null;
 
             var shareProfileDto = new ShareProfileBaseDto
             {
@@ -82,11 +81,12 @@ namespace ArtmaisBackend.Core.Users.Service
             return shareProfileDto;
         }
 
-        public UserDto GetUserInfoById(int? id)
+        public UserDto? GetUserInfoById(int? id)
         {
             var user = this._userRepository.GetUserById(id);
-            var userDto = this._mapper.Map<UserDto>(user);
+            if (user is null) return null;
 
+            var userDto = this._mapper.Map<UserDto>(user);
             return userDto;
         }
     }

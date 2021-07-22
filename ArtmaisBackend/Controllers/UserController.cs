@@ -25,7 +25,7 @@ namespace ArtmaisBackend.Controllers
             var user = this._jwtToken.ReadToken(this.User);
             var result = this._userService.GetUserInfoById(user.UserID);
 
-            if (result == null)
+            if (result is null)
                 return this.UnprocessableEntity();
             else
                 return this.Ok(result);
@@ -36,7 +36,7 @@ namespace ArtmaisBackend.Controllers
         {
             var user = this._jwtToken.ReadToken(this.User);
             var result = this._userService.GetShareLink(id, user.UserID);
-            if (result == null)
+            if (result is null)
                 return this.UnprocessableEntity();
             else
                 return this.Ok(result);
@@ -46,7 +46,7 @@ namespace ArtmaisBackend.Controllers
         public ActionResult<ShareProfileBaseDto> GetUserByIdToShareProfile([FromQuery] int id)
         {
             var result = this._userService.GetShareProfile(id);
-            if (result == null)
+            if (result is null)
                 return this.UnprocessableEntity();
             else
                 return this.Ok(result);
