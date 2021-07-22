@@ -79,5 +79,10 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
             return results;
         }
+
+        public User GetUserByUsername(string username)
+        {
+            return this._context.User.FirstOrDefault(user => user.Username == username);
+        }
     }
 }

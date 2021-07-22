@@ -8,6 +8,6 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
 {
     public interface IContactRepository
     {
-        Task<Contact?> GetContactByUserAsync(int userId);
+        Contact? GetContactByUser(int userId);
     }
 }

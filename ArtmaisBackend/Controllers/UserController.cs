@@ -1,6 +1,7 @@
 ﻿using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
+using ArtmaisBackend.Core.Users.Request;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtmaisBackend.Controllers
@@ -19,10 +20,17 @@ namespace ArtmaisBackend.Controllers
         private readonly IJwtToken _jwtToken;
 
         [HttpGet]
-        public ActionResult<ShareLinkDto> GetUserById()
+        public ActionResult<ShareLinkDto> GetUserByIdToShareLink(UsernameRequest usernameRequest)
         {
             var user = this._jwtToken.ReadToken(this.User);
-            var result = this._userService.GetShareLinkAsync(user.UserID, user.UserName);
+            var result = this._userService.GetShareLink(usernameRequest, user.UserName);
+            return this.Ok(result);
+        }
+
+        [HttpGet]
+        public ActionResult<ShareLinkDto> GetUserByIdToSharePerfil(UsernameRequest usernameRequest)
+        {
+            var result = this._userService.GetShareProfile(usernameRequest);
             return this.Ok(result);
         }
     }

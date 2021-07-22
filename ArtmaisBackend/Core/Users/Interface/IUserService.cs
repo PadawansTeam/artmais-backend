@@ -1,10 +1,12 @@
 ﻿using ArtmaisBackend.Core.Users.Dto;
-using System.Threading.Tasks;
+using ArtmaisBackend.Core.Users.Request;
 
 namespace ArtmaisBackend.Core.Users.Interface
 {
     public interface IUserService
     {
-        Task<ShareLinkDto> GetShareLinkAsync(int userId, string userName);
+        ShareLinkDto GetShareLink(UsernameRequest usernameRequest, string userName);
+
+        SharePerfilBaseDto GetShareProfile(UsernameRequest usernameRequest);
     }
 }

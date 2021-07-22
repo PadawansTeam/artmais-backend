@@ -70,11 +70,20 @@ namespace ArtmaisBackend.Infrastructure {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to %20Venha%20apreciar%20e%20se%20deslumbrar%20com%20estás%20a%20artes%20disponíveis%20na%20plataforma%20Art%2B..
+        ///   Looks up a localized string similar to %20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B..
         /// </summary>
         public static string MessageShareLink {
             get {
                 return ResourceManager.GetString("MessageShareLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to %20Este%20é%20meu%20perfil%20na%20Plataforma%20Art%2B,%20visiti-o%20para%20conhecer%20o%20meu%20trabalho..
+        /// </summary>
+        public static string MessageSharePerfil {
+            get {
+                return ResourceManager.GetString("MessageSharePerfil", resourceCulture);
             }
         }
     }

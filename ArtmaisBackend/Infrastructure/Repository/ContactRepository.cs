@@ -1,8 +1,7 @@
 ﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
@@ -15,9 +14,9 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public async Task<Contact?> GetContactByUserAsync(int userId)
+        public Contact? GetContactByUser(int userId)
         {
-            return await this._context.Contact.FirstOrDefaultAsync(contact => contact.User.UserID == userId);
+            return this._context.Contact.FirstOrDefault(contact => contact.User.UserID == userId);
         }
     }
 }
