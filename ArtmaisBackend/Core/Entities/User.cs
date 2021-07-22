@@ -43,5 +43,8 @@ namespace ArtmaisBackend.Core.Entities
 
         [Column("fotousuario")]
         public string UserPicture { get; set; }
+
+        [Column("fotocapa")]
+        public string BackgroundPicture { get; set; }
     }
 }

@@ -76,6 +76,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
 
             var userRepositoryMock = new Mock<IUserRepository>();
             userRepositoryMock.Setup(r => r.GetUserByEmail("joao@gmail.com")).Returns((User)null);
+            userRepositoryMock.Setup(r => r.GetUserByUsername("Joao")).Returns((User)null);
             userRepositoryMock.Setup(r => r.Create(request)).Returns(user);
 
             var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
@@ -123,6 +124,43 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
             var signup = new SignUpService(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
 
             Assert.Throws<EmailAlreadyInUse>(() => signup.Create(request));
+        }
+
+        [Fact(DisplayName = "Create throws username already in use")]
+        public void CreateThrowsUsernameAlreadyInUse()
+        {
+            var request = new SignUpRequest
+            {
+                Name = "Joao",
+                Email = "joao@gmail.com",
+                Password = "123456789",
+                Description = "Apenas um consumidor",
+                Username = "Joao",
+                BirthDate = DateTime.Now,
+                Role = "Consumidor",
+                Category = "Tatuador(a)",
+                Subcategory = "Aquarela"
+            };
+
+            var user = new User
+            {
+                UserID = 1,
+                Email = "joao@gmail.com",
+                Password = "05ZqadUMOvuD8CAL+jffYg==awRk+A/eBTdeZu2HHUn5rEkgBtFefv6ljXH4TLoLoD66V1pCKjj7CN/cXMZxINsgGMaHRUxSbOOl5ahWCtPnTQ==",
+                Role = "Consumidor"
+            };
+
+            var userRepositoryMock = new Mock<IUserRepository>();
+            userRepositoryMock.Setup(r => r.GetUserByEmail("joao@gmail.com")).Returns((User)null);
+            userRepositoryMock.Setup(r => r.GetUserByUsername("Joao")).Returns(user);
+
+            var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
+
+            var jwtTokenMock = new Mock<IJwtToken>();
+
+            var signup = new SignUp(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
+
+            Assert.Throws<UsernameAlreadyInUse>(() => signup.Create(request));
         }
     }
 }

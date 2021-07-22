@@ -73,6 +73,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                            {
                                Username = user.Username,
                                UserPicture = user.UserPicture,
+                               BackgroundPicture = user.BackgroundPicture,
                                Category = category.UserCategory,
                                Subcategory = subcategory.UserSubcategory
                            }).ToList();

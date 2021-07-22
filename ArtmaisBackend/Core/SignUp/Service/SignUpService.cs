@@ -28,10 +28,15 @@ namespace ArtmaisBackend.Core.SignUp.Service
 
         public string Create(SignUpRequest signUpRequest)
         {
-            var existentUser = _usuarioRepository.GetUserByEmail(signUpRequest.Email);
+            var existentUserEmail = _usuarioRepository.GetUserByEmail(signUpRequest.Email);
 
-            if (existentUser != null)
+            if (existentUserEmail != null)
                 throw new EmailAlreadyInUse("E-mail já utilizado.");
+
+            var existentUsername = _usuarioRepository.GetUserByUsername(signUpRequest.Username);
+
+            if (existentUsername != null)
+                throw new UsernameAlreadyInUse("Username já utilizado.");
 
             var existentSubcategory = _categorySubcategoryRepository
                 .GetSubcategoryBySubcategory(signUpRequest.Subcategory);
