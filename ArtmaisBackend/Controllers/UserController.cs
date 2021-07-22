@@ -1,7 +1,6 @@
 ﻿using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
-using ArtmaisBackend.Core.Users.Request;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtmaisBackend.Controllers
@@ -26,14 +25,14 @@ namespace ArtmaisBackend.Controllers
             var user = this._jwtToken.ReadToken(this.User);
             var result = this._userService.GetUserInfoById(user.UserID);
 
-            if (result == null) 
+            if (result == null)
                 return this.UnprocessableEntity();
             else
                 return this.Ok(result);
         }
 
         [HttpGet("ShareLink")]
-        public ActionResult<ShareLinkDto> GetUserByIdToShareLink([FromQuery] UserRequest id)
+        public ActionResult<ShareLinkDto> GetUserByIdToShareLink([FromQuery] int id)
         {
             var user = this._jwtToken.ReadToken(this.User);
             var result = this._userService.GetShareLink(id, user.UserID);
@@ -44,7 +43,7 @@ namespace ArtmaisBackend.Controllers
         }
 
         [HttpGet("ShareProfile")]
-        public ActionResult<ShareProfileBaseDto> GetUserByIdToShareProfile([FromQuery] UserRequest id)
+        public ActionResult<ShareProfileBaseDto> GetUserByIdToShareProfile([FromQuery] int id)
         {
             var result = this._userService.GetShareProfile(id);
             if (result == null)

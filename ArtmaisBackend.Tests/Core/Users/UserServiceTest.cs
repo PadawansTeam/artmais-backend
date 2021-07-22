@@ -1,5 +1,4 @@
 ﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Users.Request;
 using ArtmaisBackend.Core.Users.Service;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
@@ -17,18 +16,13 @@ namespace ArtmaisBackend.Tests.Core.Users
         [Fact(DisplayName = "Should be returns ShareLinkDto when userName with userName is equals userNameProfile")]
         public void GetShareLinkShouldBeNameReturnsShareLinkDtoWithUserNameAndUserNameProfileItIsEquals()
         {
-            var request = new UserRequest
-            {
-                Id = 3
-            };
-
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User 
-            { 
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User
+            {
                 Username = "userName"
             });
 
@@ -47,7 +41,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var userIdProfile = 3;
             var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
-            var result = userService.GetShareLink(request, userIdProfile);
+            var result = userService.GetShareLink(3, userIdProfile);
 
             result.Twitter.Should().BeEquivalentTo("https://twitter.com/intent/tweet?text=https://artmais-frontend.herokuapp.com/userName%20Este%20é%20meu%20perfil%20na%20Plataforma%20Art%2B,%20visiti-o%20para%20conhecer%20o%20meu%20trabalho.");
             result.Facebook.Should().BeEquivalentTo("https://www.facebook.com/sharer/sharer.php?u=https://artmais-frontend.herokuapp.com/userName%20Este%20é%20meu%20perfil%20na%20Plataforma%20Art%2B,%20visiti-o%20para%20conhecer%20o%20meu%20trabalho.");
@@ -59,18 +53,13 @@ namespace ArtmaisBackend.Tests.Core.Users
         [Fact(DisplayName = "Should be returns ShareLinkDto when userName it is not equals userNameProfile")]
         public void GetShareLinkShouldBeReturnsShareLinkDtoWithUserNameAndUserNameProfileItIsNotEquals()
         {
-            var request = new UserRequest
-            {
-                Id = 3
-            };
-
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User 
-            { 
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User
+            {
                 Username = "userNameProfile"
             });
 
@@ -92,7 +81,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var userIdProfile = 2;
             var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
-            var result = userService.GetShareLink(request, userIdProfile);
+            var result = userService.GetShareLink(3, userIdProfile);
 
             result.Twitter.Should().BeEquivalentTo("https://twitter.com/intent/tweet?text=https://artmais-frontend.herokuapp.com/userNameProfile%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
             result.Facebook.Should().BeEquivalentTo("https://www.facebook.com/sharer/sharer.php?u=https://artmais-frontend.herokuapp.com/userNameProfile%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
@@ -104,7 +93,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         [Fact(DisplayName = "Should be GetShareLink throw when request is null or empty")]
         public void GetShareLinkShouldBeThrow()
         {
-            var request = new UserRequest { };
+            int? userId = null;
 
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
@@ -119,18 +108,13 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
-            Action act = () => userService.GetShareProfile(request);
+            Action act = () => userService.GetShareProfile(userId);
             act.Should().Throw<ArgumentNullException>();
         }
 
         [Fact(DisplayName = "Should be returns ShareProfileDto based on userId")]
         public void GetShareProfileShouldBeReturnsShareLinkDto()
         {
-            var request = new UserRequest
-            {
-                Id = 3
-            };
-
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
@@ -155,7 +139,7 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
-            var result = userService.GetShareProfile(request);
+            var result = userService.GetShareProfile(3);
 
             result.Twitter.Should().BeEquivalentTo("https://twitter.com/TwitterUserName");
             result.Facebook.Should().BeEquivalentTo("https://www.facebook.com/FacebookUserName");
@@ -165,7 +149,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         [Fact(DisplayName = "Should be GetShareProfile throw when request is null or empty")]
         public void GetShareProfileShouldBeThrow()
         {
-            var request = new UserRequest { };
+            int? userId = null;
 
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
@@ -180,7 +164,7 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var userService = new UserService(mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
-            Action act = () => userService.GetShareProfile(request);
+            Action act = () => userService.GetShareProfile(userId);
             act.Should().Throw<ArgumentNullException>();
         }
     }

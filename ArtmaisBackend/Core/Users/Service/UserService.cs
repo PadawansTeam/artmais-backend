@@ -1,6 +1,5 @@
 ﻿using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
-using ArtmaisBackend.Core.Users.Request;
 using ArtmaisBackend.Infrastructure;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
@@ -26,18 +25,18 @@ namespace ArtmaisBackend.Core.Users.Service
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public ShareLinkDto GetShareLink(UserRequest userId, int userIdProfile)
+        public ShareLinkDto GetShareLink(int? userId, int userIdProfile)
         {
-            if (userId.Id is null) throw new ArgumentNullException();
+            if (userId is null) throw new ArgumentNullException();
 
-            var user = this._userRepository.GetUserById(userId.Id);
+            var user = this._userRepository.GetUserById(userId);
             var userProfile = this._userRepository.GetUserById(userIdProfile);
             if (user is null) throw new ArgumentNullException();
 
             var contact = this._contactRepository.GetContactByUser(user.UserID);
             if (contact is null) throw new ArgumentNullException();
 
-            if (userIdProfile.Equals(userId.Id))
+            if (userIdProfile.Equals(userId))
             {
                 var shareLinkDto = new ShareLinkDto
                 {
@@ -61,11 +60,11 @@ namespace ArtmaisBackend.Core.Users.Service
             }
         }
 
-        public ShareProfileBaseDto GetShareProfile(UserRequest userId)
+        public ShareProfileBaseDto GetShareProfile(int? userId)
         {
-            if (userId.Id is null) throw new ArgumentNullException();
+            if (userId is null) throw new ArgumentNullException();
 
-            var user = this._userRepository.GetUserById(userId.Id);
+            var user = this._userRepository.GetUserById(userId);
 
             if (user is null) throw new ArgumentNullException();
 
@@ -86,7 +85,7 @@ namespace ArtmaisBackend.Core.Users.Service
         public UserDto GetUserInfoById(int? id)
         {
             var user = this._userRepository.GetUserById(id);
-            var userDto = _mapper.Map<UserDto>(user);
+            var userDto = this._mapper.Map<UserDto>(user);
 
             return userDto;
         }
