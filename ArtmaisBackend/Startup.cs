@@ -4,6 +4,8 @@ using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Core.SignIn.Service;
 using ArtmaisBackend.Core.SignUp.Interface;
 using ArtmaisBackend.Core.SignUp.Service;
+using ArtmaisBackend.Core.Users.Interface;
+using ArtmaisBackend.Core.Users.Service;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository;
@@ -71,6 +73,9 @@ namespace ArtmaisBackend
             services.AddDbContext<ArtplusContext>(
                 options => options.UseNpgsql(this.Configuration.GetConnectionString("DbContext")));
 
+            //Automapper
+            services.AddAutoMapper(typeof(Startup).Assembly);
+
             //Options
             services.Configure<SocialMediaConfiguration>(this.Configuration.GetSection("SocialMediaShareLink"));
 
@@ -78,6 +83,7 @@ namespace ArtmaisBackend
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICategorySubcategoryRepository, CategorySubcategoryRepository>();
             services.AddScoped<IInterestRepository, InterestRepository>();
+            services.AddScoped<IContactRepository, ContactRepository>();
 
             //SignIn
             services.AddScoped<ISignIn, SignInService>();
@@ -89,6 +95,9 @@ namespace ArtmaisBackend
 
             //SignUp
             services.AddScoped<ISignUp, SignUpService>();
+
+            //User
+            services.AddScoped<IUserService, UserService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

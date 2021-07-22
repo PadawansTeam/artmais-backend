@@ -19,18 +19,27 @@ namespace ArtmaisBackend.Controllers
         private readonly IUserService _userService;
         private readonly IJwtToken _jwtToken;
 
+
         [HttpGet]
-        public ActionResult<ShareLinkDto> GetUserByIdToShareLink(UsernameRequest usernameRequest)
+        public ActionResult<UserDto> GetLoggedUserInfo()
         {
             var user = this._jwtToken.ReadToken(this.User);
-            var result = this._userService.GetShareLink(usernameRequest, user.UserName);
+            var result = this._userService.GetUserInfoById(user.UserID);
             return this.Ok(result);
         }
 
-        [HttpGet]
-        public ActionResult<ShareLinkDto> GetUserByIdToShareProfile(UsernameRequest usernameRequest)
+        [HttpGet("ShareLink")]
+        public ActionResult<ShareLinkDto> GetUserByIdToShareLink([FromQuery] UserRequest userRequest)
         {
-            var result = this._userService.GetShareProfile(usernameRequest);
+            var user = this._jwtToken.ReadToken(this.User);
+            var result = this._userService.GetShareLink(userRequest, user.UserName);
+            return this.Ok(result);
+        }
+
+        [HttpGet("ShareProfile")]
+        public ActionResult<ShareProfileBaseDto> GetUserByIdToShareProfile([FromQuery] UserRequest userRequest)
+        {
+            var result = this._userService.GetShareProfile(userRequest);
             return this.Ok(result);
         }
     }

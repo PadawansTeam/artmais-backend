@@ -1,6 +1,6 @@
 ﻿namespace ArtmaisBackend.Core.Users.Request
 {
-    public class UsernameRequest
+    public class UserRequest
     {
         public string Username { get; set; }
     }

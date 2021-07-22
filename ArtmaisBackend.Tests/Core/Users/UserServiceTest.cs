@@ -17,7 +17,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         [Fact(DisplayName = "Should be returns ShareLinkDto when userName with userName is equals userNameProfile")]
         public void GetShareLinkShouldBeNameReturnsShareLinkDtoWithUserNameAndUserNameProfileItIsEquals()
         {
-            var request = new UsernameRequest
+            var request = new UserRequest
             {
                 Username = "userName"
             };
@@ -55,7 +55,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         [Fact(DisplayName = "Should be returns ShareLinkDto when userName it is not equals userNameProfile")]
         public void GetShareLinkShouldBeReturnsShareLinkDtoWithUserNameAndUserNameProfileItIsNotEquals()
         {
-            var request = new UsernameRequest
+            var request = new UserRequest
             {
                 Username = "userName"
             };
@@ -95,7 +95,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         [Fact(DisplayName = "Should be GetShareLink throw when request is null or empty")]
         public void GetShareLinkShouldBeThrow()
         {
-            var request = new UsernameRequest { };
+            var request = new UserRequest { };
 
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
@@ -116,7 +116,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         [Fact(DisplayName = "Should be returns ShareProfileDto based on userId")]
         public void GetShareProfileShouldBeReturnsShareLinkDto()
         {
-            var request = new UsernameRequest
+            var request = new UserRequest
             {
                 Username = "Username"
             };
@@ -154,7 +154,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         [Fact(DisplayName = "Should be GetShareProfile throw when request is null or empty")]
         public void GetShareProfileShouldBeThrow()
         {
-            var request = new UsernameRequest { };
+            var request = new UserRequest { };
 
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
