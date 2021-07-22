@@ -1,6 +1,7 @@
 ﻿using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtmaisBackend.Controllers
@@ -20,6 +21,9 @@ namespace ArtmaisBackend.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<UserDto> GetLoggedUserInfo()
         {
             var user = this._jwtToken.ReadToken(this.User);
@@ -32,6 +36,9 @@ namespace ArtmaisBackend.Controllers
         }
 
         [HttpGet("ShareLink")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<ShareLinkDto> GetUserByIdToShareLink([FromQuery] int id)
         {
             var user = this._jwtToken.ReadToken(this.User);
@@ -43,6 +50,9 @@ namespace ArtmaisBackend.Controllers
         }
 
         [HttpGet("ShareProfile")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<ShareProfileBaseDto> GetUserByIdToShareProfile([FromQuery] int id)
         {
             var result = this._userService.GetShareProfile(id);
