@@ -26,11 +26,11 @@ namespace ArtmaisBackend.Core.Users.Service
 
         public ShareLinkDto? GetShareLink(int? userId, int userIdProfile)
         {
-            if (userId is null) return null;
-
             var user = this._userRepository.GetUserById(userId);
-            var userProfile = this._userRepository.GetUserById(userIdProfile);
             if (user is null) return null;
+            
+            var userProfile = this._userRepository.GetUserById(userIdProfile);
+            if (userProfile is null) return null;
 
             var contact = this._contactRepository.GetContactByUser(user.UserID);
             if (contact is null) return null;
@@ -61,8 +61,6 @@ namespace ArtmaisBackend.Core.Users.Service
 
         public ShareProfileBaseDto? GetShareProfile(int? userId)
         {
-            if (userId is null) return null;
-
             var user = this._userRepository.GetUserById(userId);
 
             if (user is null) return null;

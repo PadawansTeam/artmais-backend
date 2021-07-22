@@ -16,7 +16,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public Contact? GetContactByUser(int userId)
         {
-            return this._context.Contact.FirstOrDefault(contact => contact.User.UserID == userId);
+            return this._context.Contact.Where(contact => contact.UserID == userId).FirstOrDefault();
         }
     }
 }

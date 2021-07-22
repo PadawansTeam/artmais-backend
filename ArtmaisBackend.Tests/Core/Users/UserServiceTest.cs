@@ -28,7 +28,6 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact { });
 
-
             var url = mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration
             {
                 Facebook = "https://www.facebook.com/sharer/sharer.php?u=",
