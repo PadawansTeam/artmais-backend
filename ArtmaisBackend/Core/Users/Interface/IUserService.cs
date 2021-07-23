@@ -1,14 +1,13 @@
 ﻿using ArtmaisBackend.Core.Users.Dto;
-using ArtmaisBackend.Core.Users.Request;
 
 namespace ArtmaisBackend.Core.Users.Interface
 {
     public interface IUserService
     {
-        ShareLinkDto GetShareLink(UserRequest usernameRequest, string userName);
+        ShareLinkDto? GetShareLink(int? userId, int userIdProfile);
 
-        ShareProfileBaseDto GetShareProfile(UserRequest usernameRequest);
+        ShareProfileBaseDto? GetShareProfile(int? userId);
 
-        UserDto GetUserInfoById(int id);
+        UserDto? GetUserInfoById(int? id);
     }
 }

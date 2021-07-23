@@ -1,12 +1,10 @@
 ﻿using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
-using ArtmaisBackend.Core.Users.Request;
 using ArtmaisBackend.Infrastructure;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
 using Microsoft.Extensions.Options;
-using System;
 
 namespace ArtmaisBackend.Core.Users.Service
 {
@@ -26,23 +24,24 @@ namespace ArtmaisBackend.Core.Users.Service
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public ShareLinkDto GetShareLink(UserRequest usernameRequest, string userNameProfile)
+        public ShareLinkDto? GetShareLink(int? userId, int userIdProfile)
         {
-            if (string.IsNullOrEmpty(usernameRequest.Username)) throw new ArgumentNullException();
-
-            var user = this._userRepository.GetUserByUsername(usernameRequest.Username);
-            if (user is null) throw new ArgumentNullException();
+            var user = this._userRepository.GetUserById(userId);
+            if (user is null) return null;
+            
+            var userProfile = this._userRepository.GetUserById(userIdProfile);
+            if (userProfile is null) return null;
 
             var contact = this._contactRepository.GetContactByUser(user.UserID);
-            if (contact is null) throw new ArgumentNullException();
+            if (contact is null) return null;
 
-            if (userNameProfile.Equals(usernameRequest.Username))
+            if (userIdProfile.Equals(userId))
             {
                 var shareLinkDto = new ShareLinkDto
                 {
-                    Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{usernameRequest.Username}{ShareLinkMessages.MessageShareProfile}",
-                    Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{usernameRequest.Username}{ShareLinkMessages.MessageShareProfile}",
-                    Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}text={this._socialMediaConfiguration.ArtMais}{usernameRequest.Username}{ShareLinkMessages.MessageShareProfile}"
+                    Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{userProfile.Username}{ShareLinkMessages.MessageShareProfile}",
+                    Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{userProfile.Username}{ShareLinkMessages.MessageShareProfile}",
+                    Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}?text={this._socialMediaConfiguration.ArtMais}{userProfile.Username}{ShareLinkMessages.MessageShareProfile}"
                 };
                 return shareLinkDto;
             }
@@ -50,9 +49,9 @@ namespace ArtmaisBackend.Core.Users.Service
             {
                 var shareLinkDto = new ShareLinkDto
                 {
-                    Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{userNameProfile}{ShareLinkMessages.MessageShareLink}",
-                    Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{userNameProfile}{ShareLinkMessages.MessageShareLink}",
-                    Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}text={this._socialMediaConfiguration.ArtMais}{userNameProfile}{ShareLinkMessages.MessageShareLink}",
+                    Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{user.Username}{ShareLinkMessages.MessageShareLink}",
+                    Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{user.Username}{ShareLinkMessages.MessageShareLink}",
+                    Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}?text={this._socialMediaConfiguration.ArtMais}{user.Username}{ShareLinkMessages.MessageShareLink}",
                     WhatsappContact = $"{this._socialMediaConfiguration.Whatsapp}?phone={contact?.MainPhone}&text={ShareLinkMessages.MessageComunication}"
                 };
 
@@ -60,17 +59,15 @@ namespace ArtmaisBackend.Core.Users.Service
             }
         }
 
-        public ShareProfileBaseDto GetShareProfile(UserRequest usernameRequest)
+        public ShareProfileBaseDto? GetShareProfile(int? userId)
         {
-            if (string.IsNullOrEmpty(usernameRequest.Username)) throw new ArgumentNullException();
+            var user = this._userRepository.GetUserById(userId);
 
-            var user = this._userRepository.GetUserByUsername(usernameRequest.Username);
-
-            if (user is null) throw new ArgumentNullException();
+            if (user is null) return null;
 
             var contact = this._contactRepository.GetContactByUser(user.UserID);
 
-            if (contact is null) throw new ArgumentNullException();
+            if (contact is null) return null;
 
             var shareProfileDto = new ShareProfileBaseDto
             {
@@ -82,11 +79,12 @@ namespace ArtmaisBackend.Core.Users.Service
             return shareProfileDto;
         }
 
-        public UserDto GetUserInfoById(int id)
+        public UserDto? GetUserInfoById(int? id)
         {
             var user = this._userRepository.GetUserById(id);
-            var userDto = _mapper.Map<UserDto>(user);
+            if (user is null) return null;
 
+            var userDto = this._mapper.Map<UserDto>(user);
             return userDto;
         }
     }

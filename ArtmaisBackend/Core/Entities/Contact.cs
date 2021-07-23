@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Entities
 {
+    [Table("contato")]
     public class Contact
     {
         [Key]
         [Column("idcontatos")]
         public int ContactID { get; set; }
-        [Column("ididusuario")]
+        [Column("idusuario")]
         public int? UserID { get; set; }
 
         [ForeignKey("UserID")]

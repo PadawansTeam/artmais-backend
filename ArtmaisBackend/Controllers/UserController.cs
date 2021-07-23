@@ -1,7 +1,7 @@
 ﻿using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
-using ArtmaisBackend.Core.Users.Request;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtmaisBackend.Controllers
@@ -21,11 +21,18 @@ namespace ArtmaisBackend.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<UserDto> GetLoggedUserInfo()
         {
             var user = this._jwtToken.ReadToken(this.User);
             var result = this._userService.GetUserInfoById(user.UserID);
-            return this.Ok(result);
+
+            if (result is null)
+                return this.UnprocessableEntity();
+            else
+                return this.Ok(result);
         }
 
         [HttpGet("{userId}")]
@@ -36,18 +43,30 @@ namespace ArtmaisBackend.Controllers
         }
 
         [HttpGet("ShareLink")]
-        public ActionResult<ShareLinkDto> GetUserByIdToShareLink([FromQuery] UserRequest userRequest)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<ShareLinkDto> GetUserByIdToShareLink([FromQuery] int id)
         {
             var user = this._jwtToken.ReadToken(this.User);
-            var result = this._userService.GetShareLink(userRequest, user.UserName);
-            return this.Ok(result);
+            var result = this._userService.GetShareLink(id, user.UserID);
+            if (result is null)
+                return this.UnprocessableEntity();
+            else
+                return this.Ok(result);
         }
 
         [HttpGet("ShareProfile")]
-        public ActionResult<ShareProfileBaseDto> GetUserByIdToShareProfile([FromQuery] UserRequest userRequest)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<ShareProfileBaseDto> GetUserByIdToShareProfile([FromQuery] int id)
         {
-            var result = this._userService.GetShareProfile(userRequest);
-            return this.Ok(result);
+            var result = this._userService.GetShareProfile(id);
+            if (result is null)
+                return this.UnprocessableEntity();
+            else
+                return this.Ok(result);
         }
     }
 }
