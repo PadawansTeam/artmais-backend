@@ -28,5 +28,15 @@ namespace ArtmaisBackend.Core.Contact.Service
 
             return contactDto;
         }
+
+        public ContactDto? GetContactByUser(int userId)
+        {
+            var contact = this._contactRepository.GetContactByUser(userId);
+            if (contact is null) return null;
+
+            var contactDto = this._mapper.Map<ContactDto>(contact);
+            return contactDto;
+        }
+
     }
 }

@@ -28,5 +28,14 @@ namespace ArtmaisBackend.Controllers
             var result = this._contact.Create(contactRequest, user.UserID);
             return this.Ok(result);
         }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<ContactDto> GetContactInfoById()
+        {
+            var user = this._jwtToken.ReadToken(this.User);
+            var result = this._contact.GetContactByUser(user.UserID);
+            return this.Ok(result);
+        }
     }
 }
