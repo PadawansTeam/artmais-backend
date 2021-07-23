@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ArtmaisBackend.Core.SignUp
+namespace ArtmaisBackend.Core.SignUp.Request
 {
     public class SignUpRequest
     {
@@ -11,7 +11,7 @@ namespace ArtmaisBackend.Core.SignUp
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        
+
         [Required]
         public string Password { get; set; }
 
@@ -28,7 +28,7 @@ namespace ArtmaisBackend.Core.SignUp
 
         [Required]
         public string Category { get; set; }
-        
+
         [Required]
         public string Subcategory { get; set; }
 

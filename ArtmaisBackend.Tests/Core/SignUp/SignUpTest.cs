@@ -2,6 +2,7 @@
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Core.SignUp;
 using ArtmaisBackend.Core.SignUp.Dto;
+using ArtmaisBackend.Core.SignUp.Request;
 using ArtmaisBackend.Core.SignUp.Service;
 using ArtmaisBackend.Exceptions;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
