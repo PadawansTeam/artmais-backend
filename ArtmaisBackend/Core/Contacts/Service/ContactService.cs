@@ -1,11 +1,12 @@
 ﻿using ArtmaisBackend.Core.Contacts.Dto;
+using ArtmaisBackend.Core.Contacts.Interface;
 using ArtmaisBackend.Core.Contacts.Request;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
 
 namespace ArtmaisBackend.Core.Contact.Service
 {
-    public class ContactService
+    public class ContactService : IContactService
     {
         public ContactService(IContactRepository contactRepository, IMapper mapper)
         {

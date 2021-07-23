@@ -29,8 +29,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 Instagram = contactRequest.Instagram,
                 Twitter = contactRequest.Twitter,
                 MainPhone = contactRequest.MainPhone,
-                SecundaryPhone = contactRequest.Facebook,
-                ThirdPhone = contactRequest.Facebook,
+                SecundaryPhone = contactRequest.SecundaryPhone,
+                ThirdPhone = contactRequest.ThridPhone,
             };
 
             this._context.Contact.Add(contact);

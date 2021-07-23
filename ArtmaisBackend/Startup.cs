@@ -1,3 +1,5 @@
+using ArtmaisBackend.Core.Contact.Service;
+using ArtmaisBackend.Core.Contacts.Interface;
 using ArtmaisBackend.Core.Profile.Interface;
 using ArtmaisBackend.Core.Profile.Mediator;
 using ArtmaisBackend.Core.SignIn.Interface;
@@ -98,6 +100,9 @@ namespace ArtmaisBackend
 
             //User
             services.AddScoped<IUserService, UserService>();
+
+            //Contact
+            services.AddScoped<IContactService, ContactService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
