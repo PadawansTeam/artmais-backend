@@ -1,4 +1,4 @@
-﻿namespace ArtmaisBackend.Core.Profile
+﻿namespace ArtmaisBackend.Core.Profile.Dto
 {
     public class SubcategoryDto
     {

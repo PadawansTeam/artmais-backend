@@ -1,15 +1,16 @@
 ﻿using ArtmaisBackend.Core.SignIn.Interface;
+using ArtmaisBackend.Core.SignUp.Dto;
 using ArtmaisBackend.Core.SignUp.Interface;
 using ArtmaisBackend.Exceptions;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using ArtmaisBackend.Util;
 using System.Collections.Generic;
 
-namespace ArtmaisBackend.Core.SignUp
+namespace ArtmaisBackend.Core.SignUp.Service
 {
-    public class SignUp : ISignUp
+    public class SignUpService : ISignUp
     {
-        public SignUp(IUserRepository usuarioRepository, ICategorySubcategoryRepository categorySubcategoryRepository, IJwtToken jwtToken)
+        public SignUpService(IUserRepository usuarioRepository, ICategorySubcategoryRepository categorySubcategoryRepository, IJwtToken jwtToken)
         {
             _usuarioRepository = usuarioRepository;
             _categorySubcategoryRepository = categorySubcategoryRepository;

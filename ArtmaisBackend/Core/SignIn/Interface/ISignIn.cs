@@ -2,6 +2,6 @@
 {
     public interface ISignIn
     {
-        public string Authenticate(SigInRequest sigInRequest);
+        string Authenticate(SigInRequest sigInRequest);
     }
 }

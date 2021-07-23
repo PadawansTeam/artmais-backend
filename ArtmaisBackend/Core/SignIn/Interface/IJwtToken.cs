@@ -5,7 +5,7 @@ namespace ArtmaisBackend.Core.SignIn.Interface
 {
     public interface IJwtToken
     {
-        public string GenerateToken(User usuario);
-        public UserJwtData ReadToken(ClaimsPrincipal userClaims);
+        string GenerateToken(User usuario);
+        UserJwtData ReadToken(ClaimsPrincipal userClaims);
     }
 }

@@ -7,11 +7,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace ArtmaisBackend.Core.SignIn
+namespace ArtmaisBackend.Core.SignIn.Service
 {
-    public class JwtToken : IJwtToken
+    public class JwtTokenService : IJwtToken
     {
-        public JwtToken(IConfiguration configuration)
+        public JwtTokenService(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -28,6 +28,7 @@ namespace ArtmaisBackend.Core.SignIn
                 {
                     new Claim(ClaimTypes.NameIdentifier, usuario.UserID.ToString()),
                     new Claim(ClaimTypes.Role, usuario.Role),
+                    new Claim(ClaimTypes.Name, usuario.Username),
                 }),
                 Expires = DateTime.UtcNow.AddHours(24),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -41,7 +42,8 @@ namespace ArtmaisBackend.Core.SignIn
             return new UserJwtData
             {
                 UserID = int.Parse(userClaims.FindFirstValue(ClaimTypes.NameIdentifier)),
-                Role = userClaims.FindFirstValue(ClaimTypes.Role)
+                Role = userClaims.FindFirstValue(ClaimTypes.Role),
+                UserName = userClaims.FindFirstValue(ClaimTypes.Name)
             };
         }
     }

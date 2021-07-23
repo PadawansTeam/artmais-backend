@@ -1,4 +1,6 @@
 ﻿using ArtmaisBackend.Core.Profile;
+using ArtmaisBackend.Core.Profile.Dto;
+using ArtmaisBackend.Core.Profile.Mediator;
 using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
@@ -10,7 +12,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
 {
     public class RecomendationMediatorTest
     {
-        [Fact]
+        [Fact(DisplayName = "Should be validate GetUsersByInterest method returns RecomendationDto")]
         public void IndexReturnsRecomendationDto()
         {
             var recomendations = new List<RecomendationDto>

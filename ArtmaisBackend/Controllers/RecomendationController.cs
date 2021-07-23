@@ -1,4 +1,4 @@
-﻿using ArtmaisBackend.Core.Profile;
+﻿using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.Profile.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

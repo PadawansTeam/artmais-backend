@@ -1,4 +1,6 @@
 ﻿using ArtmaisBackend.Core.Profile;
+using ArtmaisBackend.Core.Profile.Dto;
+using ArtmaisBackend.Core.Profile.Mediator;
 using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
@@ -10,7 +12,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
 {
     public class InterestMediatorTest
     {
-        [Fact]
+        [Fact(DisplayName = "Should be validate GetUsersByInterest method returns SubcategoryDto")]
         public void IndexReturnsSubcategoryDto()
         {
             var subcategories = new List<SubcategoryDto>
@@ -38,7 +40,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
             Assert.IsAssignableFrom<InterestDto>(result);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Should be returns message when InterestRequest it is save")]
         public void CreateReturnsMessage()
         {
             var request = new InterestRequest

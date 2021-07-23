@@ -1,6 +1,7 @@
 ﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Interface;
+using ArtmaisBackend.Core.SignIn.Service;
 using ArtmaisBackend.Exceptions;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Moq;
@@ -10,7 +11,7 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
 {
     public class SignInTest
     {
-        [Fact]
+        [Fact(DisplayName = "Shouldn't be returns null when encrypt with method")]
         public void AuthenticateReturnsToken()
         {
             var request = new SigInRequest
@@ -33,12 +34,12 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
             var jwtTokenMock = new Mock<IJwtToken>();
             jwtTokenMock.Setup(j => j.GenerateToken(user)).Returns("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ");
 
-            var authenticate = new SignIn(userRepositoryMock.Object, jwtTokenMock.Object);
+            var authenticate = new SignInService(userRepositoryMock.Object, jwtTokenMock.Object);
 
             Assert.NotNull(authenticate.Authenticate(request));
         }
 
-        [Fact]
+        [Fact(DisplayName = "Should throw unauthorized when email is not authenticate")]
         public void AuthenticateThrowsUnauthorizedByEmail()
         {
             var request = new SigInRequest
@@ -52,12 +53,12 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
 
             var jwtTokenMock = new Mock<IJwtToken>();
 
-            var authenticate = new SignIn(userRepositoryMock.Object, jwtTokenMock.Object);
+            var authenticate = new SignInService(userRepositoryMock.Object, jwtTokenMock.Object);
 
             Assert.Throws<Unauthorized>(() => authenticate.Authenticate(request));
         }
 
-        [Fact]
+        [Fact(DisplayName = "Should throw unauthorized when password is not authenticate")]
         public void AuthenticateThrowsUnauthorizedByPassword()
         {
             var request = new SigInRequest
@@ -80,7 +81,7 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
             var jwtTokenMock = new Mock<IJwtToken>();
             jwtTokenMock.Setup(j => j.GenerateToken(user)).Returns("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ");
 
-            var authenticate = new SignIn(userRepositoryMock.Object, jwtTokenMock.Object);
+            var authenticate = new SignInService(userRepositoryMock.Object, jwtTokenMock.Object);
 
             Assert.Throws<Unauthorized>(() => authenticate.Authenticate(request));
         }

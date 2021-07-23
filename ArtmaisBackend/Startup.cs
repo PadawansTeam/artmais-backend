@@ -1,3 +1,15 @@
+using ArtmaisBackend.Core.Profile.Interface;
+using ArtmaisBackend.Core.Profile.Mediator;
+using ArtmaisBackend.Core.SignIn.Interface;
+using ArtmaisBackend.Core.SignIn.Service;
+using ArtmaisBackend.Core.SignUp.Interface;
+using ArtmaisBackend.Core.SignUp.Service;
+using ArtmaisBackend.Core.Users.Interface;
+using ArtmaisBackend.Core.Users.Service;
+using ArtmaisBackend.Infrastructure.Data;
+using ArtmaisBackend.Infrastructure.Options;
+using ArtmaisBackend.Infrastructure.Repository;
+using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,16 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using ArtmaisBackend.Core.SignIn;
-using ArtmaisBackend.Core.SignIn.Interface;
-using ArtmaisBackend.Core.SignUp;
-using ArtmaisBackend.Core.SignUp.Interface;
-using ArtmaisBackend.Infrastructure.Data;
-using ArtmaisBackend.Infrastructure.Repository;
-using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System.Text;
-using ArtmaisBackend.Core.Profile.Interface;
-using ArtmaisBackend.Core.Profile;
 
 namespace ArtmaisBackend
 {
@@ -70,21 +73,31 @@ namespace ArtmaisBackend
             services.AddDbContext<ArtplusContext>(
                 options => options.UseNpgsql(this.Configuration.GetConnectionString("DbContext")));
 
+            //Automapper
+            services.AddAutoMapper(typeof(Startup).Assembly);
+
+            //Options
+            services.Configure<SocialMediaConfiguration>(this.Configuration.GetSection("SocialMediaShareLink"));
+
             //Repository
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICategorySubcategoryRepository, CategorySubcategoryRepository>();
             services.AddScoped<IInterestRepository, InterestRepository>();
+            services.AddScoped<IContactRepository, ContactRepository>();
 
             //SignIn
-            services.AddScoped<ISignIn, SignIn>();
-            services.AddScoped<IJwtToken, JwtToken>();
+            services.AddScoped<ISignIn, SignInService>();
+            services.AddScoped<IJwtToken, JwtTokenService>();
 
             //Profile
             services.AddScoped<IInterestMediator, InterestMediator>();
             services.AddScoped<IRecomendationMediator, RecomendationMediator>();
 
             //SignUp
-            services.AddScoped<ISignUp, SignUp>();
+            services.AddScoped<ISignUp, SignUpService>();
+
+            //User
+            services.AddScoped<IUserService, UserService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

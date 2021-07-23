@@ -1,5 +1,5 @@
 ﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Profile;
+using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.SignUp;
 using System.Collections.Generic;
 
@@ -7,9 +7,10 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
 {
     public interface IUserRepository
     {
-        public User Create(SignUpRequest signUpRequest);
-        public User GetUserByEmail(string email);
-        public IEnumerable<RecomendationDto> GetUsersByInterest(int userId);
-        public User GetUserByUsername(string username);
+        User Create(SignUpRequest signUpRequest);
+        User GetUserByEmail(string email);
+        IEnumerable<RecomendationDto> GetUsersByInterest(int userId);
+        User GetUserByUsername(string username);
+        User GetUserById(int? id);
     }
 }

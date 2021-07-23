@@ -1,6 +1,8 @@
 ﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Core.SignUp;
+using ArtmaisBackend.Core.SignUp.Dto;
+using ArtmaisBackend.Core.SignUp.Service;
 using ArtmaisBackend.Exceptions;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Moq;
@@ -12,7 +14,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
 {
     public class SignUpTest
     {
-        [Fact(DisplayName = "Index returns category and subcategory dto")]
+        [Fact(DisplayName = "Should be validate GetCategoryAndSubcategory method returns a list of category subcategory")]
         public void IndexReturnsCategorySubcategoryDto()
         {
             var categorySubcategory = new List<CategorySubcategoryDto>
@@ -36,13 +38,13 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
 
             var jwtTokenMock = new Mock<IJwtToken>();
 
-            var signUp = new SignUp(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
+            var signUp = new SignUpService(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
             var result = signUp.Index();
 
             Assert.IsAssignableFrom<IEnumerable<CategorySubcategoryDto>>(result);
         }
 
-        [Fact(DisplayName = "Create returns token")]
+        [Fact(DisplayName = "Shouldn't be null when user is create")]
         public void CreateReturnsToken()
         {
             var request = new SignUpRequest
@@ -83,12 +85,12 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
             var jwtTokenMock = new Mock<IJwtToken>();
             jwtTokenMock.Setup(j => j.GenerateToken(user)).Returns("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ");
 
-            var signup = new SignUp(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
+            var signup = new SignUpService(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
 
             Assert.NotNull(signup.Create(request));
         }
 
-        [Fact(DisplayName = "Create throws email already in use")]
+        [Fact(DisplayName = "Should be throw when email already exist")]
         public void CreateThrowsEmailAlreadyInUse()
         {
             var request = new SignUpRequest
@@ -119,7 +121,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
 
             var jwtTokenMock = new Mock<IJwtToken>();
 
-            var signup = new SignUp(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
+            var signup = new SignUpService(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
 
             Assert.Throws<EmailAlreadyInUse>(() => signup.Create(request));
         }
@@ -156,7 +158,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
 
             var jwtTokenMock = new Mock<IJwtToken>();
 
-            var signup = new SignUp(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
+            var signup = new SignUpService(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
 
             Assert.Throws<UsernameAlreadyInUse>(() => signup.Create(request));
         }

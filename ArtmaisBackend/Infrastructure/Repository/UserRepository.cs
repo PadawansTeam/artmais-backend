@@ -1,5 +1,5 @@
 ﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Profile;
+using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.SignUp;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
@@ -83,23 +83,11 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public User GetUserByUsername(string username)
         {
-            var query = from user in _context.User
-                        where user.Username.Equals(username)
-                        select new User
-                        {
-                            UserID = user.UserID,
-                            SubcategoryID = user.SubcategoryID,
-                            Name = user.Name,
-                            Email = user.Email,
-                            Password = user.Password,
-                            Description = user.Description,
-                            Username = user.Username,
-                            BirthDate = user.BirthDate,
-                            Role = user.Role,
-                            RegisterDate = user.RegisterDate
-                        };
-
-            return query.FirstOrDefault();
+            return this._context.User.FirstOrDefault(user => user.Username == username);
+        }
+        public User GetUserById(int? id)
+        {
+            return this._context.User.FirstOrDefault(user => user.UserID == id);
         }
     }
 }

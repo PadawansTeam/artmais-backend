@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ArtmaisBackend.Core.SignUp
+namespace ArtmaisBackend.Core.SignUp.Dto
 {
     public class CategorySubcategoryDto
     {
