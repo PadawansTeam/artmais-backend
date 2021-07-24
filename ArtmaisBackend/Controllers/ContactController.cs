@@ -22,20 +22,30 @@ namespace ArtmaisBackend.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<ContactDto> Create(ContactRequest contactRequest)
         {
             var user = this._jwtToken.ReadToken(this.User);
             var result = this._contact.Create(contactRequest, user.UserID);
-            return this.Ok(result);
+            if (result is null)
+                return this.UnprocessableEntity();
+            else
+                return this.Ok(result);
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<ContactDto> GetContactInfoById()
         {
             var user = this._jwtToken.ReadToken(this.User);
             var result = this._contact.GetContactByUser(user.UserID);
-            return this.Ok(result);
+            if (result is null)
+                return this.UnprocessableEntity();
+            else
+                return this.Ok(result);
         }
     }
 }
