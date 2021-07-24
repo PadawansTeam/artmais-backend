@@ -9,8 +9,8 @@ namespace ArtmaisBackend.Infrastructure.Profiles
     {
         public UserMappingConfig()
         {
-            CreateMap<User, UserDto>();
-            CreateMap<Contact, ContactDto>();
+            this.CreateMap<User, UserDto>();
+            this.CreateMap<Contact, ContactDto>();
         }
     }
 }

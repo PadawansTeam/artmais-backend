@@ -10,26 +10,26 @@ namespace ArtmaisBackend.Infrastructure.Repository
     {
         public InterestRepository(ArtplusContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
         private readonly ArtplusContext _context;
 
         public dynamic DeleteAllAndCreateAll(InterestRequest interestRequest, int userId)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var transaction = this._context.Database.BeginTransaction())
             {
                 try
                 {
-                    DeleteAll(userId);
+                    this.DeleteAll(userId);
 
                     foreach (var subcategoryId in interestRequest.SubcategoryID)
                     {
-                        Create(subcategoryId, userId);
+                        this.Create(subcategoryId, userId);
                     }
 
                     transaction.Commit();
-                    _context.SaveChanges();
+                    this._context.SaveChanges();
                     return new { message = "Os interesses foram salvos com sucesso." };
                 }
                 catch
@@ -47,12 +47,12 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 UserID = userId,
                 SubcategoryID = subcategoryId
             };
-            _context.Interest.Add(interest);
+            this._context.Interest.Add(interest);
         }
 
         private void DeleteAll(int userId)
         {
-            _context.Interest.RemoveRange(_context.Interest
+            this._context.Interest.RemoveRange(this._context.Interest
                 .Where(i => i.UserID.Equals(userId)));
         }
 

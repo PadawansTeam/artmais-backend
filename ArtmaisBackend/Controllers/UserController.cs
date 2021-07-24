@@ -10,14 +10,14 @@ namespace ArtmaisBackend.Controllers
     [Route("v1/[controller]")]
     public class UserController : ControllerBase
     {
-        public UserController(IUserService userService, IJwtToken jwtToken)
+        public UserController(IUserService userService, IJwtTokenService jwtToken)
         {
             this._userService = userService;
             this._jwtToken = jwtToken;
         }
 
         private readonly IUserService _userService;
-        private readonly IJwtToken _jwtToken;
+        private readonly IJwtTokenService _jwtToken;
 
 
         [HttpGet]
@@ -31,7 +31,7 @@ namespace ArtmaisBackend.Controllers
 
             if (result is null)
                 return this.UnprocessableEntity();
-            
+
             return this.Ok(result);
         }
 
@@ -39,7 +39,7 @@ namespace ArtmaisBackend.Controllers
         public ActionResult<UserDto> GetUserInfo(int userId)
         {
             var result = this._userService.GetUserInfoById(userId);
-            
+
             return this.Ok(result);
         }
 
@@ -51,10 +51,10 @@ namespace ArtmaisBackend.Controllers
         {
             var user = this._jwtToken.ReadToken(this.User);
             var result = this._userService.GetShareLink(id, user.UserID);
-           
+
             if (result is null)
                 return this.UnprocessableEntity();
-            
+
             return this.Ok(result);
         }
 
@@ -65,10 +65,10 @@ namespace ArtmaisBackend.Controllers
         public ActionResult<ShareProfileBaseDto> GetUserByIdToShareProfile([FromQuery] int id)
         {
             var result = this._userService.GetShareProfile(id);
-            
+
             if (result is null)
                 return this.UnprocessableEntity();
-            
+
             return this.Ok(result);
         }
     }

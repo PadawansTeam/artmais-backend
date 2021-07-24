@@ -28,7 +28,7 @@ namespace ArtmaisBackend.Core.Users.Service
         {
             var user = this._userRepository.GetUserById(userId);
             if (user is null) return null;
-            
+
             var userProfile = this._userRepository.GetUserById(userIdProfile);
             if (userProfile is null) return null;
 

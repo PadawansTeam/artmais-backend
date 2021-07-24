@@ -165,7 +165,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var result = userService.GetShareProfile(userId);
             result.Should().BeNull();
         }
-    
+
         [Fact(DisplayName = "Should be GetShareProfile throw when request is null or empty")]
         public void GetUserInfoByIdShouldBeReturnsNull()
         {

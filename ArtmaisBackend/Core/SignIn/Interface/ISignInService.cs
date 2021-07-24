@@ -1,6 +1,6 @@
 ﻿namespace ArtmaisBackend.Core.SignIn.Interface
 {
-    public interface ISignIn
+    public interface ISignInService
     {
         string Authenticate(SigInRequest sigInRequest);
     }

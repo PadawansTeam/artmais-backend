@@ -1,3 +1,5 @@
+using ArtmaisBackend.Core.Adresses.Interface;
+using ArtmaisBackend.Core.Adresses.Service;
 using ArtmaisBackend.Core.Contact.Service;
 using ArtmaisBackend.Core.Contacts.Interface;
 using ArtmaisBackend.Core.Profile.Interface;
@@ -71,7 +73,7 @@ namespace ArtmaisBackend
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ArtmaisBackend", Version = "v1" });
-                
+
                 var jwtSecurityScheme = new OpenApiSecurityScheme
                 {
                     Scheme = "bearer",
@@ -111,23 +113,27 @@ namespace ArtmaisBackend
             services.AddScoped<ICategorySubcategoryRepository, CategorySubcategoryRepository>();
             services.AddScoped<IInterestRepository, InterestRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
 
             //SignIn
-            services.AddScoped<ISignIn, SignInService>();
-            services.AddScoped<IJwtToken, JwtTokenService>();
+            services.AddScoped<ISignInService, SignInService>();
+            services.AddScoped<IJwtTokenService, JwtTokenService>();
 
             //Profile
             services.AddScoped<IInterestMediator, InterestMediator>();
             services.AddScoped<IRecomendationMediator, RecomendationMediator>();
 
             //SignUp
-            services.AddScoped<ISignUp, SignUpService>();
+            services.AddScoped<ISignUpService, SignUpService>();
 
             //User
             services.AddScoped<IUserService, UserService>();
 
             //Contact
             services.AddScoped<IContactService, ContactService>();
+
+            //Address
+            services.AddScoped<IAddressService, AddressService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

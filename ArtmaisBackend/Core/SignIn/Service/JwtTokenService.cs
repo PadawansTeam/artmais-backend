@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.SignIn.Interface;
-using ArtmaisBackend.Core.Entities;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,11 +9,11 @@ using System.Text;
 
 namespace ArtmaisBackend.Core.SignIn.Service
 {
-    public class JwtTokenService : IJwtToken
+    public class JwtTokenService : IJwtTokenService
     {
         public JwtTokenService(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -21,7 +21,7 @@ namespace ArtmaisBackend.Core.SignIn.Service
         public string GenerateToken(User usuario)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Configuration.GetValue("Secret", ""));
+            var key = Encoding.ASCII.GetBytes(this.Configuration.GetValue("Secret", ""));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

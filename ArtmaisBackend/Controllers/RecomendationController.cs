@@ -11,7 +11,7 @@ namespace ArtmaisBackend.Controllers
     {
         public RecomendationController(IRecomendationMediator recomendationMediator)
         {
-            _recomendationMediator = recomendationMediator;
+            this._recomendationMediator = recomendationMediator;
         }
 
         private readonly IRecomendationMediator _recomendationMediator;
@@ -21,11 +21,11 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                return Ok(_recomendationMediator.Index(User));
+                return this.Ok(this._recomendationMediator.Index(this.User));
             }
             catch
             {
-                return Forbid();
+                return this.Forbid();
             }
         }
     }

@@ -1,5 +1,4 @@
 ﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Service;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -8,11 +7,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Xunit;
 
-namespace ArtmaisBackend.Tests.Core.SignInTest
+namespace ArtmaisBackend.Tests.Core.SignIn
 {
-    public class JwtTokenTest
+    public class JwtTokenServiceTest
     {
-        [Fact(DisplayName= "Should be validate jwt token it is not null when the token is generate by method")]
+        [Fact(DisplayName = "Should be validate jwt token it is not null when the token is generate by method")]
         public void GenerateTokenReturnsToken()
         {
             var user = new User
@@ -37,7 +36,7 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
             Assert.NotNull(jwtToken.GenerateToken(user));
         }
 
-        [Fact(DisplayName= "Should be Returns User Jwt Data with Read Token Method")]
+        [Fact(DisplayName = "Should be Returns User Jwt Data with Read Token Method")]
         public void ReadTokenReturnsUserJwtData()
         {
             var user = new User

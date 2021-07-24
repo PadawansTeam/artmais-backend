@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ArtmaisBackend.Core.SignUp.Interface
 {
-    public interface ISignUp
+    public interface ISignUpService
     {
         IEnumerable<CategorySubcategoryDto> Index();
         string Create(SignUpRequest signUpRequest);

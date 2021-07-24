@@ -10,17 +10,17 @@ namespace ArtmaisBackend.Controllers
     [Route("v1/[controller]")]
     public class SignUpController : ControllerBase
     {
-        public SignUpController(ISignUp signUp)
+        public SignUpController(ISignUpService signUpService)
         {
-            this._signUp = signUp;
+            this._signUpService = signUpService;
         }
 
-        private readonly ISignUp _signUp;
+        private readonly ISignUpService _signUpService;
 
         [HttpGet]
         public ActionResult<CategorySubcategoryDto> Index()
         {
-            return this.Ok(this._signUp.Index());
+            return this.Ok(this._signUpService.Index());
         }
 
         [HttpPost]
@@ -28,7 +28,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                return this.Ok(new { token = this._signUp.Create(signUpRequest) });
+                return this.Ok(new { token = this._signUpService.Create(signUpRequest) });
             }
             catch (EmailAlreadyInUse ex)
             {

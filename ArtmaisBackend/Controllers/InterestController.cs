@@ -9,19 +9,19 @@ namespace ArtmaisBackend.Controllers
     [Route("/v1/[controller]")]
     public class InterestController : ControllerBase
     {
-        public InterestController(IInterestMediator interest)
+        public InterestController(IInterestMediator interestMediator)
         {
-            _interest = interest;
+            _interestMediator = interestMediator;
         }
 
-        private readonly IInterestMediator _interest;
+        private readonly IInterestMediator _interestMediator;
 
         [HttpGet]
         public ActionResult<InterestDto> Index()
         {
             try
             {
-                return Ok(_interest.Index(User));
+                return Ok(_interestMediator.Index(User));
             }
             catch
             {
@@ -34,7 +34,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                return Ok(_interest.Create(interestRequest, User));
+                return Ok(_interestMediator.Create(interestRequest, User));
             }
             catch
             {

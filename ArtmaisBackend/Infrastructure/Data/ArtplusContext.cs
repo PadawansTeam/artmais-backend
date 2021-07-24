@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ArtmaisBackend.Core.Entities;
+﻿using ArtmaisBackend.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ArtmaisBackend.Infrastructure.Data
 {
@@ -11,6 +11,7 @@ namespace ArtmaisBackend.Infrastructure.Data
         public DbSet<Subcategory> Subcategory { get; set; }
         public DbSet<Interest> Interest { get; set; }
         public DbSet<Contact> Contact { get; set; }
+        public DbSet<Address> Address { get; set; }
     }
 }
 

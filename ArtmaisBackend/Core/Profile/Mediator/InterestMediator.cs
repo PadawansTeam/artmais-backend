@@ -8,25 +8,25 @@ namespace ArtmaisBackend.Core.Profile.Mediator
 {
     public class InterestMediator : IInterestMediator
     {
-        public InterestMediator(ICategorySubcategoryRepository categorySubcategoryRepository, IInterestRepository interestRepository, IJwtToken jwtToken)
+        public InterestMediator(ICategorySubcategoryRepository categorySubcategoryRepository, IInterestRepository interestRepository, IJwtTokenService jwtToken)
         {
-            _categorySubcategoryRepository = categorySubcategoryRepository;
-            _interestRepository = interestRepository;
-            _jwtToken = jwtToken;
+            this._categorySubcategoryRepository = categorySubcategoryRepository;
+            this._interestRepository = interestRepository;
+            this._jwtToken = jwtToken;
         }
 
         private readonly ICategorySubcategoryRepository _categorySubcategoryRepository;
         private readonly IInterestRepository _interestRepository;
-        private readonly IJwtToken _jwtToken;
+        private readonly IJwtTokenService _jwtToken;
 
         public InterestDto Index(ClaimsPrincipal userClaims)
         {
-            var userJwtData = _jwtToken.ReadToken(userClaims);
+            var userJwtData = this._jwtToken.ReadToken(userClaims);
 
             var dto = new InterestDto
             {
-                Interests = _categorySubcategoryRepository.GetSubcategoryByInterestAndUserId(userJwtData.UserID),
-                Subcategories = _categorySubcategoryRepository.GetSubcategory()
+                Interests = this._categorySubcategoryRepository.GetSubcategoryByInterestAndUserId(userJwtData.UserID),
+                Subcategories = this._categorySubcategoryRepository.GetSubcategory()
             };
 
             return dto;
@@ -34,8 +34,8 @@ namespace ArtmaisBackend.Core.Profile.Mediator
 
         public dynamic Create(InterestRequest interestRequest, ClaimsPrincipal userClaims)
         {
-            var userJwtData = _jwtToken.ReadToken(userClaims);
-            return _interestRepository.DeleteAllAndCreateAll(interestRequest, userJwtData.UserID);
+            var userJwtData = this._jwtToken.ReadToken(userClaims);
+            return this._interestRepository.DeleteAllAndCreateAll(interestRequest, userJwtData.UserID);
         }
     }
 }
