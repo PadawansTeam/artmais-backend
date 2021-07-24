@@ -24,7 +24,7 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<ContactDto> Create(ContactRequest contactRequest)
+        public ActionResult<ContactDto> Create(ContactRequest? contactRequest)
         {
             var user = this._jwtToken.ReadToken(this.User);
             var result = this._contact.Create(contactRequest, user.UserID);
