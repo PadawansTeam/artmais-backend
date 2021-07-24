@@ -24,9 +24,9 @@ namespace ArtmaisBackend.Core.Adresses.Service
             var address = this._addressRepository.Create(addressRequest, userId);
             if (address is null) return null;
 
-            var contactDto = this._mapper.Map<AddressDto>(address);
+            var addressDto = this._mapper.Map<AddressDto>(address);
 
-            return contactDto;
+            return addressDto;
         }
 
         public AddressDto? GetAddressByUser(int userId)
@@ -34,8 +34,8 @@ namespace ArtmaisBackend.Core.Adresses.Service
             var address = this._addressRepository.GetAddressByUser(userId);
             if (address is null) return null;
 
-            var contactDto = this._mapper.Map<AddressDto>(address);
-            return contactDto;
+            var addressDto = this._mapper.Map<AddressDto>(address);
+            return addressDto;
         }
     }
 }

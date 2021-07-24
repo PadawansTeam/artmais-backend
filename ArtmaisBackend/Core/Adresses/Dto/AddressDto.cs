@@ -2,10 +2,13 @@
 {
     public class AddressDto
     {
+        public int UserId { get; set; }
         public string? Street { get; set; }
         public int? Number { get; set; }
         public string? Complement { get; set; }
         public string? Neighborhood { get; set; }
         public string? ZipCode { get; set; }
+        public string Longitude { get; set; }
+        public string Latitude { get; set; }
     }
 }
