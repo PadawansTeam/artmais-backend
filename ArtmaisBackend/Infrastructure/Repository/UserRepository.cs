@@ -13,7 +13,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
     {
         public UserRepository(ArtplusContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
         private readonly ArtplusContext _context;
@@ -33,15 +33,15 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 RegisterDate = DateTime.Now
             };
 
-            _context.User.Add(user);
-            _context.SaveChanges();
+            this._context.User.Add(user);
+            this._context.SaveChanges();
 
             return user;
         }
 
         public User GetUserByEmail(string email)
         {
-            var query = from user in _context.User
+            var query = from user in this._context.User
                         where user.Email.Equals(email)
                         select new User
                         {
@@ -62,15 +62,16 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public IEnumerable<RecomendationDto> GetUsersByInterest(int userId)
         {
-            var results = (from user in _context.User
-                           join interest in _context.Interest on user.SubcategoryID equals interest.SubcategoryID
-                           join subcategory in _context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID
-                           join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+            var results = (from user in this._context.User
+                           join interest in this._context.Interest on user.SubcategoryID equals interest.SubcategoryID
+                           join subcategory in this._context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID
+                           join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
                            where interest.UserID.Equals(userId)
                            && !user.UserID.Equals(userId)
                            && subcategory.OtherSubcategory.Equals(0)
                            select new RecomendationDto
                            {
+                               UserId = user.UserID,
                                Username = user.Username,
                                UserPicture = user.UserPicture,
                                BackgroundPicture = user.BackgroundPicture,

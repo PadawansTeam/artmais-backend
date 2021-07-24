@@ -12,7 +12,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
     {
         public CategorySubcategoryRepository(ArtplusContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
         private readonly ArtplusContext _context;
@@ -20,12 +20,12 @@ namespace ArtmaisBackend.Infrastructure.Repository
         public Subcategory Create(string userCategory, string userSubcategory)
         {
             var category = new Category { UserCategory = userCategory, OtherCategory = 1 };
-            _context.Category.Add(category);
-            _context.SaveChanges();
+            this._context.Category.Add(category);
+            this._context.SaveChanges();
 
             var subcategory = new Subcategory { UserSubcategory = userSubcategory, OtherSubcategory = 1, CategoryID = category.CategoryID };
-            _context.Subcategory.Add(subcategory);
-            _context.SaveChanges();
+            this._context.Subcategory.Add(subcategory);
+            this._context.SaveChanges();
 
             return subcategory;
         }
@@ -34,8 +34,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
         {
             var dtos = new List<CategorySubcategoryDto>();
 
-            var result = (from subcategory in _context.Subcategory
-                          join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+            var result = (from subcategory in this._context.Subcategory
+                          join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
                           where subcategory.OtherSubcategory.Equals(0)
                           && category.OtherCategory.Equals(0)
                           select new { Category = category.UserCategory, Subcategory = subcategory.UserSubcategory }).ToList();
@@ -53,7 +53,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public Subcategory GetSubcategoryBySubcategory(string userSubcategory)
         {
-            var query = from subcategory in _context.Subcategory
+            var query = from subcategory in this._context.Subcategory
                         where subcategory.UserSubcategory.Equals(userSubcategory)
                         select new Subcategory
                         {
@@ -68,7 +68,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public IEnumerable<SubcategoryDto> GetSubcategory()
         {
-            var results = (from subcategory in _context.Subcategory
+            var results = (from subcategory in this._context.Subcategory
                            where subcategory.OtherSubcategory.Equals(0)
                            select new SubcategoryDto
                            {
@@ -81,8 +81,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public IEnumerable<SubcategoryDto> GetSubcategoryByInterestAndUserId(int userId)
         {
-            var results = (from subcategory in _context.Subcategory
-                           join interest in _context.Interest on subcategory.SubcategoryID equals interest.SubcategoryID
+            var results = (from subcategory in this._context.Subcategory
+                           join interest in this._context.Interest on subcategory.SubcategoryID equals interest.SubcategoryID
                            where subcategory.OtherSubcategory.Equals(0)
                            && interest.UserID.Equals(userId)
                            select new SubcategoryDto

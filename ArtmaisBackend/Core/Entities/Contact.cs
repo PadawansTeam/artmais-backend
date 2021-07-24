@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Entities
 {
@@ -13,6 +9,7 @@ namespace ArtmaisBackend.Core.Entities
         [Key]
         [Column("idcontatos")]
         public int ContactID { get; set; }
+
         [Column("idusuario")]
         public int? UserID { get; set; }
 
@@ -36,6 +33,5 @@ namespace ArtmaisBackend.Core.Entities
 
         [Column("telefone_3")]
         public string? ThirdPhone { get; set; }
-
     }
 }

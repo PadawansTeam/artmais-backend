@@ -1,4 +1,5 @@
-﻿using ArtmaisBackend.Core.Contacts.Dto;
+﻿using ArtmaisBackend.Core.Adresses.Dto;
+using ArtmaisBackend.Core.Contacts.Dto;
 using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.Users.Dto;
 using AutoMapper;
@@ -9,8 +10,9 @@ namespace ArtmaisBackend.Infrastructure.Profiles
     {
         public UserMappingConfig()
         {
-            CreateMap<User, UserDto>();
-            CreateMap<Contact, ContactDto>();
+            this.CreateMap<User, UserDto>();
+            this.CreateMap<Contact, ContactDto>();
+            this.CreateMap<Address, AddressDto>();
         }
     }
 }

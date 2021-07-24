@@ -31,7 +31,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
             categorySubcategoryRepositoryMock.Setup(r => r.GetSubcategory()).Returns(subcategories);
             categorySubcategoryRepositoryMock.Setup(r => r.GetSubcategoryByInterestAndUserId(1)).Returns(subcategories);
             var interestRepositoryMock = new Mock<IInterestRepository>();
-            var jwtTokenMock = new Mock<IJwtToken>();
+            var jwtTokenMock = new Mock<IJwtTokenService>();
             jwtTokenMock.Setup(j => j.ReadToken(null)).Returns(userJwtData);
 
             var interestMediator = new InterestMediator(categorySubcategoryRepositoryMock.Object, interestRepositoryMock.Object, jwtTokenMock.Object);
@@ -63,7 +63,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
             var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
             var interestRepositoryMock = new Mock<IInterestRepository>();
             interestRepositoryMock.Setup(r => r.DeleteAllAndCreateAll(request, 1)).Returns(message);
-            var jwtTokenMock = new Mock<IJwtToken>();
+            var jwtTokenMock = new Mock<IJwtTokenService>();
             jwtTokenMock.Setup(j => j.ReadToken(null)).Returns(userJwtData);
 
             var interestMediator = new InterestMediator(categorySubcategoryRepositoryMock.Object, interestRepositoryMock.Object, jwtTokenMock.Object);

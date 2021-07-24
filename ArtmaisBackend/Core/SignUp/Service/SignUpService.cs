@@ -9,48 +9,48 @@ using System.Collections.Generic;
 
 namespace ArtmaisBackend.Core.SignUp.Service
 {
-    public class SignUpService : ISignUp
+    public class SignUpService : ISignUpService
     {
-        public SignUpService(IUserRepository userRepository, ICategorySubcategoryRepository categorySubcategoryRepository, IJwtToken jwtToken)
+        public SignUpService(IUserRepository userRepository, ICategorySubcategoryRepository categorySubcategoryRepository, IJwtTokenService jwtToken)
         {
-            _userRepository = userRepository;
-            _categorySubcategoryRepository = categorySubcategoryRepository;
-            _jwtToken = jwtToken;
+            this._userRepository = userRepository;
+            this._categorySubcategoryRepository = categorySubcategoryRepository;
+            this._jwtToken = jwtToken;
         }
 
         private readonly IUserRepository _userRepository;
         private readonly ICategorySubcategoryRepository _categorySubcategoryRepository;
-        private readonly IJwtToken _jwtToken;
+        private readonly IJwtTokenService _jwtToken;
 
         public IEnumerable<CategorySubcategoryDto> Index()
         {
-            return _categorySubcategoryRepository.GetCategoryAndSubcategory();
+            return this._categorySubcategoryRepository.GetCategoryAndSubcategory();
         }
 
         public string Create(SignUpRequest signUpRequest)
         {
-            var existentUserEmail = _userRepository.GetUserByEmail(signUpRequest.Email);
+            var existentUserEmail = this._userRepository.GetUserByEmail(signUpRequest.Email);
 
             if (existentUserEmail != null)
                 throw new EmailAlreadyInUse("E-mail já utilizado.");
 
-            var existentUsername = _userRepository.GetUserByUsername(signUpRequest.Username);
+            var existentUsername = this._userRepository.GetUserByUsername(signUpRequest.Username);
 
             if (existentUsername != null)
                 throw new UsernameAlreadyInUse("Username já utilizado.");
 
-            var existentSubcategory = _categorySubcategoryRepository
+            var existentSubcategory = this._categorySubcategoryRepository
                 .GetSubcategoryBySubcategory(signUpRequest.Subcategory);
 
             if (existentSubcategory == null)
-                existentSubcategory = _categorySubcategoryRepository.Create(signUpRequest.Category, signUpRequest.Subcategory);
+                existentSubcategory = this._categorySubcategoryRepository.Create(signUpRequest.Category, signUpRequest.Subcategory);
 
             signUpRequest.SubcategoryID = existentSubcategory.SubcategoryID;
 
             signUpRequest.Password = PasswordUtil.Encrypt(signUpRequest.Password);
-            var user = _userRepository.Create(signUpRequest);
+            var user = this._userRepository.Create(signUpRequest);
 
-            return _jwtToken.GenerateToken(user);
+            return this._jwtToken.GenerateToken(user);
         }
     }
 }

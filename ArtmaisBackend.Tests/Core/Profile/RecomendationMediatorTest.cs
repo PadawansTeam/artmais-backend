@@ -1,5 +1,4 @@
-﻿using ArtmaisBackend.Core.Profile;
-using ArtmaisBackend.Core.Profile.Dto;
+﻿using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.Profile.Mediator;
 using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Interface;
@@ -43,7 +42,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
 
             var userRepositoryMock = new Mock<IUserRepository>();
             userRepositoryMock.Setup(r => r.GetUsersByInterest(1)).Returns(recomendations);
-            var jwtTokenMock = new Mock<IJwtToken>();
+            var jwtTokenMock = new Mock<IJwtTokenService>();
             jwtTokenMock.Setup(j => j.ReadToken(null)).Returns(userJwtData);
 
             var recomendationMediator = new RecomendationMediator(userRepositoryMock.Object, jwtTokenMock.Object);

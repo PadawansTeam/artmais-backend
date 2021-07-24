@@ -37,6 +37,5 @@ namespace ArtmaisBackend.Core.Contact.Service
             var contactDto = this._mapper.Map<ContactDto>(contact);
             return contactDto;
         }
-
     }
 }

@@ -9,19 +9,19 @@ namespace ArtmaisBackend.Core.Profile.Mediator
 {
     public class RecomendationMediator : IRecomendationMediator
     {
-        public RecomendationMediator(IUserRepository userRepository, IJwtToken jwtToken)
+        public RecomendationMediator(IUserRepository userRepository, IJwtTokenService jwtToken)
         {
-            _userRepository = userRepository;
-            _jwtToken = jwtToken;
+            this._userRepository = userRepository;
+            this._jwtToken = jwtToken;
         }
 
         private readonly IUserRepository _userRepository;
-        private readonly IJwtToken _jwtToken;
+        private readonly IJwtTokenService _jwtToken;
 
         public IEnumerable<RecomendationDto> Index(ClaimsPrincipal userClaims)
         {
-            var userJwtData = _jwtToken.ReadToken(userClaims);
-            return _userRepository.GetUsersByInterest(userJwtData.UserID);
+            var userJwtData = this._jwtToken.ReadToken(userClaims);
+            return this._userRepository.GetUsersByInterest(userJwtData.UserID);
         }
     }
 }

@@ -2,7 +2,6 @@
 using ArtmaisBackend.Core.Contacts.Dto;
 using ArtmaisBackend.Core.Contacts.Request;
 using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Infrastructure.Profiles;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
 using FluentAssertions;

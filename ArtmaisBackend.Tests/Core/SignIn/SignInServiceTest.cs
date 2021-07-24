@@ -7,9 +7,9 @@ using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Moq;
 using Xunit;
 
-namespace ArtmaisBackend.Tests.Core.SignInTest
+namespace ArtmaisBackend.Tests.Core.SignIn
 {
-    public class SignInTest
+    public class SignInServiceTest
     {
         [Fact(DisplayName = "Shouldn't be returns null when encrypt with method")]
         public void AuthenticateReturnsToken()
@@ -31,7 +31,7 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
             var userRepositoryMock = new Mock<IUserRepository>();
             userRepositoryMock.Setup(r => r.GetUserByEmail("joao@gmail.com")).Returns(user);
 
-            var jwtTokenMock = new Mock<IJwtToken>();
+            var jwtTokenMock = new Mock<IJwtTokenService>();
             jwtTokenMock.Setup(j => j.GenerateToken(user)).Returns("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ");
 
             var authenticate = new SignInService(userRepositoryMock.Object, jwtTokenMock.Object);
@@ -51,7 +51,7 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
             var userRepositoryMock = new Mock<IUserRepository>();
             userRepositoryMock.Setup(r => r.GetUserByEmail("joao@gmail.com")).Returns((User)null);
 
-            var jwtTokenMock = new Mock<IJwtToken>();
+            var jwtTokenMock = new Mock<IJwtTokenService>();
 
             var authenticate = new SignInService(userRepositoryMock.Object, jwtTokenMock.Object);
 
@@ -78,7 +78,7 @@ namespace ArtmaisBackend.Tests.Core.SignInTest
             var userRepositoryMock = new Mock<IUserRepository>();
             userRepositoryMock.Setup(r => r.GetUserByEmail("joao@gmail.com")).Returns(user);
 
-            var jwtTokenMock = new Mock<IJwtToken>();
+            var jwtTokenMock = new Mock<IJwtTokenService>();
             jwtTokenMock.Setup(j => j.GenerateToken(user)).Returns("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ");
 
             var authenticate = new SignInService(userRepositoryMock.Object, jwtTokenMock.Object);

@@ -1,6 +1,5 @@
 ﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.SignIn.Interface;
-using ArtmaisBackend.Core.SignUp;
 using ArtmaisBackend.Core.SignUp.Dto;
 using ArtmaisBackend.Core.SignUp.Request;
 using ArtmaisBackend.Core.SignUp.Service;
@@ -11,9 +10,9 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace ArtmaisBackend.Tests.Core.SignUpTest
+namespace ArtmaisBackend.Tests.Core.SignUp
 {
-    public class SignUpTest
+    public class SignUpServiceTest
     {
         [Fact(DisplayName = "Should be validate GetCategoryAndSubcategory method returns a list of category subcategory")]
         public void IndexReturnsCategorySubcategoryDto()
@@ -37,7 +36,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
             var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
             categorySubcategoryRepositoryMock.Setup(c => c.GetCategoryAndSubcategory()).Returns(categorySubcategory);
 
-            var jwtTokenMock = new Mock<IJwtToken>();
+            var jwtTokenMock = new Mock<IJwtTokenService>();
 
             var signUp = new SignUpService(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
             var result = signUp.Index();
@@ -83,7 +82,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
             var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
             categorySubcategoryRepositoryMock.Setup(c => c.GetSubcategoryBySubcategory("Aquarela")).Returns(subcategory);
 
-            var jwtTokenMock = new Mock<IJwtToken>();
+            var jwtTokenMock = new Mock<IJwtTokenService>();
             jwtTokenMock.Setup(j => j.GenerateToken(user)).Returns("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ");
 
             var signup = new SignUpService(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
@@ -120,7 +119,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
 
             var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
 
-            var jwtTokenMock = new Mock<IJwtToken>();
+            var jwtTokenMock = new Mock<IJwtTokenService>();
 
             var signup = new SignUpService(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
 
@@ -157,7 +156,7 @@ namespace ArtmaisBackend.Tests.Core.SignUpTest
 
             var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
 
-            var jwtTokenMock = new Mock<IJwtToken>();
+            var jwtTokenMock = new Mock<IJwtTokenService>();
 
             var signup = new SignUpService(userRepositoryMock.Object, categorySubcategoryRepositoryMock.Object, jwtTokenMock.Object);
 
