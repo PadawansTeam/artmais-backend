@@ -86,6 +86,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
         {
             return this._context.User.FirstOrDefault(user => user.Username == username);
         }
+        
         public User GetUserById(int? id)
         {
             return this._context.User.FirstOrDefault(user => user.UserID == id);

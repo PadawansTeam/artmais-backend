@@ -1,4 +1,5 @@
-﻿using ArtmaisBackend.Core.Adresses.Interface;
+﻿using ArtmaisBackend.Core.Adresses.Dto;
+using ArtmaisBackend.Core.Adresses.Interface;
 using ArtmaisBackend.Core.Adresses.Request;
 using ArtmaisBackend.Core.Contacts.Dto;
 using ArtmaisBackend.Core.SignIn.Interface;
@@ -20,14 +21,14 @@ namespace ArtmaisBackend.Controllers
         private readonly IAddressService _addressService;
         private readonly IJwtTokenService _jwtToken;
 
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<ContactDto> Create(AddressRequest? contactRequest)
+        public ActionResult<AddressDto> GetLoggedAddressInfo()
         {
             var user = this._jwtToken.ReadToken(this.User);
-            var result = this._addressService.Create(contactRequest, user.UserID);
+            var result = this._addressService.GetAddressByUser(user.UserID);
 
             if (result is null)
                 return this.UnprocessableEntity();
@@ -35,14 +36,28 @@ namespace ArtmaisBackend.Controllers
             return this.Ok(result);
         }
 
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<ContactDto> GetContactInfoById()
+        public ActionResult<AddressDto> Create(AddressRequest? addressRequest)
         {
             var user = this._jwtToken.ReadToken(this.User);
-            var result = this._addressService.GetAddressByUser(user.UserID);
+            var result = this._addressService.Create(addressRequest, user.UserID);
+
+            if (result is null)
+                return this.UnprocessableEntity();
+
+            return this.Ok(result);
+        }
+
+        [HttpGet("{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<AddressDto> GetAddressInfoById(int userId)
+        {
+            var result = this._addressService.GetAddressByUser(userId);
 
             if (result is null)
                 return this.UnprocessableEntity();

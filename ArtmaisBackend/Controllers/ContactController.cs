@@ -20,6 +20,21 @@ namespace ArtmaisBackend.Controllers
         private readonly IContactService _contactService;
         private readonly IJwtTokenService _jwtToken;
 
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<ContactDto> GetLoggedContactInfo()
+        {
+            var user = this._jwtToken.ReadToken(this.User);
+            var result = this._contactService.GetContactByUser(user.UserID);
+
+            if (result is null)
+                return this.UnprocessableEntity();
+
+            return this.Ok(result);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -35,7 +50,7 @@ namespace ArtmaisBackend.Controllers
             return this.Ok(result);
         }
 
-        [HttpGet]
+        [HttpGet("{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

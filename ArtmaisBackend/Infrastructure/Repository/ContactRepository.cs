@@ -15,7 +15,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public Contact? GetContactByUser(int userId)
+        public Contact? GetContactByUser(int? userId)
         {
             return this._context.Contact.Where(contact => contact.UserID == userId).FirstOrDefault();
         }

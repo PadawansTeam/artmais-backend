@@ -27,7 +27,7 @@ namespace ArtmaisBackend.Controllers
         public ActionResult<UserDto> GetLoggedUserInfo()
         {
             var user = this._jwtToken.ReadToken(this.User);
-            var result = this._userService.GetUserInfoById(user.UserID);
+            var result = this._userService.GetLoggedUserInfoById(user.UserID);
 
             if (result is null)
                 return this.UnprocessableEntity();
@@ -36,9 +36,15 @@ namespace ArtmaisBackend.Controllers
         }
 
         [HttpGet("{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<UserDto> GetUserInfo(int userId)
         {
             var result = this._userService.GetUserInfoById(userId);
+
+            if (result is null)
+                return this.UnprocessableEntity();
 
             return this.Ok(result);
         }
@@ -49,8 +55,22 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<ShareLinkDto> GetUserByIdToShareLink([FromQuery] int id)
         {
+            var result = this._userService.GetShareLinkByUserId(id);
+
+            if (result is null)
+                return this.UnprocessableEntity();
+
+            return this.Ok(result);
+        }
+
+        [HttpGet("ShareLinkProfile")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<ShareLinkDto> GetLoggedUserByIdToShareLink()
+        {
             var user = this._jwtToken.ReadToken(this.User);
-            var result = this._userService.GetShareLink(id, user.UserID);
+            var result = this._userService.GetShareLinkByLoggedUser(user.UserID);
 
             if (result is null)
                 return this.UnprocessableEntity();

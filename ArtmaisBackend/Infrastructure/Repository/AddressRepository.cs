@@ -15,7 +15,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public Address? GetAddressByUser(int userId)
+        public Address? GetAddressByUser(int? userId)
         {
             return this._context.Address.Where(address => address.UserID == userId).FirstOrDefault();
         }
