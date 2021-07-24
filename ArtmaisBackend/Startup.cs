@@ -76,13 +76,14 @@ namespace ArtmaisBackend
 
                 var jwtSecurityScheme = new OpenApiSecurityScheme
                 {
-                    Scheme = "bearer",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
                     BearerFormat = "JWT",
-                    Name = "Authentication",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Description = "Bearer Token",
-
+                    Description = "JWT Authorization header using the Bearer scheme." +
+                                  "\r\n\r\nEnter 'Bearer'[space] and then your token in the text input below." +
+                                  "\r\n\r\nExample: \"Bearer 12345abcdef\"",
                     Reference = new OpenApiReference
                     {
                         Id = JwtBearerDefaults.AuthenticationScheme,
