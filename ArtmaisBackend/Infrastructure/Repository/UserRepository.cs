@@ -71,6 +71,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                            && subcategory.OtherSubcategory.Equals(0)
                            select new RecomendationDto
                            {
+                               UserId = user.UserID,
                                Username = user.Username,
                                UserPicture = user.UserPicture,
                                BackgroundPicture = user.BackgroundPicture,
