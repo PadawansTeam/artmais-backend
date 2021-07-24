@@ -1,5 +1,4 @@
 ﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Service;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;

@@ -1,9 +1,8 @@
-﻿using ArtmaisBackend.Core.SignUp;
+﻿using ArtmaisBackend.Core.SignUp.Dto;
 using ArtmaisBackend.Core.SignUp.Interface;
+using ArtmaisBackend.Core.SignUp.Request;
 using ArtmaisBackend.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.SignUp.Dto;
 
 namespace ArtmaisBackend.Controllers
 {
@@ -13,7 +12,7 @@ namespace ArtmaisBackend.Controllers
     {
         public SignUpController(ISignUp signUp)
         {
-            _signUp = signUp;
+            this._signUp = signUp;
         }
 
         private readonly ISignUp _signUp;
@@ -21,7 +20,7 @@ namespace ArtmaisBackend.Controllers
         [HttpGet]
         public ActionResult<CategorySubcategoryDto> Index()
         {
-            return Ok(_signUp.Index());
+            return this.Ok(this._signUp.Index());
         }
 
         [HttpPost]
@@ -29,15 +28,15 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                return Ok(new { token = _signUp.Create(signUpRequest) });
+                return this.Ok(new { token = this._signUp.Create(signUpRequest) });
             }
             catch (EmailAlreadyInUse ex)
             {
-                return UnprocessableEntity(new { message = ex.Message });
+                return this.UnprocessableEntity(new { message = ex.Message });
             }
             catch (UsernameAlreadyInUse ex)
             {
-                return UnprocessableEntity(new { message = ex.Message });
+                return this.UnprocessableEntity(new { message = ex.Message });
             }
         }
     }
