@@ -28,10 +28,11 @@ namespace ArtmaisBackend.Controllers
         {
             var user = this._jwtToken.ReadToken(this.User);
             var result = this._contact.Create(contactRequest, user.UserID);
+            
             if (result is null)
                 return this.UnprocessableEntity();
-            else
-                return this.Ok(result);
+            
+            return this.Ok(result);
         }
 
         [HttpGet]
@@ -42,10 +43,11 @@ namespace ArtmaisBackend.Controllers
         {
             var user = this._jwtToken.ReadToken(this.User);
             var result = this._contact.GetContactByUser(user.UserID);
+            
             if (result is null)
                 return this.UnprocessableEntity();
-            else
-                return this.Ok(result);
+           
+            return this.Ok(result);
         }
     }
 }
