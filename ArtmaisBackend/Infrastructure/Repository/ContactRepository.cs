@@ -15,9 +15,9 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public Contact? GetContactByUser(int userId)
+        public Contact? GetContactByUser(int? userId)
         {
-            return this._context.Contact.Where(contact => contact.UserID == userId).FirstOrDefault();
+            return this._context.Contact.FirstOrDefault(contact => contact.UserID == userId);
         }
 
         public Contact Create(ContactRequest contactRequest, int userId)
@@ -34,6 +34,13 @@ namespace ArtmaisBackend.Infrastructure.Repository
             };
 
             this._context.Contact.Add(contact);
+            this._context.SaveChanges();
+
+            return contact;
+        }
+        public Contact Update(Contact contact)
+        {
+            this._context.Contact.Update(contact);
             this._context.SaveChanges();
 
             return contact;

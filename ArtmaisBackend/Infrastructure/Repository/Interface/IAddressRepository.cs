@@ -9,7 +9,8 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
 {
     public interface IAddressRepository
     {
-        Address? GetAddressByUser(int userId);
+        Address? GetAddressByUser(int? userId);
         Address Create(AddressRequest addressRequest, int userId);
+        Address Update(Address address);
     }
 }

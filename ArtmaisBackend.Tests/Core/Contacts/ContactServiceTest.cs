@@ -32,7 +32,7 @@ namespace ArtmaisBackend.Tests.Core.Contacts
             var userIdProfile = 2;
 
             var contactService = new ContactService(mockContactRepository.Object, mockMapper.Object);
-            var result = contactService.Create(contactRequest, userIdProfile);
+            var result = contactService.CreateOrUpdateUserAddress(contactRequest, userIdProfile);
 
             result.Should().BeNull();
         }

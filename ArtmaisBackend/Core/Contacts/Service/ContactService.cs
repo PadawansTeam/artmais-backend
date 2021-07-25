@@ -4,6 +4,7 @@ using ArtmaisBackend.Core.Contacts.Request;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
 
+
 namespace ArtmaisBackend.Core.Contact.Service
 {
     public class ContactService : IContactService
@@ -17,16 +18,30 @@ namespace ArtmaisBackend.Core.Contact.Service
         private readonly IContactRepository _contactRepository;
         private readonly IMapper _mapper;
 
-        public ContactDto? Create(ContactRequest? contactRequest, int userId)
+        public ContactDto? CreateOrUpdateUserAddress(ContactRequest? contactRequest, int userId)
         {
             if (contactRequest is null) return null;
 
-            var contact = this._contactRepository.Create(contactRequest, userId);
-            if (contact is null) return null;
+            var contactInfo = this._contactRepository.GetContactByUser(userId);
 
-            var contactDto = this._mapper.Map<ContactDto>(contact);
+            if(contactInfo is null)
+            {
+                var newContact = this._contactRepository.Create(contactRequest, userId);
+                if (newContact is null) return null;
 
-            return contactDto;
+                var contactDto = this._mapper.Map<ContactDto>(newContact);
+
+                return contactDto;
+            }
+            else
+            {
+                this._mapper.Map(contactRequest, contactInfo);
+                var contact = this._contactRepository.Update(contactInfo);
+
+                var contactDto = this._mapper.Map<ContactDto>(contact);
+
+                return contactDto;
+            }
         }
 
         public ContactDto? GetContactByUser(int userId)

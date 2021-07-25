@@ -74,6 +74,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                            {
                                SubcategoryID = subcategory.SubcategoryID,
                                Subcategory = subcategory.UserSubcategory,
+                               Category = subcategory.Category.UserCategory
                            }).ToList();
 
             return results;
@@ -89,6 +90,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                            {
                                SubcategoryID = subcategory.SubcategoryID,
                                Subcategory = subcategory.UserSubcategory,
+                               Category = subcategory.Category.UserCategory
                            }).ToList();
 
             return results;

@@ -17,16 +17,30 @@ namespace ArtmaisBackend.Core.Adresses.Service
         private readonly IAddressRepository _addressRepository;
         private readonly IMapper _mapper;
 
-        public AddressDto? Create(AddressRequest? addressRequest, int userId)
+        public AddressDto? CreateOrUpdateUserContact(AddressRequest? addressRequest, int userId)
         {
             if (addressRequest is null) return null;
 
-            var address = this._addressRepository.Create(addressRequest, userId);
-            if (address is null) return null;
+            var addressInfo = this._addressRepository.GetAddressByUser(userId);
 
-            var addressDto = this._mapper.Map<AddressDto>(address);
+            if (addressInfo is null)
+            {
+                var newAddress = this._addressRepository.Create(addressRequest, userId);
+                if (newAddress is null) return null;
 
-            return addressDto;
+                var addressDto = this._mapper.Map<AddressDto>(newAddress);
+
+                return addressDto;
+            }
+            else
+            {
+                this._mapper.Map(addressRequest, addressInfo);
+                var address = this._addressRepository.Update(addressInfo);
+
+                var addressDto = this._mapper.Map<AddressDto>(address);
+
+                return addressDto;
+            }
         }
 
         public AddressDto? GetAddressByUser(int userId)

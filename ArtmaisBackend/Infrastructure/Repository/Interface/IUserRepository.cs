@@ -12,5 +12,6 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
         IEnumerable<RecomendationDto> GetUsersByInterest(int userId);
         User GetUserByUsername(string username);
         User GetUserById(int? id);
+        User Update(User user);
     }
 }
