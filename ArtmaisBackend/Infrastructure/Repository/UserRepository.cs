@@ -30,7 +30,9 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 Username = signUpRequest.Username,
                 BirthDate = signUpRequest.BirthDate,
                 Role = signUpRequest.Role,
-                RegisterDate = DateTime.Now
+                RegisterDate = DateTime.Now,
+                UserPicture = signUpRequest.UserPicture,
+                BackgroundPicture = signUpRequest.BackgroundPicture
             };
 
             this._context.User.Add(user);

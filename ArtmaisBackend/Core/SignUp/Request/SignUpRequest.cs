@@ -33,5 +33,9 @@ namespace ArtmaisBackend.Core.SignUp.Request
         public string Subcategory { get; set; }
 
         public int SubcategoryID { get; set; }
+        
+        public string UserPicture { get; set; }
+
+        public string BackgroundPicture { get; set; }
     }
 }
