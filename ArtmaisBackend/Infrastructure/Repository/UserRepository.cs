@@ -1,6 +1,7 @@
 ﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.SignUp.Request;
+using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System;
@@ -88,18 +89,33 @@ namespace ArtmaisBackend.Infrastructure.Repository
         {
             return this._context.User.FirstOrDefault(user => user.Username == username);
         }
-        
+
         public User GetUserById(int? id)
         {
             return this._context.User.FirstOrDefault(user => user.UserID == id);
         }
-        
+
         public User Update(User user)
         {
             this._context.User.Update(user);
             this._context.SaveChanges();
 
             return user;
+        }
+
+        public UserCategoryDto GetSubcategoryByUserId(int userId)
+        {
+            var results = (from user in this._context.User
+                           join subcategory in this._context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
+                           join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
+                           where user.UserID.Equals(userId)
+                           select new UserCategoryDto
+                           {
+                               UserId = user.UserID,
+                               Category = category.UserCategory,
+                               Subcategory = subcategory.UserSubcategory
+                           }).FirstOrDefault();
+            return results;
         }
     }
 }

@@ -88,7 +88,8 @@ namespace ArtmaisBackend.Core.Users.Service
         {
             var user = this._userRepository.GetUserById(id);
             if (user is null) return null;
-            
+
+            var userCategory = this._userRepository.GetSubcategoryByUserId(user.UserID);
             var contact = this._contactRepository.GetContactByUser(id);
             var address = this._addressRepository.GetAddressByUser(id);
             var contactProfile = this.GetShareProfile(id);
@@ -101,7 +102,8 @@ namespace ArtmaisBackend.Core.Users.Service
                 Username = user?.Username,
                 UserPicture = user?.UserPicture,
                 BackgroundPicture = user?.BackgroundPicture,
-                Category = user?.Role,
+                Category = userCategory?.Category,
+                Subcategory = userCategory?.Subcategory,
                 Description = user?.Description,
                 Street = address?.Street,
                 Number = address?.Number,
@@ -128,7 +130,8 @@ namespace ArtmaisBackend.Core.Users.Service
         {
             var user = this._userRepository.GetUserById(id);
             if (user is null) return null;
-            
+
+            var userCategory = this._userRepository.GetSubcategoryByUserId(user.UserID);
             var contact = this._contactRepository.GetContactByUser(id);
             var address = this._addressRepository.GetAddressByUser(id);
             var contactProfile = this.GetShareProfile(id);
@@ -141,7 +144,8 @@ namespace ArtmaisBackend.Core.Users.Service
                 Username = user?.Username,
                 UserPicture = user?.UserPicture,
                 BackgroundPicture = user?.BackgroundPicture,
-                Category = user?.Role,
+                Category = userCategory?.Category,
+                Subcategory = userCategory?.Subcategory,
                 Description = user?.Description,
                 Street = address?.Street,
                 Number = address?.Number,

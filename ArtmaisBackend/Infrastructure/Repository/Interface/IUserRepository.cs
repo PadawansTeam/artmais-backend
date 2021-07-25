@@ -1,6 +1,7 @@
 ﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.SignUp.Request;
+using ArtmaisBackend.Core.Users.Dto;
 using System.Collections.Generic;
 
 namespace ArtmaisBackend.Infrastructure.Repository.Interface
@@ -13,5 +14,6 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
         User GetUserByUsername(string username);
         User GetUserById(int? id);
         User Update(User user);
+        UserCategoryDto GetSubcategoryByUserId(int userId);
     }
 }
