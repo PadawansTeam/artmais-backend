@@ -8,6 +8,7 @@
         public string? UserPicture { get; set; }
         public string? BackgroundPicture { get; set; }
         public string? Category { get; set; }
+        public string? Description { get; set; }
         public string? Street { get; set; }
         public int? Number { get; set; }
         public string? Neighborhood { get; set; }

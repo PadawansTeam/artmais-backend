@@ -97,11 +97,12 @@ namespace ArtmaisBackend.Core.Users.Service
             var userDto = new UserDto()
             {
                 UserID = user.UserID,
-                Name = user.Name,
-                Username = user.Username,
-                UserPicture = user.UserPicture,
-                BackgroundPicture = user.BackgroundPicture,
+                Name = user?.Name,
+                Username = user?.Username,
+                UserPicture = user?.UserPicture,
+                BackgroundPicture = user?.BackgroundPicture,
                 Category = user?.Subcategory?.Category?.UserCategory,
+                Description = user?.Description,
                 Street = address?.Street,
                 Number = address?.Number,
                 Neighborhood = address?.Neighborhood,
@@ -136,10 +137,12 @@ namespace ArtmaisBackend.Core.Users.Service
             var userDto = new UserDto()
             {
                 UserID = user.UserID,
-                Name = user.Name,
-                Username = user.Username,
-                UserPicture = user.UserPicture,
-                BackgroundPicture = user.BackgroundPicture,
+                Name = user?.Name,
+                Username = user?.Username,
+                UserPicture = user?.UserPicture,
+                BackgroundPicture = user?.BackgroundPicture,
+                Category = user?.Subcategory?.Category?.UserCategory,
+                Description = user?.Description,
                 Street = address?.Street,
                 Number = address?.Number,
                 Neighborhood = address?.Neighborhood,
@@ -196,6 +199,18 @@ namespace ArtmaisBackend.Core.Users.Service
             }
 
             this._mapper.Map(passwordRequest, userInfo);
+            this._userRepository.Update(userInfo);
+
+            return true;
+        }
+
+        public bool UpdateUserDescription(DescriptionRequest? descriptionRequest, int userId)
+        {
+            if (descriptionRequest is null) return false;
+
+            var userInfo = this._userRepository.GetUserById(userId);
+
+            this._mapper.Map(descriptionRequest, userInfo);
             this._userRepository.Update(userInfo);
 
             return true;
