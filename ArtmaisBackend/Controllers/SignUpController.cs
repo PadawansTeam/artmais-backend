@@ -2,6 +2,7 @@
 using ArtmaisBackend.Core.SignUp.Interface;
 using ArtmaisBackend.Core.SignUp.Request;
 using ArtmaisBackend.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtmaisBackend.Controllers
@@ -18,12 +19,17 @@ namespace ArtmaisBackend.Controllers
         private readonly ISignUpService _signUpService;
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<CategorySubcategoryDto> Index()
         {
             return this.Ok(this._signUpService.Index());
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<dynamic> Create(SignUpRequest signUpRequest)
         {
             try

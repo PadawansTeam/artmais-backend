@@ -104,7 +104,7 @@ namespace ArtmaisBackend.Tests.Core.Contacts
             result.Should().Be(expectedUser);
         }
 
-        [Fact(DisplayName = "Get contact by user should be null when contactRequest is null or empty")]
+        [Fact(DisplayName = "Get contact by user should be null when contact doesn't exist")]
         public void GetContactByUserShouldBeReturnsNullContactDto()
         {
             var mockContactRepository = new Mock<IContactRepository>();

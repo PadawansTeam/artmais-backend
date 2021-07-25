@@ -1,6 +1,7 @@
 ﻿using ArtmaisBackend.Core.Profile;
 using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.Profile.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtmaisBackend.Controllers
@@ -17,6 +18,9 @@ namespace ArtmaisBackend.Controllers
         private readonly IInterestMediator _interestMediator;
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<InterestDto> Index()
         {
             try
@@ -30,6 +34,9 @@ namespace ArtmaisBackend.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<dynamic> Create(InterestRequest interestRequest)
         {
             try
