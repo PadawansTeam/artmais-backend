@@ -105,17 +105,17 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public UserCategoryDto GetSubcategoryByUserId(int userId)
         {
-            var results = (from user in this._context.User
-                           join subcategory in this._context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
-                           join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
-                           where user.UserID.Equals(userId)
-                           select new UserCategoryDto
-                           {
-                               UserId = user.UserID,
-                               Category = category.UserCategory,
-                               Subcategory = subcategory.UserSubcategory
-                           }).FirstOrDefault();
-            return results;
+            var query = from user in this._context.User
+                        join subcategory in this._context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
+                        join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
+                        where user.UserID.Equals(userId)
+                        select new UserCategoryDto
+                        {
+                            Category = category.UserCategory,
+                            Subcategory = subcategory.UserSubcategory
+                        };
+
+            return query.FirstOrDefault();
         }
     }
 }
