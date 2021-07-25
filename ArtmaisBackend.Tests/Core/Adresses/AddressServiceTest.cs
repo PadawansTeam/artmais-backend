@@ -57,7 +57,7 @@ namespace ArtmaisBackend.Tests.Core.Adresses
             result.ZipCode.Should().BeEquivalentTo(expectedAddress.ZipCode);
         }
 
-        [Fact(DisplayName = "Create should be returns null AddressDto")]
+        [Fact(DisplayName = "Create should be null AddressDto when contactRequest is null or empty")]
         public void CreateOrUpdateUserAddressShouldBeReturnsNullAddressDto()
         {
             var contactRequest = new AddressRequest { };
@@ -100,7 +100,7 @@ namespace ArtmaisBackend.Tests.Core.Adresses
             result.Should().Be(expectedUser);
         }
 
-        [Fact(DisplayName = "Get Address by user should be returns null AddressDto")]
+        [Fact(DisplayName = "Get Address by user should be null AddressDto when userId doesn't exist")]
         public void GetContactByUserShouldBeReturnsNullContactDto()
         {
             var mockAddressRepository = new Mock<IAddressRepository>();

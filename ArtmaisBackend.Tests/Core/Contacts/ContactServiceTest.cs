@@ -60,19 +60,11 @@ namespace ArtmaisBackend.Tests.Core.Contacts
             result.SecundaryPhone.Should().BeEquivalentTo(expectedContact.SecundaryPhone);
             result.ThirdPhone.Should().BeEquivalentTo(expectedContact.ThirdPhone);
         }
-
-        [Fact(DisplayName = "Create should be null contactdto")]
+         
+        [Fact(DisplayName = "Create should be null contactdto when contactRequest is null or empty")]
         public void CreateOrUpdateUserContactShouldBeReturnsNullContactDto()
         {
-            var contactRequest = new ContactRequest
-            {
-                Facebook = "facebook",
-                Twitter = "twitter",
-                Instagram = "instagram",
-                MainPhone = "5511999999999",
-                SecundaryPhone = "5511888888888",
-                ThirdPhone = "5511777777777"
-            };
+            var contactRequest = new ContactRequest{};
 
             var mockContactRepository = new Mock<IContactRepository>();
             var mockMapper = new Mock<IMapper>();
@@ -112,7 +104,7 @@ namespace ArtmaisBackend.Tests.Core.Contacts
             result.Should().Be(expectedUser);
         }
 
-        [Fact(DisplayName = "Get contact by user should be null contactdto")]
+        [Fact(DisplayName = "Get contact by user should be null when contactRequest is null or empty")]
         public void GetContactByUserShouldBeReturnsNullContactDto()
         {
             var mockContactRepository = new Mock<IContactRepository>();
