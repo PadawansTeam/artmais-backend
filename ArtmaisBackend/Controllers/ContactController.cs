@@ -42,7 +42,7 @@ namespace ArtmaisBackend.Controllers
         public ActionResult<ContactDto> Upsert(ContactRequest? contactRequest)
         {
             var user = this._jwtToken.ReadToken(this.User);
-            var result = this._contactService.CreateOrUpdateUserAddress(contactRequest, user.UserID);
+            var result = this._contactService.CreateOrUpdateUserContact(contactRequest, user.UserID);
 
             if (result is null)
                 return this.UnprocessableEntity();

@@ -11,7 +11,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
 {
     public class RecomendationMediatorTest
     {
-        [Fact(DisplayName = "Should be validate GetUsersByInterest method returns RecomendationDto")]
+        [Fact(DisplayName = "Index should be validate GetUsersByInterest method and returns RecomendationDto")]
         public void IndexReturnsRecomendationDto()
         {
             var recomendations = new List<RecomendationDto>

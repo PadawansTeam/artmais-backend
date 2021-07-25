@@ -11,7 +11,7 @@ namespace ArtmaisBackend.Tests.Core.SignIn
 {
     public class SignInServiceTest
     {
-        [Fact(DisplayName = "Shouldn't be returns null when encrypt with method")]
+        [Fact(DisplayName = "Authenticate shouldn't be null when encrypt with method")]
         public void AuthenticateReturnsToken()
         {
             var request = new SigInRequest
@@ -39,7 +39,7 @@ namespace ArtmaisBackend.Tests.Core.SignIn
             Assert.NotNull(authenticate.Authenticate(request));
         }
 
-        [Fact(DisplayName = "Should throw unauthorized when email is not authenticate")]
+        [Fact(DisplayName = "Authenticate should throw unauthorized when email is not authenticate")]
         public void AuthenticateThrowsUnauthorizedByEmail()
         {
             var request = new SigInRequest
@@ -58,7 +58,7 @@ namespace ArtmaisBackend.Tests.Core.SignIn
             Assert.Throws<Unauthorized>(() => authenticate.Authenticate(request));
         }
 
-        [Fact(DisplayName = "Should throw unauthorized when password is not authenticate")]
+        [Fact(DisplayName = "Authenticate should throw unauthorized when password is not authenticate")]
         public void AuthenticateThrowsUnauthorizedByPassword()
         {
             var request = new SigInRequest

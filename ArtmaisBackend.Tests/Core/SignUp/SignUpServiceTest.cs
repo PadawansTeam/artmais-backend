@@ -14,7 +14,7 @@ namespace ArtmaisBackend.Tests.Core.SignUp
 {
     public class SignUpServiceTest
     {
-        [Fact(DisplayName = "Should be validate GetCategoryAndSubcategory method returns a list of category subcategory")]
+        [Fact(DisplayName = "Index should be validate GetCategoryAndSubcategory method returns a list of category subcategory")]
         public void IndexReturnsCategorySubcategoryDto()
         {
             var categorySubcategory = new List<CategorySubcategoryDto>
@@ -44,7 +44,7 @@ namespace ArtmaisBackend.Tests.Core.SignUp
             Assert.IsAssignableFrom<IEnumerable<CategorySubcategoryDto>>(result);
         }
 
-        [Fact(DisplayName = "Shouldn't be null when user is create")]
+        [Fact(DisplayName = "Create shouldn't be null when user is create")]
         public void CreateReturnsToken()
         {
             var request = new SignUpRequest
@@ -90,7 +90,7 @@ namespace ArtmaisBackend.Tests.Core.SignUp
             Assert.NotNull(signup.Create(request));
         }
 
-        [Fact(DisplayName = "Should be throw when email already exist")]
+        [Fact(DisplayName = "Create should be throw when email already exist")]
         public void CreateThrowsEmailAlreadyInUse()
         {
             var request = new SignUpRequest
@@ -126,7 +126,7 @@ namespace ArtmaisBackend.Tests.Core.SignUp
             Assert.Throws<EmailAlreadyInUse>(() => signup.Create(request));
         }
 
-        [Fact(DisplayName = "Create throws username already in use")]
+        [Fact(DisplayName = "Create throws when username already in use")]
         public void CreateThrowsUsernameAlreadyInUse()
         {
             var request = new SignUpRequest

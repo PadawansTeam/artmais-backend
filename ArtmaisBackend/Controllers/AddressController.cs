@@ -43,7 +43,7 @@ namespace ArtmaisBackend.Controllers
         public ActionResult<AddressDto> Upsert(AddressRequest? addressRequest)
         {
             var user = this._jwtToken.ReadToken(this.User);
-            var result = this._addressService.CreateOrUpdateUserContact(addressRequest, user.UserID);
+            var result = this._addressService.CreateOrUpdateUserAddress(addressRequest, user.UserID);
 
             if (result is null)
                 return this.UnprocessableEntity();

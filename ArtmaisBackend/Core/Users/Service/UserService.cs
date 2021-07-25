@@ -167,11 +167,11 @@ namespace ArtmaisBackend.Core.Users.Service
             if (userRequest is null) return null;
 
             var userInfo = this._userRepository.GetUserById(userId);
-            this._mapper.Map(userRequest, userInfo);
+            userInfo = this._mapper.Map(userRequest, userInfo);
             var user = this._userRepository.Update(userInfo);
 
             var userContactInfo = this._contactRepository.GetContactByUser(userId);
-            this._mapper.Map(userRequest, userContactInfo);
+            userContactInfo = this._mapper.Map(userRequest, userContactInfo);
             var contact = this._contactRepository.Update(userContactInfo);
 
             var userDto = new UserProfileInfoDto { 

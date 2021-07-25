@@ -11,7 +11,7 @@ namespace ArtmaisBackend.Tests.Core.SignIn
 {
     public class JwtTokenServiceTest
     {
-        [Fact(DisplayName = "Should be validate jwt token it is not null when the token is generate by method")]
+        [Fact(DisplayName = "GenerateToken should be validate jwt token it is not null when the token is generate by method")]
         public void GenerateTokenReturnsToken()
         {
             var user = new User
@@ -36,7 +36,7 @@ namespace ArtmaisBackend.Tests.Core.SignIn
             Assert.NotNull(jwtToken.GenerateToken(user));
         }
 
-        [Fact(DisplayName = "Should be Returns User Jwt Data with Read Token Method")]
+        [Fact(DisplayName = "GenerateToken should be returns UserJwtData with ReadToken Method")]
         public void ReadTokenReturnsUserJwtData()
         {
             var user = new User
