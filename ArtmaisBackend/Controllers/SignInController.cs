@@ -1,6 +1,7 @@
 ﻿using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArtmaisBackend.Controllers
@@ -17,6 +18,9 @@ namespace ArtmaisBackend.Controllers
         private readonly ISignInService _signIn;
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<dynamic> Authenticate(SigInRequest sigInRequest)
         {
             try

@@ -12,7 +12,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
 {
     public class InterestMediatorTest
     {
-        [Fact(DisplayName = "Should be validate GetUsersByInterest method returns SubcategoryDto")]
+        [Fact(DisplayName = "Index should be validate GetUsersByInterest method and returns SubcategoryDto")]
         public void IndexReturnsSubcategoryDto()
         {
             var subcategories = new List<SubcategoryDto>
@@ -40,7 +40,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
             Assert.IsAssignableFrom<InterestDto>(result);
         }
 
-        [Fact(DisplayName = "Should be returns message when InterestRequest it is save")]
+        [Fact(DisplayName = "Create should be returns message when InterestRequest it is save")]
         public void CreateReturnsMessage()
         {
             var request = new InterestRequest

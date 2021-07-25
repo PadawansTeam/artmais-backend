@@ -17,7 +17,7 @@ namespace ArtmaisBackend.Core.Adresses.Service
         private readonly IAddressRepository _addressRepository;
         private readonly IMapper _mapper;
 
-        public AddressDto? CreateOrUpdateUserContact(AddressRequest? addressRequest, int userId)
+        public AddressDto? CreateOrUpdateUserAddress(AddressRequest? addressRequest, int userId)
         {
             if (addressRequest is null) return null;
 

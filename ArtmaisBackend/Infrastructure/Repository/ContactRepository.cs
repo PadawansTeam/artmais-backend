@@ -30,7 +30,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 Twitter = contactRequest.Twitter,
                 MainPhone = contactRequest.MainPhone,
                 SecundaryPhone = contactRequest.SecundaryPhone,
-                ThirdPhone = contactRequest.ThridPhone,
+                ThirdPhone = contactRequest.ThirdPhone,
             };
 
             this._context.Contact.Add(contact);
