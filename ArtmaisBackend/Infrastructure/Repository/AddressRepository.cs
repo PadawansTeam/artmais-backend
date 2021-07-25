@@ -17,7 +17,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public Address? GetAddressByUser(int? userId)
         {
-            return this._context.Address.Where(address => address.UserID == userId).FirstOrDefault();
+            return this._context.Address.FirstOrDefault(address => address.UserID == userId);
         }
 
         public Address Create(AddressRequest addressRequest, int userId)
@@ -33,6 +33,13 @@ namespace ArtmaisBackend.Infrastructure.Repository
             };
 
             this._context.Address.Add(address);
+            this._context.SaveChanges();
+
+            return address;
+        }
+        public Address Update(Address address)
+        {
+            this._context.Address.Update(address);
             this._context.SaveChanges();
 
             return address;

@@ -35,14 +35,14 @@ namespace ArtmaisBackend.Controllers
             return this.Ok(result);
         }
 
-        [HttpPost]
+        [HttpPost("[Action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<ContactDto> Create(ContactRequest? contactRequest)
+        public ActionResult<ContactDto> Upsert(ContactRequest? contactRequest)
         {
             var user = this._jwtToken.ReadToken(this.User);
-            var result = this._contactService.Create(contactRequest, user.UserID);
+            var result = this._contactService.CreateOrUpdateUserAddress(contactRequest, user.UserID);
 
             if (result is null)
                 return this.UnprocessableEntity();

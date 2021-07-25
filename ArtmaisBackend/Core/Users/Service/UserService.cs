@@ -1,8 +1,10 @@
 ﻿using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
+using ArtmaisBackend.Core.Users.Request;
 using ArtmaisBackend.Infrastructure;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
+using ArtmaisBackend.Util;
 using AutoMapper;
 using Microsoft.Extensions.Options;
 
@@ -88,11 +90,7 @@ namespace ArtmaisBackend.Core.Users.Service
             if (user is null) return null;
             
             var contact = this._contactRepository.GetContactByUser(id);
-            if (contact is null) return null;
-
             var address = this._addressRepository.GetAddressByUser(id);
-            if (address is null) return null;
-
             var contactProfile = this.GetShareProfile(id);
             var contactShareLink = GetShareLinkByLoggedUser(id);
 
@@ -103,19 +101,19 @@ namespace ArtmaisBackend.Core.Users.Service
                 Username = user.Username,
                 UserPicture = user.UserPicture,
                 BackgroundPicture = user.BackgroundPicture,
-                Street = address.Street,
-                Number = address.Number,
-                Neighborhood = address.Neighborhood,
-                ZipCode = address.ZipCode,
-                Facebook = contactProfile.Facebook,
-                Twitter = contactProfile.Twitter,
-                Instagram = contactProfile.Instagram,
-                MainPhone = contact.MainPhone,
-                SecundaryPhone = contact.SecundaryPhone,
-                ThridPhone = contact.ThirdPhone,
-                FacebookProfile = contactShareLink.Facebook,
-                InstagramProfile = contactShareLink.Twitter,
-                WhatsappProfile = contactShareLink.Whatsapp
+                Street = address?.Street,
+                Number = address?.Number,
+                Neighborhood = address?.Neighborhood,
+                ZipCode = address?.ZipCode,
+                Facebook = contactProfile?.Facebook,
+                Twitter = contactProfile?.Twitter,
+                Instagram = contactProfile?.Instagram,
+                MainPhone = contact?.MainPhone,
+                SecundaryPhone = contact?.SecundaryPhone,
+                ThridPhone = contact?.ThirdPhone,
+                FacebookProfile = contactShareLink?.Facebook,
+                InstagramProfile = contactShareLink?.Twitter,
+                WhatsappProfile = contactShareLink?.Whatsapp
             };
 
             return userDto;
@@ -127,11 +125,7 @@ namespace ArtmaisBackend.Core.Users.Service
             if (user is null) return null;
             
             var contact = this._contactRepository.GetContactByUser(id);
-            if (contact is null) return null;
-
             var address = this._addressRepository.GetAddressByUser(id);
-            if (address is null) return null;
-
             var contactProfile = this.GetShareProfile(id);
             var contactShareLink = GetShareLinkByUserId(id);
 
@@ -142,23 +136,65 @@ namespace ArtmaisBackend.Core.Users.Service
                 Username = user.Username,
                 UserPicture = user.UserPicture,
                 BackgroundPicture = user.BackgroundPicture,
-                Street = address.Street,
-                Number = address.Number,
-                Neighborhood = address.Neighborhood,
-                ZipCode = address.ZipCode,
-                Facebook = contactProfile.Facebook,
-                Twitter = contactProfile.Twitter,
-                Instagram = contactProfile.Instagram,
-                MainPhone = contact.MainPhone,
-                SecundaryPhone = contact.SecundaryPhone,
-                ThridPhone = contact.ThirdPhone,
-                FacebookProfile = contactShareLink.Facebook,
-                InstagramProfile = contactShareLink.Twitter,
-                WhatsappProfile = contactShareLink.Whatsapp,
-                WhatsappContact = contactShareLink.WhatsappContact
+                Street = address?.Street,
+                Number = address?.Number,
+                Neighborhood = address?.Neighborhood,
+                ZipCode = address?.ZipCode,
+                Facebook = contactProfile?.Facebook,
+                Twitter = contactProfile?.Twitter,
+                Instagram = contactProfile?.Instagram,
+                MainPhone = contact?.MainPhone,
+                SecundaryPhone = contact?.SecundaryPhone,
+                ThridPhone = contact?.ThirdPhone,
+                FacebookProfile = contactShareLink?.Facebook,
+                InstagramProfile = contactShareLink?.Twitter,
+                WhatsappProfile = contactShareLink?.Whatsapp,
+                WhatsappContact = contactShareLink?.WhatsappContact
             };
 
             return userDto;
+        }
+
+        public UserProfileInfoDto UpdateUserInfo(UserRequest? userRequest, int userId)
+        {
+            if (userRequest is null) return null;
+
+            var userInfo = this._userRepository.GetUserById(userId);
+            this._mapper.Map(userRequest, userInfo);
+            var user = this._userRepository.Update(userInfo);
+
+            var userContactInfo = this._contactRepository.GetContactByUser(userId);
+            this._mapper.Map(userRequest, userContactInfo);
+            var contact = this._contactRepository.Update(userContactInfo);
+
+            var userDto = new UserProfileInfoDto { 
+                UserId = user.UserID,
+                Name = user.Name,
+                Username = user.Username,
+                UserPicture = user.UserPicture,
+                BirthDate = user.BirthDate,
+                MainPhone = contact.MainPhone,
+                SecundaryPhone = contact.SecundaryPhone,
+                ThirdPhone = contact.ThirdPhone
+            };
+
+            return userDto;
+        }
+
+        public bool UpdateUserPassword(PasswordRequest? passwordRequest, int userId)
+        {
+            if (passwordRequest is null) return false;
+
+            var userInfo = this._userRepository.GetUserById(userId);
+            if (passwordRequest.OldPassword.Equals(passwordRequest.OldPasswordConfirmation))
+            {
+                passwordRequest.Password = PasswordUtil.Encrypt(passwordRequest.Password);
+            }
+
+            this._mapper.Map(passwordRequest, userInfo);
+            this._userRepository.Update(userInfo);
+
+            return true;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ArtmaisBackend.Core.Users.Dto;
+using ArtmaisBackend.Core.Users.Request;
 
 namespace ArtmaisBackend.Core.Users.Interface
 {
@@ -13,5 +14,8 @@ namespace ArtmaisBackend.Core.Users.Interface
         UserDto? GetLoggedUserInfoById(int? id);
 
         UserDto? GetUserInfoById(int? id);
+
+        UserProfileInfoDto UpdateUserInfo(UserRequest? userRequest, int userId);
+        bool UpdateUserPassword(PasswordRequest? passwordRequest, int userId);
     }
 }

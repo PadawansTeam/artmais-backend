@@ -7,5 +7,6 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
     {
         Contact? GetContactByUser(int? userId);
         Contact Create(ContactRequest contactRequest, int userId);
+        Contact Update(Contact contact);
     }
 }
