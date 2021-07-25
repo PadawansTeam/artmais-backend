@@ -7,10 +7,14 @@
         public string? Username { get; set; }
         public string? UserPicture { get; set; }
         public string? BackgroundPicture { get; set; }
+        public string? Category { get; set; }
         public string? Street { get; set; }
         public int? Number { get; set; }
         public string? Neighborhood { get; set; }
         public string? ZipCode { get; set; }
+        public string? UserFacebook { get; set; }
+        public string? UserInstagram { get; set; }
+        public string? UserTwitter { get; set; }
         public string? Facebook { get; set; }
         public string? Instagram { get; set; }
         public string? Twitter { get; set; }

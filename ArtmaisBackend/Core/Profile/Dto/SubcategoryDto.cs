@@ -3,6 +3,7 @@
     public class SubcategoryDto
     {
         public int SubcategoryID { get; set; }
+        public string Category { get; set; }
         public string Subcategory { get; set; }
     }
 }
