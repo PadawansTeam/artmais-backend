@@ -16,6 +16,9 @@ namespace ArtmaisBackend.Core.Users.Interface
         UserDto? GetUserInfoById(int? id);
 
         UserProfileInfoDto UpdateUserInfo(UserRequest? userRequest, int userId);
+        
         bool UpdateUserPassword(PasswordRequest? passwordRequest, int userId);
+
+        bool UpdateUserDescription(DescriptionRequest? descriptionRequest, int userId);
     }
 }

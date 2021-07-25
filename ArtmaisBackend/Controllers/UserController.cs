@@ -65,6 +65,21 @@ namespace ArtmaisBackend.Controllers
             return this.Ok(result);
         }
 
+        [HttpPatch("[Action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<UserDto> UpdateUserDescription(DescriptionRequest descriptionRequest)
+        {
+            var user = this._jwtToken.ReadToken(this.User);
+            var result = this._userService.UpdateUserDescription(descriptionRequest, user.UserID);
+
+            if (result is false)
+                return this.UnprocessableEntity();
+
+            return this.Ok(result);
+        }
+
         [HttpPut("[Action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
