@@ -119,7 +119,7 @@ namespace ArtmaisBackend.Core.Users.Service
                 SecundaryPhone = contact?.SecundaryPhone,
                 ThridPhone = contact?.ThirdPhone,
                 FacebookProfile = contactShareLink?.Facebook,
-                InstagramProfile = contactShareLink?.Twitter,
+                TwitterProfile = contactShareLink?.Twitter,
                 WhatsappProfile = contactShareLink?.Whatsapp
             };
 
@@ -158,7 +158,7 @@ namespace ArtmaisBackend.Core.Users.Service
                 SecundaryPhone = contact?.SecundaryPhone,
                 ThridPhone = contact?.ThirdPhone,
                 FacebookProfile = contactShareLink?.Facebook,
-                InstagramProfile = contactShareLink?.Twitter,
+                TwitterProfile = contactShareLink?.Twitter,
                 WhatsappProfile = contactShareLink?.Whatsapp,
                 WhatsappContact = contactShareLink?.WhatsappContact
             };

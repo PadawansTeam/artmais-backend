@@ -24,7 +24,7 @@
         public string? SecundaryPhone { get; set; }
         public string? ThridPhone { get; set; }
         public string? FacebookProfile { get; set; }
-        public string? InstagramProfile { get; set; }
+        public string? TwitterProfile { get; set; }
         public string? WhatsappProfile { get; set; }
         public string? WhatsappContact { get; set; }
     }
