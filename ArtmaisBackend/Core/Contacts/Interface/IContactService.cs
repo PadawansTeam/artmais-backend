@@ -5,7 +5,7 @@ namespace ArtmaisBackend.Core.Contacts.Interface
 {
     public interface IContactService
     {
-        ContactDto? CreateOrUpdateUserContact(ContactRequest? contactRequest, int userId);
-        ContactDto? GetContactByUser(int userId);
+        ContactDto? CreateOrUpdateUserContact(ContactRequest? contactRequest, long userId);
+        ContactDto? GetContactByUser(long userId);
     }
 }

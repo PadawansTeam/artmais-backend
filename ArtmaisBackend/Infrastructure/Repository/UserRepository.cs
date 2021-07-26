@@ -63,7 +63,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<RecomendationDto> GetUsersByInterest(int userId)
+        public IEnumerable<RecomendationDto> GetUsersByInterest(long userId)
         {
             var results = (from user in this._context.User
                            join interest in this._context.Interest on user.SubcategoryID equals interest.SubcategoryID
@@ -89,8 +89,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
         {
             return this._context.User.FirstOrDefault(user => user.Username == username);
         }
-
-        public User GetUserById(int? id)
+        
+        public User GetUserById(long? id)
         {
             return this._context.User.FirstOrDefault(user => user.UserID == id);
         }

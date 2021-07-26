@@ -30,7 +30,7 @@ namespace ArtmaisBackend.Core.Users.Service
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public ShareLinkDto? GetShareLinkByLoggedUser(int? userId)
+        public ShareLinkDto? GetShareLinkByLoggedUser(long? userId)
         {
             var user = this._userRepository.GetUserById(userId);
             if (user is null)
@@ -49,7 +49,7 @@ namespace ArtmaisBackend.Core.Users.Service
             return shareLinkDto;
         }
 
-        public ShareLinkDto? GetShareLinkByUserId(int? userId)
+        public ShareLinkDto? GetShareLinkByUserId(long? userId)
         {
             var user = this._userRepository.GetUserById(userId);
             if (user is null)
@@ -70,7 +70,7 @@ namespace ArtmaisBackend.Core.Users.Service
             return shareLinkDto;
         }
 
-        public ShareProfileBaseDto? GetShareProfile(int? userId)
+        public ShareProfileBaseDto? GetShareProfile(long? userId)
         {
             var user = this._userRepository.GetUserById(userId);
             if (user is null)
@@ -90,7 +90,7 @@ namespace ArtmaisBackend.Core.Users.Service
             return shareProfileDto;
         }
 
-        public UserDto? GetLoggedUserInfoById(int? id)
+        public UserDto? GetLoggedUserInfoById(long? id)
         {
             var user = this._userRepository.GetUserById(id);
             if (user is null)
@@ -178,7 +178,7 @@ namespace ArtmaisBackend.Core.Users.Service
             return userDto;
         }
 
-        public UserProfileInfoDto UpdateUserInfo(UserRequest? userRequest, int userId)
+        public UserProfileInfoDto UpdateUserInfo(UserRequest? userRequest, long userId)
         {
             if (userRequest is null)
                 throw new ArgumentNullException();
@@ -231,7 +231,7 @@ namespace ArtmaisBackend.Core.Users.Service
             }
         }
 
-        public bool UpdateUserPassword(PasswordRequest? passwordRequest, int userId)
+        public bool UpdateUserPassword(PasswordRequest? passwordRequest, long userId)
         {
             if (passwordRequest is null || passwordRequest.NewPassword == "" || passwordRequest.Password == "")
                 throw new ArgumentNullException();
@@ -257,7 +257,7 @@ namespace ArtmaisBackend.Core.Users.Service
             return true;
         }
 
-        public bool UpdateUserDescription(DescriptionRequest? descriptionRequest, int userId)
+        public bool UpdateUserDescription(DescriptionRequest? descriptionRequest, long userId)
         {
             if (descriptionRequest is null)
                 throw new ArgumentNullException();

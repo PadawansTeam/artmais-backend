@@ -11,6 +11,6 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
         IEnumerable<CategorySubcategoryDto> GetCategoryAndSubcategory();
         Subcategory GetSubcategoryBySubcategory(string userSubcategory);
         IEnumerable<SubcategoryDto> GetSubcategory();
-        IEnumerable<SubcategoryDto> GetSubcategoryByInterestAndUserId(int userId);
+        IEnumerable<SubcategoryDto> GetSubcategoryByInterestAndUserId(long userId);
     }
 }
