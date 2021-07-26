@@ -37,7 +37,7 @@ namespace ArtmaisBackend.Tests.Core.Contacts
 
             var mockContactRepository = new Mock<IContactRepository>();
             var mockMapper = new Mock<IMapper>();
-            mockContactRepository.Setup(x => x.GetContactByUser(It.IsAny<int>())).Returns(new Contact
+            mockContactRepository.Setup(x => x.GetContactByUser(It.IsAny<long>())).Returns(new Contact
             {
                 UserID = 2,
                 Facebook = "facebook",
@@ -81,7 +81,7 @@ namespace ArtmaisBackend.Tests.Core.Contacts
         [Fact(DisplayName = "Get contact by user should be returns contactdto")]
         public void GetContactByUserShouldBeReturnsContactDto()
         {
-            var userId = 2;
+            long userId = 2;
 
             var mockContactRepository = new Mock<IContactRepository>();
             var mockMapper = new Mock<IMapper>();
@@ -91,7 +91,7 @@ namespace ArtmaisBackend.Tests.Core.Contacts
                 UserId = 2
             };
 
-            mockContactRepository.Setup(x => x.GetContactByUser(It.IsAny<int>())).Returns(new Contact
+            mockContactRepository.Setup(x => x.GetContactByUser(It.IsAny<long>())).Returns(new Contact
             {
                 UserID = 2
             });
@@ -112,12 +112,12 @@ namespace ArtmaisBackend.Tests.Core.Contacts
 
             var expectedUser = new ContactDto { };
 
-            mockContactRepository.Setup(x => x.GetContactByUser(It.IsAny<int>())).Returns(new Contact { });
+            mockContactRepository.Setup(x => x.GetContactByUser(It.IsAny<long>())).Returns(new Contact { });
             mockMapper.Setup(x => x.Map<ContactDto>(It.IsAny<Contact>())).Returns(expectedUser);
 
             var contactService = new ContactService(mockContactRepository.Object, mockMapper.Object);
 
-            var result = contactService.GetContactByUser(It.IsAny<int>());
+            var result = contactService.GetContactByUser(It.IsAny<long>());
 
             result.Should().Be(expectedUser);
         }
