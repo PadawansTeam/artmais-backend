@@ -4,6 +4,6 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
 {
     public interface IInterestRepository
     {
-        dynamic DeleteAllAndCreateAll(InterestRequest interestRequest, int userId);
+        dynamic DeleteAllAndCreateAll(InterestRequest interestRequest, long userId);
     }
 }

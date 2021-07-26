@@ -55,7 +55,7 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<AddressDto> GetAddressInfoById(int userId)
+        public ActionResult<AddressDto> GetAddressInfoById(long userId)
         {
             var result = this._addressService.GetAddressByUser(userId);
 

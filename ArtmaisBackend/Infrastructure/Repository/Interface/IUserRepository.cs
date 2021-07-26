@@ -9,9 +9,9 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
     {
         User Create(SignUpRequest signUpRequest);
         User GetUserByEmail(string email);
-        IEnumerable<RecomendationDto> GetUsersByInterest(int userId);
+        IEnumerable<RecomendationDto> GetUsersByInterest(long userId);
         User GetUserByUsername(string username);
-        User GetUserById(int? id);
+        User GetUserById(long? id);
         User Update(User user);
     }
 }

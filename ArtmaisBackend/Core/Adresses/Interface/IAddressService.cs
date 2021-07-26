@@ -5,7 +5,7 @@ namespace ArtmaisBackend.Core.Adresses.Interface
 {
     public interface IAddressService
     {
-        AddressDto? CreateOrUpdateUserAddress(AddressRequest? addressRequest, int userId);
-        AddressDto? GetAddressByUser(int userId);
+        AddressDto? CreateOrUpdateUserAddress(AddressRequest? addressRequest, long userId);
+        AddressDto? GetAddressByUser(long userId);
     }
 }

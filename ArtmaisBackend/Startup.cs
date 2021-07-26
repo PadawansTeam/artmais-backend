@@ -2,6 +2,8 @@ using ArtmaisBackend.Core.Adresses.Interface;
 using ArtmaisBackend.Core.Adresses.Service;
 using ArtmaisBackend.Core.Contact.Service;
 using ArtmaisBackend.Core.Contacts.Interface;
+using ArtmaisBackend.Core.OAuth.Google.Interface;
+using ArtmaisBackend.Core.OAuth.Google.Mediator;
 using ArtmaisBackend.Core.Profile.Interface;
 using ArtmaisBackend.Core.Profile.Mediator;
 using ArtmaisBackend.Core.SignIn.Interface;
@@ -14,6 +16,8 @@ using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
+using ArtmaisBackend.Services;
+using ArtmaisBackend.Services.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -108,6 +112,7 @@ namespace ArtmaisBackend
 
             //Options
             services.Configure<SocialMediaConfiguration>(this.Configuration.GetSection("SocialMediaShareLink"));
+            services.Configure<GoogleConfiguration>(this.Configuration.GetSection("GoogleConfiguration"));
 
             //Repository
             services.AddScoped<IUserRepository, UserRepository>();
@@ -135,6 +140,12 @@ namespace ArtmaisBackend
 
             //Address
             services.AddScoped<IAddressService, AddressService>();
+
+            //Services
+            services.AddScoped<IGoogleService, GoogleService>();
+
+            //OAuth Google
+            services.AddScoped<IGoogleMediator, GoogleMediator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
