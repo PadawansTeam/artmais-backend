@@ -35,7 +35,7 @@ namespace ArtmaisBackend.Core.OAuth.Google.Mediator
             var user = _userRepository.GetUserById(externalAuthorization.UserId);
 
             if (user == null)
-                return null;
+                throw new UserNotFound("Usuário não encontrado");
 
             return _jwtTokenService.GenerateToken(user);
         }
@@ -57,7 +57,7 @@ namespace ArtmaisBackend.Core.OAuth.Google.Mediator
 
             var user = _userRepository.CreateOAuthUser(request, "google");
             _externalAuthorizationRepository.Create(request.ExternalAuthorizationId, user.UserID);
-
+            
             return _jwtTokenService.GenerateToken(user);
         }
     }
