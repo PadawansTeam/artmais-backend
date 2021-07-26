@@ -24,13 +24,13 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User
             {
                 Username = "userName",
                 UserID = 3
             });
 
-            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact { });
+            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<long>()))).Returns(new Contact { });
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration
             {
@@ -64,9 +64,9 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User { });
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User { });
 
-            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact { });
+            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<long>()))).Returns(new Contact { });
 
             var url = mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
@@ -85,13 +85,13 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User
             {
                 UserID = 3
             });
 
 
-            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact
+            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<long>()))).Returns(new Contact
             {
                 MainPhone = "5511984439282"
             });
@@ -148,9 +148,9 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User { });
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User { });
 
-            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact
+            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<long>()))).Returns(new Contact
             {
                 Twitter = "TwitterUserName",
                 Facebook = "FacebookUserName",
@@ -177,7 +177,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         [Fact(DisplayName = "GetShareProfile should be null when request is null or empty")]
         public void GetShareProfileShouldBeReturnsNull()
         {
-            int? userId = null;
+            long? userId = null;
 
             var mockAddressRepository = new Mock<IAddressRepository>();
             var mockContactRepository = new Mock<IContactRepository>();
@@ -185,9 +185,9 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User { });
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User { });
 
-            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact { });
+            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<long>()))).Returns(new Contact { });
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
@@ -206,17 +206,17 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User
             {
                 UserID = 3,
                 Username = "Username"
             });
-            mockAddressRepository.Setup(x => x.GetAddressByUser((It.IsAny<int>()))).Returns(new Address
+            mockAddressRepository.Setup(x => x.GetAddressByUser((It.IsAny<long>()))).Returns(new Address
             {
                 UserID = 3,
                 Street = "Street"
             });
-            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact
+            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<long>()))).Returns(new Contact
             {
                 UserID = 3,
                 MainPhone = "999987766"
@@ -281,7 +281,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
 
-            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User
             {
                 UserID = 3,
                 Username = "Username"
