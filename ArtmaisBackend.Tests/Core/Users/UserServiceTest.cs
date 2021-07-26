@@ -36,7 +36,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 Facebook = "https://www.facebook.com/sharer/sharer.php?u=",
                 Twitter = "https://twitter.com/intent/tweet?text=",
                 Whatsapp = "https://wa.me/",
-                ArtMais = "https://artmais-frontend.herokuapp.com/"
+                ArtMais = "https://artmais-frontend.herokuapp.com/artista/"
             }
             );
 
@@ -45,9 +45,9 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var result = userService.GetShareLinkByLoggedUser(userIdProfile);
 
-            result.Twitter.Should().BeEquivalentTo("https://twitter.com/intent/tweet?text=https://artmais-frontend.herokuapp.com/userName%20Este%20é%20meu%20perfil%20na%20Plataforma%20Art%2B,%20visite-o%20para%20conhecer%20o%20meu%20trabalho.");
-            result.Facebook.Should().BeEquivalentTo("https://www.facebook.com/sharer/sharer.php?u=https://artmais-frontend.herokuapp.com/userName%20Este%20é%20meu%20perfil%20na%20Plataforma%20Art%2B,%20visite-o%20para%20conhecer%20o%20meu%20trabalho.");
-            result.Whatsapp.Should().BeEquivalentTo("https://wa.me/?text=https://artmais-frontend.herokuapp.com/userName%20Este%20é%20meu%20perfil%20na%20Plataforma%20Art%2B,%20visite-o%20para%20conhecer%20o%20meu%20trabalho.");
+            result.Twitter.Should().BeEquivalentTo("https://twitter.com/intent/tweet?text=https://artmais-frontend.herokuapp.com/artista/3%20Este%20é%20meu%20perfil%20na%20Plataforma%20Art%2B,%20visite-o%20para%20conhecer%20o%20meu%20trabalho.");
+            result.Facebook.Should().BeEquivalentTo("https://www.facebook.com/sharer/sharer.php?u=https://artmais-frontend.herokuapp.com/artista/3%20Este%20é%20meu%20perfil%20na%20Plataforma%20Art%2B,%20visite-o%20para%20conhecer%20o%20meu%20trabalho.");
+            result.Whatsapp.Should().BeEquivalentTo("https://wa.me/?text=https://artmais-frontend.herokuapp.com/artista/3%20Este%20é%20meu%20perfil%20na%20Plataforma%20Art%2B,%20visite-o%20para%20conhecer%20o%20meu%20trabalho.");
             result.WhatsappContact.Should().BeNullOrEmpty();
             result.Instagram.Should().BeNullOrEmpty();
         }
@@ -87,7 +87,7 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User
             {
-                Username = "userNameProfile"
+                UserID = 3
             });
 
 
@@ -101,7 +101,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 Facebook = "https://www.facebook.com/sharer/sharer.php?u=",
                 Twitter = "https://twitter.com/intent/tweet?text=",
                 Whatsapp = "https://wa.me/",
-                ArtMais = "https://artmais-frontend.herokuapp.com/"
+                ArtMais = "https://artmais-frontend.herokuapp.com/artista/"
             }
             );
 
@@ -109,9 +109,9 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var result = userService.GetShareLinkByUserId(3);
 
-            result.Twitter.Should().BeEquivalentTo("https://twitter.com/intent/tweet?text=https://artmais-frontend.herokuapp.com/userNameProfile%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
-            result.Facebook.Should().BeEquivalentTo("https://www.facebook.com/sharer/sharer.php?u=https://artmais-frontend.herokuapp.com/userNameProfile%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
-            result.Whatsapp.Should().BeEquivalentTo("https://wa.me/?text=https://artmais-frontend.herokuapp.com/userNameProfile%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
+            result.Twitter.Should().BeEquivalentTo("https://twitter.com/intent/tweet?text=https://artmais-frontend.herokuapp.com/artista/3%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
+            result.Facebook.Should().BeEquivalentTo("https://www.facebook.com/sharer/sharer.php?u=https://artmais-frontend.herokuapp.com/artista/3%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
+            result.Whatsapp.Should().BeEquivalentTo("https://wa.me/?text=https://artmais-frontend.herokuapp.com/artista/3%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
             result.WhatsappContact.Should().BeEquivalentTo("https://wa.me/?phone=5511984439282&text=+Olá,+gostaria+de+conversar+sobre+a+sua+arte+disponível+na+plataforma+Art%2B.");
             result.Instagram.Should().BeNullOrEmpty();
         }
