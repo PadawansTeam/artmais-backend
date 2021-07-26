@@ -18,7 +18,7 @@ namespace ArtmaisBackend.Core.Contact.Service
         private readonly IContactRepository _contactRepository;
         private readonly IMapper _mapper;
 
-        public ContactDto? CreateOrUpdateUserContact(ContactRequest? contactRequest, int userId)
+        public ContactDto? CreateOrUpdateUserContact(ContactRequest? contactRequest, long userId)
         {
             if (contactRequest is null) return null;
 
@@ -44,7 +44,7 @@ namespace ArtmaisBackend.Core.Contact.Service
             }
         }
 
-        public ContactDto? GetContactByUser(int userId)
+        public ContactDto? GetContactByUser(long userId)
         {
             var contact = this._contactRepository.GetContactByUser(userId);
             if (contact is null) return null;

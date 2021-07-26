@@ -4,6 +4,7 @@ namespace ArtmaisBackend.Core.OAuth.Google.Interface
 {
     public interface IGoogleMediator
     {
-        Task<bool> SignIn(string token);
+        Task<string?> SignIn(string token);
+        string SignUp(OAuthSignUpRequest request);
     }
 }

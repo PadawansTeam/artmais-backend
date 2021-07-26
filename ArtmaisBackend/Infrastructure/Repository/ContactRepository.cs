@@ -15,12 +15,12 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public Contact? GetContactByUser(int? userId)
+        public Contact? GetContactByUser(long? userId)
         {
             return this._context.Contact.FirstOrDefault(contact => contact.UserID == userId);
         }
 
-        public Contact Create(ContactRequest contactRequest, int userId)
+        public Contact Create(ContactRequest contactRequest, long userId)
         {
             var contact = new Contact
             {
