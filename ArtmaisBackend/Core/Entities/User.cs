@@ -46,5 +46,8 @@ namespace ArtmaisBackend.Core.Entities
 
         [Column("fotocapa")]
         public string? BackgroundPicture { get; set; }
+
+        [Column("provedor")]
+        public string Provider { get; set; }
     }
 }

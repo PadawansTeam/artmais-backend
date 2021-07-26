@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ArtmaisBackend.Core.OAuth.Google
 {
-    public class GoogleSignUpRequest
+    public class OAuthSignUpRequest
     {
         [Required]
         public long UserID { get; set; }

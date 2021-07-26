@@ -1,4 +1,5 @@
 ﻿using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.OAuth.Google;
 using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.SignUp.Request;
 using ArtmaisBackend.Core.Users.Dto;
@@ -33,7 +34,32 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 Role = signUpRequest.Role,
                 RegisterDate = DateTime.Now,
                 UserPicture = signUpRequest.UserPicture,
-                BackgroundPicture = signUpRequest.BackgroundPicture
+                BackgroundPicture = signUpRequest.BackgroundPicture,
+                Provider = "artmais"
+            };
+
+            this._context.User.Add(user);
+            this._context.SaveChanges();
+
+            return user;
+        }
+
+        public User CreateOAuthUser(OAuthSignUpRequest signUpRequest, string provider)
+        {
+            var user = new User
+            {
+                UserID = signUpRequest.UserID,
+                SubcategoryID = signUpRequest.SubcategoryID,
+                Name = signUpRequest.Name,
+                Email = signUpRequest.Email,
+                Description = signUpRequest.Description,
+                Username = signUpRequest.Username,
+                BirthDate = signUpRequest.BirthDate,
+                Role = signUpRequest.Role,
+                RegisterDate = DateTime.Now,
+                UserPicture = signUpRequest.UserPicture,
+                BackgroundPicture = signUpRequest.BackgroundPicture,
+                Provider = provider
             };
 
             this._context.User.Add(user);
