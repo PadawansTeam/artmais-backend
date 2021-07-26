@@ -34,6 +34,9 @@ namespace ArtmaisBackend.Core.OAuth.Google.Mediator
 
             var user = _userRepository.GetUserById(externalAuthorization.UserId);
 
+            if (user == null)
+                return null;
+
             return _jwtTokenService.GenerateToken(user);
         }
 

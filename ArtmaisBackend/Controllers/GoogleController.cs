@@ -1,4 +1,4 @@
-﻿using ArtmaisBackend.Core.OAuth.Google;
+using ArtmaisBackend.Core.OAuth.Google;
 using ArtmaisBackend.Core.OAuth.Google.Interface;
 using ArtmaisBackend.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +25,7 @@ namespace ArtmaisBackend.Controllers
             {
                 return Ok(new { token = await _googleMediator.SignIn(token) });
             }
-            catch(UserNotFound ex)
+            catch (UserNotFound ex)
             {
                 return NotFound(new { message = ex.Message });
             }
@@ -39,7 +39,7 @@ namespace ArtmaisBackend.Controllers
             {
                 return Ok(_googleMediator.SignUp(request));
             }
-            catch(UsernameAlreadyInUse ex)
+            catch (UsernameAlreadyInUse ex)
             {
                 return UnprocessableEntity(new { message = ex.Message });
             }
