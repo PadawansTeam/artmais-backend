@@ -117,7 +117,7 @@ namespace ArtmaisBackend.Core.Users.Service
                 Instagram = contactProfile?.Instagram,
                 MainPhone = contact?.MainPhone,
                 SecundaryPhone = contact?.SecundaryPhone,
-                ThridPhone = contact?.ThirdPhone,
+                ThirdPhone = contact?.ThirdPhone,
                 FacebookProfile = contactShareLink?.Facebook,
                 InstagramProfile = contactShareLink?.Twitter,
                 WhatsappProfile = contactShareLink?.Whatsapp
@@ -156,7 +156,7 @@ namespace ArtmaisBackend.Core.Users.Service
                 Instagram = contactProfile?.Instagram,
                 MainPhone = contact?.MainPhone,
                 SecundaryPhone = contact?.SecundaryPhone,
-                ThridPhone = contact?.ThirdPhone,
+                ThirdPhone = contact?.ThirdPhone,
                 FacebookProfile = contactShareLink?.Facebook,
                 InstagramProfile = contactShareLink?.Twitter,
                 WhatsappProfile = contactShareLink?.Whatsapp,

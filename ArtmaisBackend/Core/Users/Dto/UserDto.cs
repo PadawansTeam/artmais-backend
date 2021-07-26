@@ -22,7 +22,7 @@
         public string? Twitter { get; set; }
         public string? MainPhone { get; set; }
         public string? SecundaryPhone { get; set; }
-        public string? ThridPhone { get; set; }
+        public string? ThirdPhone { get; set; }
         public string? FacebookProfile { get; set; }
         public string? InstagramProfile { get; set; }
         public string? WhatsappProfile { get; set; }
