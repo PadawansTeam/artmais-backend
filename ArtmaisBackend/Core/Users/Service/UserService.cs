@@ -38,9 +38,9 @@ namespace ArtmaisBackend.Core.Users.Service
 
             var shareLinkDto = new ShareLinkDto
             {
-                Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{user.Username}{ShareLinkMessages.MessageShareProfile}",
-                Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{user.Username}{ShareLinkMessages.MessageShareProfile}",
-                Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}?text={this._socialMediaConfiguration.ArtMais}{user.Username}{ShareLinkMessages.MessageShareProfile}"
+                Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareProfile}",
+                Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareProfile}",
+                Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}?text={this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareProfile}"
             };
             return shareLinkDto;
         }
@@ -55,9 +55,9 @@ namespace ArtmaisBackend.Core.Users.Service
 
             var shareLinkDto = new ShareLinkDto
             {
-                Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{user.Username}{ShareLinkMessages.MessageShareLink}",
-                Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{user.Username}{ShareLinkMessages.MessageShareLink}",
-                Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}?text={this._socialMediaConfiguration.ArtMais}{user.Username}{ShareLinkMessages.MessageShareLink}",
+                Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareLink}",
+                Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareLink}",
+                Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}?text={this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareLink}",
                 WhatsappContact = $"{this._socialMediaConfiguration.Whatsapp}?phone={contact?.MainPhone}&text={ShareLinkMessages.MessageComunication}"
             };
 
@@ -88,7 +88,8 @@ namespace ArtmaisBackend.Core.Users.Service
         {
             var user = this._userRepository.GetUserById(id);
             if (user is null) return null;
-            
+
+            var userCategory = this._userRepository.GetSubcategoryByUserId(user.UserID);
             var contact = this._contactRepository.GetContactByUser(id);
             var address = this._addressRepository.GetAddressByUser(id);
             var contactProfile = this.GetShareProfile(id);
@@ -101,7 +102,8 @@ namespace ArtmaisBackend.Core.Users.Service
                 Username = user?.Username,
                 UserPicture = user?.UserPicture,
                 BackgroundPicture = user?.BackgroundPicture,
-                Category = user?.Subcategory?.Category?.UserCategory,
+                Category = userCategory?.Category,
+                Subcategory = userCategory?.Subcategory,
                 Description = user?.Description,
                 Street = address?.Street,
                 Number = address?.Number,
@@ -115,9 +117,9 @@ namespace ArtmaisBackend.Core.Users.Service
                 Instagram = contactProfile?.Instagram,
                 MainPhone = contact?.MainPhone,
                 SecundaryPhone = contact?.SecundaryPhone,
-                ThridPhone = contact?.ThirdPhone,
+                ThirdPhone = contact?.ThirdPhone,
                 FacebookProfile = contactShareLink?.Facebook,
-                InstagramProfile = contactShareLink?.Twitter,
+                TwitterProfile = contactShareLink?.Twitter,
                 WhatsappProfile = contactShareLink?.Whatsapp
             };
 
@@ -128,7 +130,8 @@ namespace ArtmaisBackend.Core.Users.Service
         {
             var user = this._userRepository.GetUserById(id);
             if (user is null) return null;
-            
+
+            var userCategory = this._userRepository.GetSubcategoryByUserId(user.UserID);
             var contact = this._contactRepository.GetContactByUser(id);
             var address = this._addressRepository.GetAddressByUser(id);
             var contactProfile = this.GetShareProfile(id);
@@ -141,7 +144,8 @@ namespace ArtmaisBackend.Core.Users.Service
                 Username = user?.Username,
                 UserPicture = user?.UserPicture,
                 BackgroundPicture = user?.BackgroundPicture,
-                Category = user?.Subcategory?.Category?.UserCategory,
+                Category = userCategory?.Category,
+                Subcategory = userCategory?.Subcategory,
                 Description = user?.Description,
                 Street = address?.Street,
                 Number = address?.Number,
@@ -152,9 +156,9 @@ namespace ArtmaisBackend.Core.Users.Service
                 Instagram = contactProfile?.Instagram,
                 MainPhone = contact?.MainPhone,
                 SecundaryPhone = contact?.SecundaryPhone,
-                ThridPhone = contact?.ThirdPhone,
+                ThirdPhone = contact?.ThirdPhone,
                 FacebookProfile = contactShareLink?.Facebook,
-                InstagramProfile = contactShareLink?.Twitter,
+                TwitterProfile = contactShareLink?.Twitter,
                 WhatsappProfile = contactShareLink?.Whatsapp,
                 WhatsappContact = contactShareLink?.WhatsappContact
             };
@@ -190,14 +194,18 @@ namespace ArtmaisBackend.Core.Users.Service
 
         public bool UpdateUserPassword(PasswordRequest? passwordRequest, long userId)
         {
-            if (passwordRequest is null) return false;
+            if (passwordRequest is null || passwordRequest.NewPassword == "" || passwordRequest.Password == "") return false;
+            if (!(passwordRequest.Password.Equals(passwordRequest.NewPassword))) return false;
 
             var userInfo = this._userRepository.GetUserById(userId);
-            if (passwordRequest.OldPassword.Equals(passwordRequest.OldPasswordConfirmation))
-            {
-                passwordRequest.Password = PasswordUtil.Encrypt(passwordRequest.Password);
-            }
 
+            var salt = userInfo.Password.Substring(0, 24);
+            var encryptedPassword = PasswordUtil.Encrypt(passwordRequest.OldPassword, salt);
+
+            if(!encryptedPassword.Equals(userInfo.Password)) return false;
+
+            passwordRequest.Password = PasswordUtil.Encrypt(passwordRequest.Password);
+           
             this._mapper.Map(passwordRequest, userInfo);
             this._userRepository.Update(userInfo);
 

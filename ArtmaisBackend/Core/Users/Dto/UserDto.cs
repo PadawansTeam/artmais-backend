@@ -8,6 +8,7 @@
         public string? UserPicture { get; set; }
         public string? BackgroundPicture { get; set; }
         public string? Category { get; set; }
+        public string? Subcategory { get; set; }
         public string? Description { get; set; }
         public string? Street { get; set; }
         public int? Number { get; set; }
@@ -21,9 +22,9 @@
         public string? Twitter { get; set; }
         public string? MainPhone { get; set; }
         public string? SecundaryPhone { get; set; }
-        public string? ThridPhone { get; set; }
+        public string? ThirdPhone { get; set; }
         public string? FacebookProfile { get; set; }
-        public string? InstagramProfile { get; set; }
+        public string? TwitterProfile { get; set; }
         public string? WhatsappProfile { get; set; }
         public string? WhatsappContact { get; set; }
     }

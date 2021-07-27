@@ -2,6 +2,7 @@
 using ArtmaisBackend.Core.OAuth.Google;
 using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.SignUp.Request;
+using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System;
@@ -118,13 +119,28 @@ namespace ArtmaisBackend.Infrastructure.Repository
         {
             return this._context.User.FirstOrDefault(user => user.UserID == id);
         }
-        
+
         public User Update(User user)
         {
             this._context.User.Update(user);
             this._context.SaveChanges();
 
             return user;
+        }
+
+        public UserCategoryDto GetSubcategoryByUserId(int userId)
+        {
+            var query = from user in this._context.User
+                        join subcategory in this._context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
+                        join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
+                        where user.UserID.Equals(userId)
+                        select new UserCategoryDto
+                        {
+                            Category = category.UserCategory,
+                            Subcategory = subcategory.UserSubcategory
+                        };
+
+            return query.FirstOrDefault();
         }
     }
 }
