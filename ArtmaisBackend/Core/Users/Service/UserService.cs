@@ -117,7 +117,7 @@ namespace ArtmaisBackend.Core.Users.Service
                 Instagram = contactProfile?.Instagram,
                 MainPhone = contact?.MainPhone,
                 SecundaryPhone = contact?.SecundaryPhone,
-                ThridPhone = contact?.ThirdPhone,
+                ThirdPhone = contact?.ThirdPhone,
                 FacebookProfile = contactShareLink?.Facebook,
                 TwitterProfile = contactShareLink?.Twitter,
                 WhatsappProfile = contactShareLink?.Whatsapp
@@ -156,7 +156,7 @@ namespace ArtmaisBackend.Core.Users.Service
                 Instagram = contactProfile?.Instagram,
                 MainPhone = contact?.MainPhone,
                 SecundaryPhone = contact?.SecundaryPhone,
-                ThridPhone = contact?.ThirdPhone,
+                ThirdPhone = contact?.ThirdPhone,
                 FacebookProfile = contactShareLink?.Facebook,
                 TwitterProfile = contactShareLink?.Twitter,
                 WhatsappProfile = contactShareLink?.Whatsapp,
@@ -194,14 +194,18 @@ namespace ArtmaisBackend.Core.Users.Service
 
         public bool UpdateUserPassword(PasswordRequest? passwordRequest, int userId)
         {
-            if (passwordRequest is null) return false;
+            if (passwordRequest is null || passwordRequest.NewPassword == "" || passwordRequest.Password == "") return false;
+            if (!(passwordRequest.Password.Equals(passwordRequest.NewPassword))) return false;
 
             var userInfo = this._userRepository.GetUserById(userId);
-            if (passwordRequest.OldPassword.Equals(passwordRequest.OldPasswordConfirmation))
-            {
-                passwordRequest.Password = PasswordUtil.Encrypt(passwordRequest.Password);
-            }
 
+            var salt = userInfo.Password.Substring(0, 24);
+            var encryptedPassword = PasswordUtil.Encrypt(passwordRequest.OldPassword, salt);
+
+            if(!encryptedPassword.Equals(userInfo.Password)) return false;
+
+            passwordRequest.Password = PasswordUtil.Encrypt(passwordRequest.Password);
+           
             this._mapper.Map(passwordRequest, userInfo);
             this._userRepository.Update(userInfo);
 
