@@ -16,6 +16,6 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
         User GetUserByUsername(string username);
         User GetUserById(long? id);
         User Update(User user);
-        UserCategoryDto GetSubcategoryByUserId(int userId);
+        UserCategoryDto GetSubcategoryByUserId(long userId);
     }
 }
