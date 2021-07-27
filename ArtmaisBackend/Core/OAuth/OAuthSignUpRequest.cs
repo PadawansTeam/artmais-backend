@@ -6,7 +6,7 @@ namespace ArtmaisBackend.Core.OAuth.Google
     public class OAuthSignUpRequest
     {
         [Required]
-        public long UserID { get; set; }
+        public string ExternalAuthorizationId { get; set; }
 
         [Required]
         public string Name { get; set; }

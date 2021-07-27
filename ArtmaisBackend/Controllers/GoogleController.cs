@@ -23,7 +23,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                return Ok(new { message = await _googleMediator.SignIn(token) });
+                return Ok(new { token = await _googleMediator.SignIn(token) });
             }
             catch(UserNotFound ex)
             {

@@ -48,7 +48,6 @@ namespace ArtmaisBackend.Infrastructure.Repository
         {
             var user = new User
             {
-                UserID = signUpRequest.UserID,
                 SubcategoryID = signUpRequest.SubcategoryID,
                 Name = signUpRequest.Name,
                 Email = signUpRequest.Email,
