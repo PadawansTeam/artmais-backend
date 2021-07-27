@@ -128,7 +128,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return user;
         }
 
-        public UserCategoryDto GetSubcategoryByUserId(int userId)
+        public UserCategoryDto GetSubcategoryByUserId(long userId)
         {
             var query = from user in this._context.User
                         join subcategory in this._context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
