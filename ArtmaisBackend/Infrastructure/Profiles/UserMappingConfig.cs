@@ -21,6 +21,7 @@ namespace ArtmaisBackend.Infrastructure.Profiles
             this.CreateMap<Contact, ContactDto>();
             this.CreateMap<UserRequest, ContactRequest>();
             this.CreateMap<Contact, ContactRequest>();
+            this.CreateMap<ContactRequest, Contact>();
             this.CreateMap<Address, AddressDto>();
             this.CreateMap<AddressRequest, Address>();
         }
