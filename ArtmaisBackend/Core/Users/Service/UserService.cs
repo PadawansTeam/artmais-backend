@@ -1,4 +1,5 @@
-﻿using ArtmaisBackend.Core.Users.Dto;
+﻿using ArtmaisBackend.Core.Contacts.Request;
+using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
 using ArtmaisBackend.Core.Users.Request;
 using ArtmaisBackend.Infrastructure;
@@ -175,21 +176,46 @@ namespace ArtmaisBackend.Core.Users.Service
             var user = this._userRepository.Update(userInfo);
 
             var userContactInfo = this._contactRepository.GetContactByUser(userId);
-            userContactInfo = this._mapper.Map(userRequest, userContactInfo);
-            var contact = this._contactRepository.Update(userContactInfo);
+          
+            if (userContactInfo is null)
+            {
+                var contactRequest =  this._mapper.Map<ContactRequest>(userRequest);
+                var newContact = this._contactRepository.Create(contactRequest, userId);
+                if (newContact is null) return null;
 
-            var userDto = new UserProfileInfoDto { 
-                UserId = user.UserID,
-                Name = user.Name,
-                Username = user.Username,
-                UserPicture = user.UserPicture,
-                BirthDate = user.BirthDate,
-                MainPhone = contact.MainPhone,
-                SecundaryPhone = contact.SecundaryPhone,
-                ThirdPhone = contact.ThirdPhone
-            };
+                var userDto = new UserProfileInfoDto
+                {
+                    UserId = user.UserID,
+                    Name = user.Name,
+                    Username = user.Username,
+                    UserPicture = user.UserPicture,
+                    BirthDate = user.BirthDate,
+                    MainPhone = newContact.MainPhone,
+                    SecundaryPhone = newContact.SecundaryPhone,
+                    ThirdPhone = newContact.ThirdPhone
+                };
 
-            return userDto;
+                return userDto;
+            }
+            else
+            {
+                userContactInfo = this._mapper.Map(userRequest, userContactInfo);
+                var contact = this._contactRepository.Update(userContactInfo);
+
+                var userDto = new UserProfileInfoDto
+                {
+                    UserId = user.UserID,
+                    Name = user.Name,
+                    Username = user.Username,
+                    UserPicture = user.UserPicture,
+                    BirthDate = user.BirthDate,
+                    MainPhone = contact.MainPhone,
+                    SecundaryPhone = contact.SecundaryPhone,
+                    ThirdPhone = contact.ThirdPhone
+                };
+
+                return userDto;
+            }
         }
 
         public bool UpdateUserPassword(PasswordRequest? passwordRequest, int userId)

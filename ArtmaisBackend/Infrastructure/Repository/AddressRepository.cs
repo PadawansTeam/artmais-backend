@@ -37,6 +37,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
             return address;
         }
+
         public Address Update(Address address)
         {
             this._context.Address.Update(address);
