@@ -39,7 +39,6 @@ namespace ArtmaisBackend.Core.OAuth.Google.Mediator
 
         public string SignUp(OAuthSignUpRequest request)
         {
-
             var existentUsername = this._userRepository.GetUserByUsername(request.Username);
 
             if (existentUsername != null)
