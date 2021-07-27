@@ -12,6 +12,7 @@ namespace ArtmaisBackend.Infrastructure.Data
         public DbSet<Interest> Interest { get; set; }
         public DbSet<Contact> Contact { get; set; }
         public DbSet<Address> Address { get; set; }
+        public DbSet<ExternalAuthorization> ExternalAuthorization { get; set; }
     }
 }
 

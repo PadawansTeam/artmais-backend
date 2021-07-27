@@ -9,15 +9,17 @@ namespace ArtmaisBackend.Core.OAuth.Google.Mediator
 {
     public class GoogleMediator : IGoogleMediator
     {
-        public GoogleMediator(ICategorySubcategoryRepository categorySubcategoryRepository, IGoogleService googleService, IJwtTokenService jwtTokenService, IUserRepository userRepository)
+        public GoogleMediator(ICategorySubcategoryRepository categorySubcategoryRepository, IExternalAuthorizationRepository externalAuthorizationRepository, IGoogleService googleService, IJwtTokenService jwtTokenService, IUserRepository userRepository)
         {
             _categorySubcategoryRepository = categorySubcategoryRepository;
+            _externalAuthorizationRepository = externalAuthorizationRepository;
             _googleService = googleService;
             _jwtTokenService = jwtTokenService;
             _userRepository = userRepository;
         }
 
         private readonly ICategorySubcategoryRepository _categorySubcategoryRepository;
+        private readonly IExternalAuthorizationRepository _externalAuthorizationRepository;
         private readonly IGoogleService _googleService;
         private readonly IJwtTokenService _jwtTokenService;
         private readonly IUserRepository _userRepository;
@@ -25,10 +27,12 @@ namespace ArtmaisBackend.Core.OAuth.Google.Mediator
         public async Task<string?> SignIn(string token)
         {
             var googleUser = await _googleService.ValidateToken(token);
-            var user = _userRepository.GetUserById(long.Parse(googleUser.Subject));
+            var externalAuthorization = _externalAuthorizationRepository.GetExternalAuthorizationByExternalAuthorizationId(googleUser.Subject);
 
-            if (user == null)
+            if (externalAuthorization == null)
                 throw new UserNotFound("Usuário não encontrado");
+
+            var user = _userRepository.GetUserById(externalAuthorization.UserId);
 
             return _jwtTokenService.GenerateToken(user);
         }
@@ -49,8 +53,9 @@ namespace ArtmaisBackend.Core.OAuth.Google.Mediator
 
             request.SubcategoryID = existentSubcategory.SubcategoryID;
 
-            var user = _userRepository.CreateOAuthUser(request, "Google");
-            
+            var user = _userRepository.CreateOAuthUser(request, "google");
+            _externalAuthorizationRepository.Create(request.ExternalAuthorizationId, user.UserID);
+
             return _jwtTokenService.GenerateToken(user);
         }
     }
