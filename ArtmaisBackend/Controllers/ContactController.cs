@@ -4,6 +4,7 @@ using ArtmaisBackend.Core.Contacts.Request;
 using ArtmaisBackend.Core.SignIn.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace ArtmaisBackend.Controllers
 {
@@ -26,13 +27,17 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<ContactDto> GetLoggedContactInfo()
         {
-            var user = this._jwtToken.ReadToken(this.User);
-            var result = this._contactService.GetContactByUser(user.UserID);
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var result = this._contactService.GetContactByUser(user.UserID);
 
-            if (result is null)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
 
         [HttpPost("[Action]")]
@@ -41,13 +46,17 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<ContactDto> Upsert(ContactRequest? contactRequest)
         {
-            var user = this._jwtToken.ReadToken(this.User);
-            var result = this._contactService.CreateOrUpdateUserContact(contactRequest, user.UserID);
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var result = this._contactService.CreateOrUpdateUserContact(contactRequest, user.UserID);
 
-            if (result is null)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
 
         [HttpGet("{userId}")]
@@ -56,13 +65,17 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<ContactDto> GetContactInfoById()
         {
-            var user = this._jwtToken.ReadToken(this.User);
-            var result = this._contactService.GetContactByUser(user.UserID);
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var result = this._contactService.GetContactByUser(user.UserID);
 
-            if (result is null)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
     }
 }

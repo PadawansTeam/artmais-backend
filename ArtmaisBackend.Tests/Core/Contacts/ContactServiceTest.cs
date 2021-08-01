@@ -6,6 +6,7 @@ using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
 using FluentAssertions;
 using Moq;
+using System;
 using Xunit;
 
 namespace ArtmaisBackend.Tests.Core.Contacts
@@ -73,9 +74,9 @@ namespace ArtmaisBackend.Tests.Core.Contacts
             var userIdProfile = 2;
 
             var contactService = new ContactService(mockContactRepository.Object, mockMapper.Object);
-            var result = contactService.CreateOrUpdateUserContact(contactRequest, userIdProfile);
-
-            result.Should().BeNull();
+            
+            Action act = () => contactService.CreateOrUpdateUserContact(contactRequest, userIdProfile);
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "Get contact by user should be returns contactdto")]

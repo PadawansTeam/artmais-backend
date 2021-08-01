@@ -3,6 +3,7 @@ using ArtmaisBackend.Core.Adresses.Interface;
 using ArtmaisBackend.Core.Adresses.Request;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
+using System;
 
 namespace ArtmaisBackend.Core.Adresses.Service
 {
@@ -19,17 +20,19 @@ namespace ArtmaisBackend.Core.Adresses.Service
 
         public AddressDto? CreateOrUpdateUserAddress(AddressRequest? addressRequest, int userId)
         {
-            if (addressRequest is null) return null;
+            if (addressRequest is null) 
+                throw new ArgumentNullException();
 
             var addressInfo = this._addressRepository.GetAddressByUser(userId);
 
             if (addressInfo is null)
             {
                 var newAddress = this._addressRepository.Create(addressRequest, userId);
-                if (newAddress is null) return null;
+                if (newAddress is null)
+                    throw new ArgumentNullException();
+
 
                 var addressDto = this._mapper.Map<AddressDto>(newAddress);
-
                 return addressDto;
             }
             else
@@ -46,7 +49,8 @@ namespace ArtmaisBackend.Core.Adresses.Service
         public AddressDto? GetAddressByUser(int userId)
         {
             var address = this._addressRepository.GetAddressByUser(userId);
-            if (address is null) return null;
+            if (address is null)
+                throw new ArgumentNullException();
 
             var addressDto = this._mapper.Map<AddressDto>(address);
             return addressDto;

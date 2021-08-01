@@ -4,6 +4,7 @@ using ArtmaisBackend.Core.Users.Interface;
 using ArtmaisBackend.Core.Users.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace ArtmaisBackend.Controllers
 {
@@ -20,20 +21,23 @@ namespace ArtmaisBackend.Controllers
         private readonly IUserService _userService;
         private readonly IJwtTokenService _jwtToken;
 
-
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<UserDto> GetLoggedUserInfo()
         {
-            var user = this._jwtToken.ReadToken(this.User);
-            var result = this._userService.GetLoggedUserInfoById(user.UserID);
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var result = this._userService.GetLoggedUserInfoById(user.UserID);
 
-            if (result is null)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
 
         [HttpGet("{userId}")]
@@ -42,12 +46,16 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<UserDto> GetUserInfo(int userId)
         {
-            var result = this._userService.GetUserInfoById(userId);
+            try
+            {
+                var result = this._userService.GetUserInfoById(userId);
+                return this.Ok(result);
 
-            if (result is null)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
 
         [HttpPatch("[Action]")]
@@ -56,13 +64,25 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<UserDto> UpdateUserPassword(PasswordRequest passwordRequest)
         {
-            var user = this._jwtToken.ReadToken(this.User);
-            var result = this._userService.UpdateUserPassword(passwordRequest, user.UserID);
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var result = this._userService.UpdateUserPassword(passwordRequest, user.UserID);
 
-            if (result is false)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (AccessViolationException)
+            {
+                return Forbid();
+            }
         }
 
         [HttpPatch("[Action]")]
@@ -71,13 +91,17 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<UserDto> UpdateUserDescription(DescriptionRequest descriptionRequest)
         {
-            var user = this._jwtToken.ReadToken(this.User);
-            var result = this._userService.UpdateUserDescription(descriptionRequest, user.UserID);
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var result = this._userService.UpdateUserDescription(descriptionRequest, user.UserID);
 
-            if (result is false)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
 
         [HttpPut("[Action]")]
@@ -86,13 +110,17 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<UserDto> UpdateUserInfo(UserRequest userRequest)
         {
-            var user = this._jwtToken.ReadToken(this.User);
-            var result = this._userService.UpdateUserInfo(userRequest, user.UserID);
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var result = this._userService.UpdateUserInfo(userRequest, user.UserID);
 
-            if (result is null)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
 
         [HttpGet("ShareLink")]
@@ -101,12 +129,16 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<ShareLinkDto> GetUserByIdToShareLink([FromQuery] int id)
         {
-            var result = this._userService.GetShareLinkByUserId(id);
+            try
+            {
+                var result = this._userService.GetShareLinkByUserId(id);
 
-            if (result is null)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
 
         [HttpGet("ShareLinkProfile")]
@@ -115,13 +147,17 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<ShareLinkDto> GetLoggedUserByIdToShareLink()
         {
-            var user = this._jwtToken.ReadToken(this.User);
-            var result = this._userService.GetShareLinkByLoggedUser(user.UserID);
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var result = this._userService.GetShareLinkByLoggedUser(user.UserID);
 
-            if (result is null)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
 
         [HttpGet("ShareProfile")]
@@ -130,12 +166,16 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<ShareProfileBaseDto> GetUserByIdToShareProfile([FromQuery] int id)
         {
-            var result = this._userService.GetShareProfile(id);
+            try
+            {
+                var result = this._userService.GetShareProfile(id);
 
-            if (result is null)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
     }
 }
