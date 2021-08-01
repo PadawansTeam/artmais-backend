@@ -8,6 +8,7 @@ using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
+using System;
 using Xunit;
 
 namespace ArtmaisBackend.Tests.Core.Users
@@ -31,7 +32,7 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact { });
 
-            var url = mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration
+            mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration
             {
                 Facebook = "https://www.facebook.com/sharer/sharer.php?u=",
                 Twitter = "https://twitter.com/intent/tweet?text=",
@@ -71,9 +72,8 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
-            var result = userService.GetShareLinkByLoggedUser(userIdProfile);
-
-            result.Should().BeNull();
+            Action act = () => userService.GetShareLinkByLoggedUser(userIdProfile);
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "GetShareLinkByUserId should be returns ShareLinkDto when userId it is not equals userIdProfile")]
@@ -135,8 +135,8 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
-            var result = userService.GetShareLinkByLoggedUser(userId);
-            result.Should().BeNull();
+            Action act = () => userService.GetShareLinkByLoggedUser(userId);
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "GetShareProfile should be returns ShareProfileDto based on userId")]
@@ -193,8 +193,8 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
-            var result = userService.GetShareProfile(userId);
-            result.Should().BeNull();
+            Action act = () => userService.GetShareProfile(userId);
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "GetLoggedUserInfoById should be returns UserDto by userId")]
@@ -268,10 +268,8 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
-            var contactProfile = userService?.GetShareProfile(userId);
-            var contactShareLink = userService?.GetShareLinkByLoggedUser(userId);
-            var result = userService.GetLoggedUserInfoById(userId);
-            result.Should().BeNull();
+            Action act = () => userService.GetLoggedUserInfoById(userId);
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "GetShareProfile should be returns user info by userId")]
@@ -288,6 +286,21 @@ namespace ArtmaisBackend.Tests.Core.Users
                 UserID = 3,
                 Username = "Username"
             });
+
+            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact
+            {
+                UserID = 3,
+                MainPhone = "Username"
+            });
+
+            mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration
+            {
+                Facebook = "https://www.facebook.com/sharer/sharer.php?u=",
+                Twitter = "https://twitter.com/intent/tweet?text=",
+                Whatsapp = "https://wa.me/",
+                ArtMais = "https://artmais-frontend.herokuapp.com/artista/"
+            }
+            );
 
             var expectedUser = new UserDto
             {
@@ -320,8 +333,8 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
 
-            var result = userService.GetUserInfoById(userId);
-            result.Should().BeNull();
+            Action act = () => userService.GetUserInfoById(userId);
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "UpdateUserInfo should be returns UserProfileInfoDto and update database")]
@@ -410,9 +423,8 @@ namespace ArtmaisBackend.Tests.Core.Users
                 mockUserRepository.Object,
                 mockMapper.Object);
 
-            var result = userService.UpdateUserInfo(userRequest, 3);
-
-            result.Should().BeNull();
+            Action act = () => userService.UpdateUserInfo(userRequest, 3);
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "UpdateUserPassword should be true and update database")]
@@ -479,9 +491,8 @@ namespace ArtmaisBackend.Tests.Core.Users
                 mockUserRepository.Object,
                 mockMapper.Object);
 
-            var result = userService.UpdateUserPassword(passwordRequest, 3);
-
-            result.Should().BeFalse();
+            Action act = () => userService.UpdateUserPassword(passwordRequest, 3);
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "UpdateUserDescription should be true and update database")]
@@ -546,9 +557,8 @@ namespace ArtmaisBackend.Tests.Core.Users
                 mockUserRepository.Object,
                 mockMapper.Object);
 
-            var result = userService.UpdateUserDescription(descriptionRequest, 3);
-
-            result.Should().BeFalse();
+            Action act = () => userService.UpdateUserDescription(descriptionRequest, 3);
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
     }
 }

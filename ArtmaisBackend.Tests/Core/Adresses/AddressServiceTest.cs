@@ -6,6 +6,7 @@ using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
 using FluentAssertions;
 using Moq;
+using System;
 using Xunit;
 
 namespace ArtmaisBackend.Tests.Core.Adresses
@@ -21,7 +22,9 @@ namespace ArtmaisBackend.Tests.Core.Adresses
                 Number = 2,
                 Complement = "Complement",
                 Neighborhood = "Neighborhood",
-                ZipCode = "05860142"
+                ZipCode = "05860142",
+                City = "São Paulo",
+                State = "SP"
             };
 
             var expectedAddress = new AddressDto
@@ -30,7 +33,9 @@ namespace ArtmaisBackend.Tests.Core.Adresses
                 Number = 2,
                 Complement = "Complement",
                 Neighborhood = "Neighborhood",
-                ZipCode = "05860142"
+                ZipCode = "05860142",
+                City = "São Paulo",
+                State = "SP"
             };
 
             var mockAddressRepository = new Mock<IAddressRepository>();
@@ -41,7 +46,9 @@ namespace ArtmaisBackend.Tests.Core.Adresses
                 Number = 2,
                 Complement = "Complement",
                 Neighborhood = "Neighborhood",
-                ZipCode = "05860142"
+                ZipCode = "05860142",
+                City = "São Paulo",
+                State = "SP"
             });
 
             mockMapper.Setup(m => m.Map<AddressDto>(It.IsAny<Address>())).Returns(expectedAddress);
@@ -57,7 +64,7 @@ namespace ArtmaisBackend.Tests.Core.Adresses
             result.ZipCode.Should().BeEquivalentTo(expectedAddress.ZipCode);
         }
 
-        [Fact(DisplayName = "Create should be null AddressDto when contactRequest is null or empty")]
+        [Fact(DisplayName = "Create should be throw when contactRequest is null or empty")]
         public void CreateOrUpdateUserAddressShouldBeReturnsNullAddressDto()
         {
             var contactRequest = new AddressRequest { };
@@ -69,13 +76,13 @@ namespace ArtmaisBackend.Tests.Core.Adresses
             var userIdProfile = 2;
 
             var contactService = new AddressService(mockAddressRepository.Object, mockMapper.Object);
-            var result = contactService.CreateOrUpdateUserAddress(contactRequest, userIdProfile);
-
-            result.Should().BeNull();
+            
+            Action act = () => contactService.CreateOrUpdateUserAddress(contactRequest, userIdProfile);
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "Get Address by user should be returns AddressDto")]
-        public void GetContactByUserShouldBeReturnsContactDto()
+        public void GetContactByUserShouldBeReturnsAddressDto()
         {
             var userId = 2;
 
@@ -101,7 +108,7 @@ namespace ArtmaisBackend.Tests.Core.Adresses
         }
 
         [Fact(DisplayName = "Get Address by user should be null AddressDto when userId doesn't exist")]
-        public void GetContactByUserShouldBeReturnsNullContactDto()
+        public void GetContactByUserShouldBeReturnsNullAddressDto()
         {
             var mockAddressRepository = new Mock<IAddressRepository>();
             var mockMapper = new Mock<IMapper>();

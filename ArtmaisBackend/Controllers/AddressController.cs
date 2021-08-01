@@ -1,10 +1,10 @@
 ﻿using ArtmaisBackend.Core.Adresses.Dto;
 using ArtmaisBackend.Core.Adresses.Interface;
 using ArtmaisBackend.Core.Adresses.Request;
-using ArtmaisBackend.Core.Contacts.Dto;
 using ArtmaisBackend.Core.SignIn.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace ArtmaisBackend.Controllers
 {
@@ -27,13 +27,16 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<AddressDto> GetLoggedAddressInfo()
         {
-            var user = this._jwtToken.ReadToken(this.User);
-            var result = this._addressService.GetAddressByUser(user.UserID);
-
-            if (result is null)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var result = this._addressService.GetAddressByUser(user.UserID);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
 
         [HttpPost("[Action]")]
@@ -42,13 +45,16 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<AddressDto> Upsert(AddressRequest? addressRequest)
         {
-            var user = this._jwtToken.ReadToken(this.User);
-            var result = this._addressService.CreateOrUpdateUserAddress(addressRequest, user.UserID);
-
-            if (result is null)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var result = this._addressService.CreateOrUpdateUserAddress(addressRequest, user.UserID);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
 
         [HttpGet("{userId}")]
@@ -57,12 +63,15 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<AddressDto> GetAddressInfoById(int userId)
         {
-            var result = this._addressService.GetAddressByUser(userId);
-
-            if (result is null)
-                return this.UnprocessableEntity();
-
-            return this.Ok(result);
+            try
+            {
+                var result = this._addressService.GetAddressByUser(userId);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
         }
     }
 }
