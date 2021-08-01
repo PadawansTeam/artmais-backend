@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Drawing;
 
 namespace ArtmaisBackend.Core.Entities
 {
@@ -31,10 +32,10 @@ namespace ArtmaisBackend.Core.Entities
         [Column("cep")]
         public string? ZipCode { get; set; }
 
-        [Column("latitude")]
-        public string? Latitude { get; set; }
+        [Column("estado")]
+        public string? State { get; set; }
 
-        [Column("longitude")]
-        public string? Longitude { get; set; }
+        [Column("cidade")]
+        public string? City { get; set; }
     }
 }
