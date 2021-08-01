@@ -29,7 +29,9 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 Number = addressRequest.Number,
                 Complement = addressRequest.Complement,
                 Neighborhood = addressRequest.Neighborhood,
-                ZipCode = addressRequest.ZipCode
+                ZipCode = addressRequest.ZipCode,
+                City = addressRequest.City,
+                State = addressRequest.State
             };
 
             this._context.Address.Add(address);
