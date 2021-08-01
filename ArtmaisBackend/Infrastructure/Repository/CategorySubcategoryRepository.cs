@@ -80,7 +80,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return results;
         }
 
-        public IEnumerable<SubcategoryDto> GetSubcategoryByInterestAndUserId(int userId)
+        public IEnumerable<SubcategoryDto> GetSubcategoryByInterestAndUserId(long userId)
         {
             var results = (from subcategory in this._context.Subcategory
                            join interest in this._context.Interest on subcategory.SubcategoryID equals interest.SubcategoryID

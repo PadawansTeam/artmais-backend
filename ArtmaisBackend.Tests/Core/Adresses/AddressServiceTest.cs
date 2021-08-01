@@ -40,7 +40,7 @@ namespace ArtmaisBackend.Tests.Core.Adresses
 
             var mockAddressRepository = new Mock<IAddressRepository>();
             var mockMapper = new Mock<IMapper>();
-            mockAddressRepository.Setup(x => x.GetAddressByUser(It.IsAny<int>())).Returns(new Address
+            mockAddressRepository.Setup(x => x.GetAddressByUser(It.IsAny<long>())).Returns(new Address
             {
                 Street = "Street",
                 Number = 2,
@@ -84,7 +84,7 @@ namespace ArtmaisBackend.Tests.Core.Adresses
         [Fact(DisplayName = "Get Address by user should be returns AddressDto")]
         public void GetContactByUserShouldBeReturnsAddressDto()
         {
-            var userId = 2;
+            long userId = 2;
 
             var mockAddressRepository = new Mock<IAddressRepository>();
             var mockMapper = new Mock<IMapper>();
@@ -94,7 +94,7 @@ namespace ArtmaisBackend.Tests.Core.Adresses
                 UserId = 2
             };
 
-            mockAddressRepository.Setup(x => x.GetAddressByUser(It.IsAny<int>())).Returns(new Address
+            mockAddressRepository.Setup(x => x.GetAddressByUser(It.IsAny<long>())).Returns(new Address
             {
                 UserID = 2
             });
@@ -115,12 +115,12 @@ namespace ArtmaisBackend.Tests.Core.Adresses
 
             var expectedUser = new AddressDto { };
 
-            mockAddressRepository.Setup(x => x.GetAddressByUser(It.IsAny<int>())).Returns(new Address { });
+            mockAddressRepository.Setup(x => x.GetAddressByUser(It.IsAny<long>())).Returns(new Address { });
             mockMapper.Setup(x => x.Map<AddressDto>(It.IsAny<Address>())).Returns(expectedUser);
 
             var contactService = new AddressService(mockAddressRepository.Object, mockMapper.Object);
 
-            var result = contactService.GetAddressByUser(It.IsAny<int>());
+            var result = contactService.GetAddressByUser(It.IsAny<long>());
 
             result.Should().Be(expectedUser);
         }

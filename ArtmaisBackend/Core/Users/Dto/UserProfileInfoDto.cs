@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Users.Dto
 {
     public class UserProfileInfoDto
     {
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public string? Name { get; set; }
         public string? Username { get; set; }
         public string? UserPicture { get; set; }

@@ -1,4 +1,5 @@
 ﻿using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.OAuth.Google;
 using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.SignUp.Request;
 using ArtmaisBackend.Core.Users.Dto;
@@ -33,7 +34,31 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 Role = signUpRequest.Role,
                 RegisterDate = DateTime.Now,
                 UserPicture = signUpRequest.UserPicture,
-                BackgroundPicture = signUpRequest.BackgroundPicture
+                BackgroundPicture = signUpRequest.BackgroundPicture,
+                Provider = "artmais"
+            };
+
+            this._context.User.Add(user);
+            this._context.SaveChanges();
+
+            return user;
+        }
+
+        public User CreateOAuthUser(OAuthSignUpRequest signUpRequest, string provider)
+        {
+            var user = new User
+            {
+                SubcategoryID = signUpRequest.SubcategoryID,
+                Name = signUpRequest.Name,
+                Email = signUpRequest.Email,
+                Description = signUpRequest.Description,
+                Username = signUpRequest.Username,
+                BirthDate = signUpRequest.BirthDate,
+                Role = signUpRequest.Role,
+                RegisterDate = DateTime.Now,
+                UserPicture = signUpRequest.UserPicture,
+                BackgroundPicture = signUpRequest.BackgroundPicture,
+                Provider = provider
             };
 
             this._context.User.Add(user);
@@ -63,7 +88,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<RecomendationDto> GetUsersByInterest(int userId)
+        public IEnumerable<RecomendationDto> GetUsersByInterest(long userId)
         {
             var results = (from user in this._context.User
                            join interest in this._context.Interest on user.SubcategoryID equals interest.SubcategoryID
@@ -89,8 +114,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
         {
             return this._context.User.FirstOrDefault(user => user.Username == username);
         }
-
-        public User GetUserById(int? id)
+        
+        public User GetUserById(long? id)
         {
             return this._context.User.FirstOrDefault(user => user.UserID == id);
         }
@@ -103,7 +128,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return user;
         }
 
-        public UserCategoryDto GetSubcategoryByUserId(int userId)
+        public UserCategoryDto GetSubcategoryByUserId(long userId)
         {
             var query = from user in this._context.User
                         join subcategory in this._context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
