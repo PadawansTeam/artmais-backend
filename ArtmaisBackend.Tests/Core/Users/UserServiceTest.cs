@@ -287,7 +287,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 Username = "Username"
             });
 
-            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(new Contact
+            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<long>()))).Returns(new Contact
             {
                 UserID = 3,
                 MainPhone = "Username"
@@ -369,7 +369,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 Name = "Name"
             };
 
-            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(userInfo);
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(userInfo);
             mockMapper.Setup(m => m.Map(userRequest, userInfo)).Returns(updatedUser);
             mockUserRepository.Setup(x => x.Update((It.IsAny<User>()))).Returns(updatedUser);
 
@@ -384,7 +384,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 MainPhone = "165987766",
                 SecundaryPhone = "999987766"
             };
-            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<int>()))).Returns(contactInfo);
+            mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<long>()))).Returns(contactInfo);
             mockMapper.Setup(m => m.Map(userRequest, contactInfo)).Returns(updatedContact);
             mockContactRepository.Setup(x => x.Update((It.IsAny<Contact>()))).Returns(updatedContact);
             #endregion
@@ -456,7 +456,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 Password = "k4xsqPZJOUVsO4PUZLOoKQ==ju7lMkPE3CHc97DTXw54lN1EG5mrtNw6OpLdsPS/sZ4b7XFYl5AnI3+ZdVrxQJmZF4J0HuNoyMP3cbDcxN04Kg=="
             };
 
-            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(userInfo);
+            mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(userInfo);
             mockMapper.Setup(m => m.Map(passwordRequest, userInfo)).Returns(updatedUser);
             mockUserRepository.Setup(x => x.Update((It.IsAny<User>()))).Returns(updatedUser);
             #endregion
