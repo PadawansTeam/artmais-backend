@@ -7,16 +7,16 @@ using System.Security.Claims;
 
 namespace ArtmaisBackend.Core.Profile.Mediator
 {
-    public class ProfileAcessMediator : IProfileAcessMediator
+    public class ProfileAccessMediator : IProfileAccessMediator
     {
-        public ProfileAcessMediator(IJwtTokenService jwtTokenService, IProfileAcessRepository profileAcessRepository)
+        public ProfileAccessMediator(IJwtTokenService jwtTokenService, IProfileAccessRepository profileAcessRepository)
         {
             _jwtTokenService = jwtTokenService;
             _profileAcessRepository = profileAcessRepository;
         }
 
         private readonly IJwtTokenService _jwtTokenService;
-        private readonly IProfileAcessRepository _profileAcessRepository;
+        private readonly IProfileAccessRepository _profileAcessRepository;
 
         public ProfileAcess? Create(ClaimsPrincipal visitorUserClaims, long visitedUserId)
         {

@@ -5,9 +5,9 @@ using System;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
-    public class ProfileAcessRepository : IProfileAcessRepository
+    public class ProfileAccessRepository : IProfileAccessRepository
     {
-        public ProfileAcessRepository(ArtplusContext context)
+        public ProfileAccessRepository(ArtplusContext context)
         {
             _context = context;
         }

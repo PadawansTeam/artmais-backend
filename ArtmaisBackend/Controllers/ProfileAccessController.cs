@@ -7,14 +7,14 @@ namespace ArtmaisBackend.Controllers
 {
     [ApiController]
     [Route("v1/[controller]")]
-    public class ProfileAcessController : ControllerBase
+    public class ProfileAccessController : ControllerBase
     {
-        public ProfileAcessController(IProfileAcessMediator profileAcessMediator)
+        public ProfileAccessController(IProfileAccessMediator profileAcessMediator)
         {
             _profileAcessMediator = profileAcessMediator;
         }
 
-        private readonly IProfileAcessMediator _profileAcessMediator;
+        private readonly IProfileAccessMediator _profileAcessMediator;
 
         [HttpPost]
         [Route("{visitedUserId}")]

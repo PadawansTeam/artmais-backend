@@ -2,7 +2,7 @@
 
 namespace ArtmaisBackend.Infrastructure.Repository.Interface
 {
-    public interface IProfileAcessRepository
+    public interface IProfileAccessRepository
     {
         ProfileAcess Create(long visitorUserId, long visitedUserId);
     }

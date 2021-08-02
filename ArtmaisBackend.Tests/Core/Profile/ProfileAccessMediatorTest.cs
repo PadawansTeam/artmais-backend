@@ -6,13 +6,11 @@ using ArtmaisBackend.Infrastructure.Repository.Interface;
 using FluentAssertions;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace ArtmaisBackend.Tests.Core.Profile
 {
-    public class ProfileAcessMediatorTest
+    public class ProfileAccessMediatorTest
     {
         [Fact(DisplayName = "Create returns ProfileAcess")]
         public void CreateReturnsProfileAcess()
@@ -35,10 +33,10 @@ namespace ArtmaisBackend.Tests.Core.Profile
             var jwtTokenServiceMock = new Mock<IJwtTokenService>();
             jwtTokenServiceMock.Setup(j => j.ReadToken(null)).Returns(userJwtData);
 
-            var profileAcessRepositoryMock = new Mock<IProfileAcessRepository>();
+            var profileAcessRepositoryMock = new Mock<IProfileAccessRepository>();
             profileAcessRepositoryMock.Setup(p => p.Create(1, 2)).Returns(profileAcess);
 
-            var profileAcessMediator = new ProfileAcessMediator(jwtTokenServiceMock.Object, profileAcessRepositoryMock.Object);
+            var profileAcessMediator = new ProfileAccessMediator(jwtTokenServiceMock.Object, profileAcessRepositoryMock.Object);
             var result = profileAcessMediator.Create(null, 2);
 
             result.ProfileAcessId.Should().Be(1);
@@ -59,13 +57,13 @@ namespace ArtmaisBackend.Tests.Core.Profile
             var jwtTokenServiceMock = new Mock<IJwtTokenService>();
             jwtTokenServiceMock.Setup(j => j.ReadToken(null)).Returns(userJwtData);
 
-            var profileAcessRepositoryMock = new Mock<IProfileAcessRepository>();
+            var profileAcessRepositoryMock = new Mock<IProfileAccessRepository>();
             profileAcessRepositoryMock.Setup(p => p.Create(1, 1)).Returns((ProfileAcess)null);
 
-            var profileAcessMediator = new ProfileAcessMediator(jwtTokenServiceMock.Object, profileAcessRepositoryMock.Object);
+            var profileAcessMediator = new ProfileAccessMediator(jwtTokenServiceMock.Object, profileAcessRepositoryMock.Object);
             var result = profileAcessMediator.Create(null, 1);
 
-            result.Should().Be(null);
+            result.Should().BeNull();
         }
     }
 }
