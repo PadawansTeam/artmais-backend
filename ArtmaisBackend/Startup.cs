@@ -121,6 +121,7 @@ namespace ArtmaisBackend
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IExternalAuthorizationRepository, ExternalAuthorizationRepository>();
+            services.AddScoped<IProfileAcessRepository, ProfileAcessRepository>();
 
             //SignIn
             services.AddScoped<ISignInService, SignInService>();
@@ -129,6 +130,7 @@ namespace ArtmaisBackend
             //Profile
             services.AddScoped<IInterestMediator, InterestMediator>();
             services.AddScoped<IRecomendationMediator, RecomendationMediator>();
+            services.AddScoped<IProfileAcessMediator, ProfileAcessMediator>();
 
             //SignUp
             services.AddScoped<ISignUpService, SignUpService>();
