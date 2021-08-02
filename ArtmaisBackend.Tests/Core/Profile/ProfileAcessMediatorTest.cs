@@ -44,7 +44,28 @@ namespace ArtmaisBackend.Tests.Core.Profile
             result.ProfileAcessId.Should().Be(1);
             result.VisitorUserId.Should().Be(1);
             result.VisitedUserId.Should().Be(2);
-            result.VisitDate.Should<DateTime>();
+        }
+
+        [Fact(DisplayName = "Create returns null")]
+        public void CreateReturnsNull()
+        {
+            var userJwtData = new UserJwtData
+            {
+                UserID = 1,
+                Role = "artist",
+                UserName = "carlos"
+            };
+
+            var jwtTokenServiceMock = new Mock<IJwtTokenService>();
+            jwtTokenServiceMock.Setup(j => j.ReadToken(null)).Returns(userJwtData);
+
+            var profileAcessRepositoryMock = new Mock<IProfileAcessRepository>();
+            profileAcessRepositoryMock.Setup(p => p.Create(1, 1)).Returns((ProfileAcess)null);
+
+            var profileAcessMediator = new ProfileAcessMediator(jwtTokenServiceMock.Object, profileAcessRepositoryMock.Object);
+            var result = profileAcessMediator.Create(null, 1);
+
+            result.Should().BeOfType<ProfileAcess>();
         }
     }
 }
