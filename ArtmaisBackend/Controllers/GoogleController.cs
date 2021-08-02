@@ -1,6 +1,7 @@
 using ArtmaisBackend.Core.OAuth.Google;
 using ArtmaisBackend.Core.OAuth.Google.Interface;
 using ArtmaisBackend.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -18,6 +19,8 @@ namespace ArtmaisBackend.Controllers
         private readonly IGoogleMediator _googleMediator;
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("signin/{token}")]
         public async Task<ActionResult<dynamic>> SignIn([FromRoute] string token)
         {
@@ -32,6 +35,8 @@ namespace ArtmaisBackend.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [Route("signup")]
         public ActionResult<dynamic> SignUp([FromBody] OAuthSignUpRequest request)
         {
