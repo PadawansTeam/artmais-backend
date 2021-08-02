@@ -13,7 +13,7 @@ namespace ArtmaisBackend.Core.Users.Interface
 
         UserDto? GetLoggedUserInfoById(long? id);
 
-        UserDto? GetUserInfoById(int? id);
+        UserDto? GetUserInfoById(long? id);
 
         UserProfileInfoDto UpdateUserInfo(UserRequest? userRequest, long userId);
         
