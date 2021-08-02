@@ -5,6 +5,6 @@ namespace ArtmaisBackend.Core.Profile.Interface
 {
     public interface IProfileAcessMediator
     {
-        ProfileAcess Create(ClaimsPrincipal visitorUserClaims, long visitedUserId)
+        ProfileAcess Create(ClaimsPrincipal visitorUserClaims, long visitedUserId);
     }
 }
