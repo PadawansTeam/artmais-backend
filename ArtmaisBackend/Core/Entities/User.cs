@@ -48,6 +48,6 @@ namespace ArtmaisBackend.Core.Entities
         public string? BackgroundPicture { get; set; }
 
         [Column("provedor")]
-        public string Provider { get; set; }
+        public string? Provider { get; set; }
     }
 }

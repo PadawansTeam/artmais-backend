@@ -135,7 +135,7 @@ namespace ArtmaisBackend.Core.Users.Service
             return userDto;
         }
 
-        public UserDto? GetUserInfoById(int? id)
+        public UserDto? GetUserInfoById(long? id)
         {
             var user = this._userRepository.GetUserById(id);
             if (user is null)
