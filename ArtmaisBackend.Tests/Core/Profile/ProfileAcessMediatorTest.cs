@@ -65,7 +65,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
             var profileAcessMediator = new ProfileAcessMediator(jwtTokenServiceMock.Object, profileAcessRepositoryMock.Object);
             var result = profileAcessMediator.Create(null, 1);
 
-            result.Should().BeOfType<ProfileAcess>();
+            result.Should().Be(null);
         }
     }
 }
