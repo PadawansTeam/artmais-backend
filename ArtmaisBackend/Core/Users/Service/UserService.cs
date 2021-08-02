@@ -97,10 +97,10 @@ namespace ArtmaisBackend.Core.Users.Service
                 throw new ArgumentNullException();
 
             var userCategory = this._userRepository.GetSubcategoryByUserId(user.UserID);
-            var contact = this._contactRepository.GetContactByUser(id);
-            var address = this._addressRepository.GetAddressByUser(id);
-            var contactProfile = this.GetShareProfile(id);
-            var contactShareLink = GetShareLinkByLoggedUser(id);
+            var contact = this._contactRepository.GetContactByUser(user.UserID);
+            var address = this._addressRepository.GetAddressByUser(user.UserID);
+            var contactProfile = this.GetShareProfile(user.UserID);
+            var contactShareLink = GetShareLinkByLoggedUser(user.UserID);
 
             var userDto = new UserDto()
             {
@@ -142,10 +142,10 @@ namespace ArtmaisBackend.Core.Users.Service
                 throw new ArgumentNullException();
 
             var userCategory = this._userRepository.GetSubcategoryByUserId(user.UserID);
-            var contact = this._contactRepository.GetContactByUser(id);
-            var address = this._addressRepository.GetAddressByUser(id);
-            var contactProfile = this.GetShareProfile(id);
-            var contactShareLink = GetShareLinkByUserId(id);
+            var contact = this._contactRepository.GetContactByUser(user.UserID);
+            var address = this._addressRepository.GetAddressByUser(user.UserID);
+            var contactProfile = this.GetShareProfile(user.UserID);
+            var contactShareLink = GetShareLinkByUserId(user.UserID);
 
             var userDto = new UserDto()
             {
@@ -187,25 +187,26 @@ namespace ArtmaisBackend.Core.Users.Service
             userInfo = this._mapper.Map(userRequest, userInfo);
             var user = this._userRepository.Update(userInfo);
 
-            var userContactInfo = this._contactRepository.GetContactByUser(userId);
+            var userContactInfo = this._contactRepository.GetContactByUser(user.UserID);
           
             if (userContactInfo is null)
             {
                 var contactRequest =  this._mapper.Map<ContactRequest>(userRequest);
-                var newContact = this._contactRepository.Create(contactRequest, userId);
+                var newContact = this._contactRepository.Create(contactRequest, user.UserID);
                 if (newContact is null)
                     throw new ArgumentNullException();
 
                 var userDto = new UserProfileInfoDto
                 {
                     UserId = user.UserID,
-                    Name = user.Name,
-                    Username = user.Username,
-                    UserPicture = user.UserPicture,
-                    BirthDate = user.BirthDate,
-                    MainPhone = newContact.MainPhone,
-                    SecundaryPhone = newContact.SecundaryPhone,
-                    ThirdPhone = newContact.ThirdPhone
+                    Name = user?.Name,
+                    Username = user?.Username,
+                    UserPicture = user?.UserPicture,
+                    BackgroundPicture = user?.BackgroundPicture,
+                    BirthDate = user?.BirthDate,
+                    MainPhone = newContact?.MainPhone,
+                    SecundaryPhone = newContact?.SecundaryPhone,
+                    ThirdPhone = newContact?.ThirdPhone
                 };
 
                 return userDto;
@@ -218,13 +219,14 @@ namespace ArtmaisBackend.Core.Users.Service
                 var userDto = new UserProfileInfoDto
                 {
                     UserId = user.UserID,
-                    Name = user.Name,
-                    Username = user.Username,
-                    UserPicture = user.UserPicture,
-                    BirthDate = user.BirthDate,
-                    MainPhone = contact.MainPhone,
-                    SecundaryPhone = contact.SecundaryPhone,
-                    ThirdPhone = contact.ThirdPhone
+                    Name = user?.Name,
+                    Username = user?.Username,
+                    UserPicture = user?.UserPicture,
+                    BackgroundPicture = user?.BackgroundPicture,
+                    BirthDate = user?.BirthDate,
+                    MainPhone = contact?.MainPhone,
+                    SecundaryPhone = contact?.SecundaryPhone,
+                    ThirdPhone = contact?.ThirdPhone
                 };
 
                 return userDto;
