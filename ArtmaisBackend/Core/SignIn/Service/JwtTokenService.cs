@@ -41,7 +41,7 @@ namespace ArtmaisBackend.Core.SignIn.Service
         {
             return new UserJwtData
             {
-                UserID = int.Parse(userClaims.FindFirstValue(ClaimTypes.NameIdentifier)),
+                UserID = long.Parse(userClaims.FindFirstValue(ClaimTypes.NameIdentifier)),
                 Role = userClaims.FindFirstValue(ClaimTypes.Role),
                 UserName = userClaims.FindFirstValue(ClaimTypes.Name)
             };

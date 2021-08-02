@@ -18,7 +18,7 @@ namespace ArtmaisBackend.Core.Adresses.Service
         private readonly IAddressRepository _addressRepository;
         private readonly IMapper _mapper;
 
-        public AddressDto? CreateOrUpdateUserAddress(AddressRequest? addressRequest, int userId)
+        public AddressDto? CreateOrUpdateUserAddress(AddressRequest? addressRequest, long userId)
         {
             if (addressRequest is null) 
                 throw new ArgumentNullException();
@@ -46,7 +46,7 @@ namespace ArtmaisBackend.Core.Adresses.Service
             }
         }
 
-        public AddressDto? GetAddressByUser(int userId)
+        public AddressDto? GetAddressByUser(long userId)
         {
             var address = this._addressRepository.GetAddressByUser(userId);
             if (address is null)

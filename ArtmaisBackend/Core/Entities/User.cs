@@ -9,7 +9,7 @@ namespace ArtmaisBackend.Core.Entities
     {
         [Key]
         [Column("idusuario")]
-        public int UserID { get; set; }
+        public long UserID { get; set; }
 
         [Column("idsubcategoria")]
         public int SubcategoryID { get; set; }
@@ -46,5 +46,8 @@ namespace ArtmaisBackend.Core.Entities
 
         [Column("fotocapa")]
         public string? BackgroundPicture { get; set; }
+
+        [Column("provedor")]
+        public string Provider { get; set; }
     }
 }

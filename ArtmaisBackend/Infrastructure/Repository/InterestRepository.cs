@@ -15,7 +15,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public dynamic DeleteAllAndCreateAll(InterestRequest interestRequest, int userId)
+        public dynamic DeleteAllAndCreateAll(InterestRequest interestRequest, long userId)
         {
             using (var transaction = this._context.Database.BeginTransaction())
             {
@@ -40,7 +40,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             }
         }
 
-        private void Create(int subcategoryId, int userId)
+        private void Create(int subcategoryId, long userId)
         {
             var interest = new Interest
             {
@@ -50,7 +50,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             this._context.Interest.Add(interest);
         }
 
-        private void DeleteAll(int userId)
+        private void DeleteAll(long userId)
         {
             this._context.Interest.RemoveRange(this._context.Interest
                 .Where(i => i.UserID.Equals(userId)));

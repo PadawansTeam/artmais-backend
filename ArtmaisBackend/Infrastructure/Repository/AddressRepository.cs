@@ -15,12 +15,12 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public Address? GetAddressByUser(int? userId)
+        public Address? GetAddressByUser(long? userId)
         {
             return this._context.Address.FirstOrDefault(address => address.UserID == userId);
         }
 
-        public Address Create(AddressRequest addressRequest, int userId)
+        public Address Create(AddressRequest addressRequest, long userId)
         {
             var address = new Address
             {

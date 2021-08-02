@@ -2,7 +2,7 @@
 {
     public class RecomendationDto
     {
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public string Username { get; set; }
         public string UserPicture { get; set; }
         public string BackgroundPicture { get; set; }

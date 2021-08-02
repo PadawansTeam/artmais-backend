@@ -2,7 +2,7 @@
 {
     public class UserJwtData
     {
-        public int UserID { get; set; }
+        public long UserID { get; set; }
         public string Role { get; set; }
         public string UserName { get; set; }
     }
