@@ -96,7 +96,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                            join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
                            where interest.UserID.Equals(userId)
                            && !user.UserID.Equals(userId)
-                           && subcategory.OtherSubcategory.Equals(0)
+                           && subcategory.OtherSubcategory.Equals(false)
                            select new RecomendationDto
                            {
                                UserId = user.UserID,
