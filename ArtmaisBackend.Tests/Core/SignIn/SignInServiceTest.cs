@@ -25,7 +25,6 @@ namespace ArtmaisBackend.Tests.Core.SignIn
                 UserID = 1,
                 Email = "joao@gmail.com",
                 Password = "05ZqadUMOvuD8CAL+jffYg==awRk+A/eBTdeZu2HHUn5rEkgBtFefv6ljXH4TLoLoD66V1pCKjj7CN/cXMZxINsgGMaHRUxSbOOl5ahWCtPnTQ==",
-                Role = "Consumidor"
             };
 
             var userRepositoryMock = new Mock<IUserRepository>();
@@ -72,7 +71,6 @@ namespace ArtmaisBackend.Tests.Core.SignIn
                 UserID = 1,
                 Email = "joao@gmail.com",
                 Password = "05ZqadUMOvuD8CAL+jffYg==awRk+A/eBTdeZu2HHUn5rEkgBtFefv6ljXH4TLoLoD66V1pCKjj7CN/cXMZxINsgGMaHRUxSbOOl5ahWCtPnTQ==",
-                Role = "Consumidor"
             };
 
             var userRepositoryMock = new Mock<IUserRepository>();

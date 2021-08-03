@@ -19,7 +19,8 @@ namespace ArtmaisBackend.Tests.Core.SignIn
                 UserID = 1,
                 Email = "joao@gmail.com",
                 Password = "05ZqadUMOvuD8CAL+jffYg==awRk+A/eBTdeZu2HHUn5rEkgBtFefv6ljXH4TLoLoD66V1pCKjj7CN/cXMZxINsgGMaHRUxSbOOl5ahWCtPnTQ==",
-                Role = "artist",
+                UserType = new UserType { UserTypeId = 1, Description = "Artist" },
+                UserTypeId = 1,
                 Username = "joaoartista"
             };
 
@@ -44,7 +45,8 @@ namespace ArtmaisBackend.Tests.Core.SignIn
                 UserID = 1,
                 Email = "joao@gmail.com",
                 Password = "05ZqadUMOvuD8CAL+jffYg==awRk+A/eBTdeZu2HHUn5rEkgBtFefv6ljXH4TLoLoD66V1pCKjj7CN/cXMZxINsgGMaHRUxSbOOl5ahWCtPnTQ==",
-                Role = "artist",
+                UserType = new UserType { UserTypeId = 1, Description = "Artist" },
+                UserTypeId = 1,
                 Username = "joaoartista"
             };
 
@@ -73,7 +75,7 @@ namespace ArtmaisBackend.Tests.Core.SignIn
             var result = jwtToken.ReadToken(claims);
 
             Assert.Equal(1, result.UserID);
-            Assert.Equal("artist", result.Role);
+            Assert.Equal("Artist", result.Role);
             Assert.Equal("joaoartista", result.UserName);
         }
     }

@@ -24,9 +24,6 @@ namespace ArtmaisBackend.Core.SignUp.Request
         public DateTime BirthDate { get; set; }
 
         [Required]
-        public string Role { get; set; }
-
-        [Required]
         public string Category { get; set; }
 
         [Required]

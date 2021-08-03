@@ -52,10 +52,18 @@ namespace ArtmaisBackend.Core.OAuth.Google.Mediator
 
             request.SubcategoryID = existentSubcategory.SubcategoryID;
 
-            var user = _userRepository.CreateOAuthUser(request, "google");
+            if (request.Category.Equals("Consumidor"))
+                return CreateUser(request, 2);
+
+            return CreateUser(request);
+        }
+
+        private string CreateUser(OAuthSignUpRequest request, int userTypeId = 1)
+        {
+            var user = _userRepository.CreateOAuthUser(request, "google", userTypeId);
             _externalAuthorizationRepository.Create(request.ExternalAuthorizationId, user.UserID);
 
-           return _jwtTokenService.GenerateToken(user);
+            return _jwtTokenService.GenerateToken(user);
         }
     }
 }

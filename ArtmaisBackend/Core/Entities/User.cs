@@ -38,9 +38,6 @@ namespace ArtmaisBackend.Core.Entities
         [Column("datacadastro")]
         public DateTime? RegisterDate { get; set; }
 
-        [Column("role")]
-        public string Role { get; set; }
-
         [Column("fotousuario")]
         public string? UserPicture { get; set; }
 
@@ -49,5 +46,11 @@ namespace ArtmaisBackend.Core.Entities
 
         [Column("provedor")]
         public string? Provider { get; set; }
+
+        [Column("idtipousuario")]
+        public int UserTypeId { get; set; }
+
+        [ForeignKey("UserTypeId")]
+        public UserType UserType { get; set; }
     }
 }
