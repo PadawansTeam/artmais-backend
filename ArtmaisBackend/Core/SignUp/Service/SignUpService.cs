@@ -48,7 +48,16 @@ namespace ArtmaisBackend.Core.SignUp.Service
             signUpRequest.SubcategoryID = existentSubcategory.SubcategoryID;
 
             signUpRequest.Password = PasswordUtil.Encrypt(signUpRequest.Password);
-            var user = this._userRepository.Create(signUpRequest);
+
+            if (signUpRequest.Category.Equals("Consumidor"))
+                return CreateUser(signUpRequest, 2);
+
+            return CreateUser(signUpRequest);
+        }
+
+        private string CreateUser(SignUpRequest signUpRequest, int userTypeId = 1)
+        {
+            var user = _userRepository.Create(signUpRequest, userTypeId);
 
             return this._jwtToken.GenerateToken(user);
         }

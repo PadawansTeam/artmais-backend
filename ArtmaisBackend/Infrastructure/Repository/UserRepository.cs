@@ -20,7 +20,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public User Create(SignUpRequest signUpRequest)
+        public User Create(SignUpRequest signUpRequest, int userTypeId = 1)
         {
             var user = new User
             {
@@ -31,11 +31,11 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 Description = signUpRequest.Description,
                 Username = signUpRequest.Username,
                 BirthDate = signUpRequest.BirthDate,
-                Role = signUpRequest.Role,
                 RegisterDate = DateTime.Now,
                 UserPicture = signUpRequest.UserPicture,
                 BackgroundPicture = signUpRequest.BackgroundPicture,
-                Provider = "artmais"
+                Provider = "artmais",
+                UserTypeId = userTypeId
             };
 
             this._context.User.Add(user);
@@ -44,7 +44,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return user;
         }
 
-        public User CreateOAuthUser(OAuthSignUpRequest signUpRequest, string provider)
+        public User CreateOAuthUser(OAuthSignUpRequest signUpRequest, string provider, int userTypeId = 1)
         {
             var user = new User
             {
@@ -54,11 +54,11 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 Description = signUpRequest.Description,
                 Username = signUpRequest.Username,
                 BirthDate = signUpRequest.BirthDate,
-                Role = signUpRequest.Role,
                 RegisterDate = DateTime.Now,
                 UserPicture = signUpRequest.UserPicture,
                 BackgroundPicture = signUpRequest.BackgroundPicture,
-                Provider = provider
+                Provider = provider,
+                UserTypeId = userTypeId
             };
 
             this._context.User.Add(user);
@@ -81,8 +81,9 @@ namespace ArtmaisBackend.Infrastructure.Repository
                             Description = user.Description,
                             Username = user.Username,
                             BirthDate = user.BirthDate,
-                            Role = user.Role,
-                            RegisterDate = user.RegisterDate
+                            RegisterDate = user.RegisterDate,
+                            UserTypeId = user.UserTypeId,
+                            UserType = user.UserType
                         };
 
             return query.FirstOrDefault();
@@ -96,7 +97,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                            join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
                            where interest.UserID.Equals(userId)
                            && !user.UserID.Equals(userId)
-                           && subcategory.OtherSubcategory.Equals(0)
+                           && subcategory.OtherSubcategory.Equals(false)
                            select new RecomendationDto
                            {
                                UserId = user.UserID,

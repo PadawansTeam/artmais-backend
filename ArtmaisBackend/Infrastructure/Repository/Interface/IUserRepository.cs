@@ -9,8 +9,8 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
 {
     public interface IUserRepository
     {
-        User Create(SignUpRequest signUpRequest);
-        User CreateOAuthUser(OAuthSignUpRequest signUpRequest, string provider);
+        User Create(SignUpRequest signUpRequest, int userTypeId = 1);
+        User CreateOAuthUser(OAuthSignUpRequest signUpRequest, string provider, int userTypeId = 1);
         User GetUserByEmail(string email);
         IEnumerable<RecomendationDto> GetUsersByInterest(long userId);
         User GetUserByUsername(string username);

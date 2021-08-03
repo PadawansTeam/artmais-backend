@@ -55,7 +55,6 @@ namespace ArtmaisBackend.Tests.Core.SignUp
                 Description = "Apenas um consumidor",
                 Username = "Joao",
                 BirthDate = DateTime.Now,
-                Role = "Consumidor",
                 Category = "Tatuador(a)",
                 Subcategory = "Aquarela"
             };
@@ -65,7 +64,8 @@ namespace ArtmaisBackend.Tests.Core.SignUp
                 UserID = 1,
                 Email = "joao@gmail.com",
                 Password = "05ZqadUMOvuD8CAL+jffYg==awRk+A/eBTdeZu2HHUn5rEkgBtFefv6ljXH4TLoLoD66V1pCKjj7CN/cXMZxINsgGMaHRUxSbOOl5ahWCtPnTQ==",
-                Role = "Consumidor"
+                UserType = new UserType { UserTypeId = 1, Description = "Artist" },
+                UserTypeId = 1
             };
 
             var subcategory = new Subcategory
@@ -77,7 +77,7 @@ namespace ArtmaisBackend.Tests.Core.SignUp
             var userRepositoryMock = new Mock<IUserRepository>();
             userRepositoryMock.Setup(r => r.GetUserByEmail("joao@gmail.com")).Returns((User)null);
             userRepositoryMock.Setup(r => r.GetUserByUsername("Joao")).Returns((User)null);
-            userRepositoryMock.Setup(r => r.Create(request)).Returns(user);
+            userRepositoryMock.Setup(r => r.Create(request, 1)).Returns(user);
 
             var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
             categorySubcategoryRepositoryMock.Setup(c => c.GetSubcategoryBySubcategory("Aquarela")).Returns(subcategory);
@@ -101,7 +101,6 @@ namespace ArtmaisBackend.Tests.Core.SignUp
                 Description = "Apenas um consumidor",
                 Username = "Joao",
                 BirthDate = DateTime.Now,
-                Role = "Consumidor",
                 Category = "Tatuador(a)",
                 Subcategory = "Aquarela"
             };
@@ -111,7 +110,8 @@ namespace ArtmaisBackend.Tests.Core.SignUp
                 UserID = 1,
                 Email = "joao@gmail.com",
                 Password = "05ZqadUMOvuD8CAL+jffYg==awRk+A/eBTdeZu2HHUn5rEkgBtFefv6ljXH4TLoLoD66V1pCKjj7CN/cXMZxINsgGMaHRUxSbOOl5ahWCtPnTQ==",
-                Role = "Consumidor"
+                UserType = new UserType { UserTypeId = 1, Description = "Artist" },
+                UserTypeId = 1
             };
 
             var userRepositoryMock = new Mock<IUserRepository>();
@@ -137,7 +137,6 @@ namespace ArtmaisBackend.Tests.Core.SignUp
                 Description = "Apenas um consumidor",
                 Username = "Joao",
                 BirthDate = DateTime.Now,
-                Role = "Consumidor",
                 Category = "Tatuador(a)",
                 Subcategory = "Aquarela"
             };
@@ -147,7 +146,8 @@ namespace ArtmaisBackend.Tests.Core.SignUp
                 UserID = 1,
                 Email = "joao@gmail.com",
                 Password = "05ZqadUMOvuD8CAL+jffYg==awRk+A/eBTdeZu2HHUn5rEkgBtFefv6ljXH4TLoLoD66V1pCKjj7CN/cXMZxINsgGMaHRUxSbOOl5ahWCtPnTQ==",
-                Role = "Consumidor"
+                UserType = new UserType { UserTypeId = 1, Description = "Artist" },
+                UserTypeId = 1
             };
 
             var userRepositoryMock = new Mock<IUserRepository>();

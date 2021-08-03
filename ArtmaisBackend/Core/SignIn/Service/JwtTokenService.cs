@@ -18,7 +18,7 @@ namespace ArtmaisBackend.Core.SignIn.Service
 
         public IConfiguration Configuration { get; }
 
-        public string GenerateToken(User usuario)
+        public string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(this.Configuration.GetValue("Secret", ""));
@@ -26,9 +26,9 @@ namespace ArtmaisBackend.Core.SignIn.Service
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, usuario.UserID.ToString()),
-                    new Claim(ClaimTypes.Role, usuario.Role),
-                    new Claim(ClaimTypes.Name, usuario.Username),
+                    new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
+                    new Claim(ClaimTypes.Role, user.UserType.Description),
+                    new Claim(ClaimTypes.Name, user.Username),
                 }),
                 Expires = DateTime.UtcNow.AddHours(24),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
