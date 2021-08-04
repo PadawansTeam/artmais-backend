@@ -1,4 +1,6 @@
-﻿namespace ArtmaisBackend.Core.Users.Dto
+﻿using System;
+
+namespace ArtmaisBackend.Core.Users.Dto
 {
     public class UserDto
     {
@@ -10,6 +12,7 @@
         public string? Category { get; set; }
         public string? Subcategory { get; set; }
         public string? Description { get; set; }
+        public DateTime? BirthDate { get; set; }
         public string? Street { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
