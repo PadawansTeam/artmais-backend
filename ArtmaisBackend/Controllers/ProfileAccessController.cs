@@ -18,7 +18,7 @@ namespace ArtmaisBackend.Controllers
 
         [HttpPost]
         [Route("{visitedUserId}")]
-        public ActionResult<ProfileAcess> Create([FromRoute] long visitedUserId)
+        public ActionResult<ProfileAccess> Create([FromRoute] long visitedUserId)
         {
             try
             {

@@ -6,6 +6,7 @@ using ArtmaisBackend.Core.OAuth.Google.Interface;
 using ArtmaisBackend.Core.OAuth.Google.Mediator;
 using ArtmaisBackend.Core.Profile.Interface;
 using ArtmaisBackend.Core.Profile.Mediator;
+using ArtmaisBackend.Core.Profile.Services;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Core.SignIn.Service;
 using ArtmaisBackend.Core.SignUp.Interface;
@@ -107,6 +108,9 @@ namespace ArtmaisBackend
             services.AddDbContext<ArtplusContext>(
                 options => options.UseNpgsql(this.Configuration.GetConnectionString("DbContext")));
 
+            //HostedServices
+            services.AddHostedService<RecomendationService>();
+
             //Automapper
             services.AddAutoMapper(typeof(Startup).Assembly);
 
@@ -122,6 +126,7 @@ namespace ArtmaisBackend
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IExternalAuthorizationRepository, ExternalAuthorizationRepository>();
             services.AddScoped<IProfileAccessRepository, ProfileAccessRepository>();
+            services.AddSingleton<IAsyncProfileAccessRepository, AsyncProfileAccessRepository>();
 
             //SignIn
             services.AddScoped<ISignInService, SignInService>();

@@ -1,11 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ArtmaisBackend.Core.Entities
 {
     [Table("acessoperfil")]
-    public class ProfileAcess
+    public class ProfileAccess
     {
+        [Key]
         [Column("idacessoperfil")]
         public long ProfileAcessId { get; set; }
 
