@@ -14,16 +14,16 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public ProfileAcess Create(long visitorUserId, long visitedUserId)
+        public ProfileAccess Create(long visitorUserId, long visitedUserId)
         {
-            var profileAcess = new ProfileAcess
+            var profileAcess = new ProfileAccess
             {
                 VisitorUserId = visitorUserId,
                 VisitedUserId = visitedUserId,
                 VisitDate = DateTime.Now
             };
 
-            _context.ProfileAcess.Add(profileAcess);
+            _context.ProfileAccess.Add(profileAcess);
             _context.SaveChanges();
 
             return profileAcess;

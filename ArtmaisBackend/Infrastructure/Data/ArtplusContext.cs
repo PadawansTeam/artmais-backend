@@ -13,7 +13,7 @@ namespace ArtmaisBackend.Infrastructure.Data
         public DbSet<Contact> Contact { get; set; }
         public DbSet<Address> Address { get; set; }
         public DbSet<ExternalAuthorization> ExternalAuthorization { get; set; }
-        public DbSet<ProfileAcess> ProfileAcess { get; set; }
+        public DbSet<ProfileAccess> ProfileAccess { get; set; }
     }
 }
 
