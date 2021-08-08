@@ -4,6 +4,6 @@
     {
         public long VisitorUserId { get; set; }
         public int VisitedSubcategoryId { get; set; }
-        public int VisitNumber { get; set; }
+        public float VisitNumber { get; set; }
     }
 }

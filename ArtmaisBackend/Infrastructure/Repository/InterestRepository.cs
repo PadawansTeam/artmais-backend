@@ -45,7 +45,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
             var interest = new Interest
             {
                 UserID = userId,
-                SubcategoryID = subcategoryId
+                SubcategoryID = subcategoryId,
+                UserSelected = true
             };
             this._context.Interest.Add(interest);
         }
@@ -53,7 +54,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
         private void DeleteAll(long userId)
         {
             this._context.Interest.RemoveRange(this._context.Interest
-                .Where(i => i.UserID.Equals(userId)));
+                .Where(i => i.UserID.Equals(userId) && i.UserSelected));
         }
 
     }
