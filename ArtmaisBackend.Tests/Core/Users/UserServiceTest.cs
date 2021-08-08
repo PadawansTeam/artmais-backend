@@ -499,7 +499,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         public void UpdateUserDescriptionShouldBeTrue()
         {
             #region Mocks
-            var descriptionRequest = new DescriptionRequest
+            var descriptionRequest = new UserDescriptionRequest
             {
                 Description = "Description"
             };
@@ -542,7 +542,7 @@ namespace ArtmaisBackend.Tests.Core.Users
         [Fact(DisplayName = "UpdateUserDescription should be false when request is null or empty")]
         public void UpdateUserDescriptionShouldBeFalse()
         {
-            DescriptionRequest descriptionRequest = null;
+            UserDescriptionRequest descriptionRequest = null;
 
             var mockAddressRepository = new Mock<IAddressRepository>();
             var mockContactRepository = new Mock<IContactRepository>();

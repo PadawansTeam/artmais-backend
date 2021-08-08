@@ -11,14 +11,14 @@ namespace ArtmaisBackend.Core.Users.Interface
 
         ShareProfileBaseDto? GetShareProfile(long? userId);
 
-        UserDto? GetLoggedUserInfoById(long? id);
+        UserDto? GetLoggedUserInfoById(long? userId);
 
-        UserDto? GetUserInfoById(long? id);
+        UserDto? GetUserInfoById(long? userId);
 
         UserProfileInfoDto UpdateUserInfo(UserRequest? userRequest, long userId);
         
         bool UpdateUserPassword(PasswordRequest? passwordRequest, long userId);
 
-        bool UpdateUserDescription(DescriptionRequest? descriptionRequest, long userId);
+        bool UpdateUserDescription(UserDescriptionRequest? descriptionRequest, long userId);
     }
 }

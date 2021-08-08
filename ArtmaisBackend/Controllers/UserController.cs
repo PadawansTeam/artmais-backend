@@ -62,7 +62,7 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<UserDto> UpdateUserPassword(PasswordRequest passwordRequest)
+        public ActionResult<bool> UpdateUserPassword(PasswordRequest passwordRequest)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<UserDto> UpdateUserDescription(DescriptionRequest descriptionRequest)
+        public ActionResult<bool> UpdateUserDescription(UserDescriptionRequest descriptionRequest)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<UserDto> UpdateUserInfo(UserRequest userRequest)
+        public ActionResult<UserProfileInfoDto> UpdateUserInfo(UserRequest userRequest)
         {
             try
             {
