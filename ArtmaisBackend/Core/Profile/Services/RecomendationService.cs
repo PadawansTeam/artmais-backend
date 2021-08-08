@@ -26,7 +26,7 @@ namespace ArtmaisBackend.Core.Profile.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromHours(12));
             return Task.CompletedTask;
         }
 
@@ -44,7 +44,7 @@ namespace ArtmaisBackend.Core.Profile.Services
                 MatrixColumnIndexColumnName = "VisitorUserIdEnconded",
                 MatrixRowIndexColumnName = "VisitedSubcategoryIdEnconded",
                 LabelColumnName = "VisitNumber",
-                NumberOfIterations = 200,
+                NumberOfIterations = categoriesRating.Count(),
                 ApproximationRank = 100
             };
 
