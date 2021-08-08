@@ -36,10 +36,6 @@ namespace ArtmaisBackend.Core.Users.Service
             if (user is null)
                 throw new ArgumentNullException();
 
-            var contact = this._contactRepository.GetContactByUser(user.UserID);
-            if (contact is null)
-                throw new ArgumentNullException();
-
             var shareLinkDto = new ShareLinkDto
             {
                 Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareProfile}",
@@ -56,8 +52,6 @@ namespace ArtmaisBackend.Core.Users.Service
                 throw new ArgumentNullException();
 
             var contact = this._contactRepository.GetContactByUser(user.UserID);
-            if (contact is null)
-                throw new ArgumentNullException();
 
             var shareLinkDto = new ShareLinkDto
             {
@@ -77,17 +71,22 @@ namespace ArtmaisBackend.Core.Users.Service
                 throw new ArgumentNullException();
 
             var contact = this._contactRepository.GetContactByUser(user.UserID);
-            if (contact is null)
-                throw new ArgumentNullException();
 
-            var shareProfileDto = new ShareProfileBaseDto
+            if(contact is null)
             {
-                Facebook = $"{this._socialMediaConfiguration.FacebookProfile }{contact?.Facebook}",
-                Twitter = $"{this._socialMediaConfiguration.TwitterProfile }{contact?.Twitter}",
-                Instagram = $"{this._socialMediaConfiguration.InstagramProfile }{contact?.Instagram}",
-            };
+                return new ShareProfileBaseDto { };
+            }
+            else
+            {
+                var shareProfileDto = new ShareProfileBaseDto
+                {
+                    Facebook = $"{this._socialMediaConfiguration.FacebookProfile }{contact?.Facebook}",
+                    Twitter = $"{this._socialMediaConfiguration.TwitterProfile }{contact?.Twitter}",
+                    Instagram = $"{this._socialMediaConfiguration.InstagramProfile }{contact?.Instagram}",
+                };
 
-            return shareProfileDto;
+                return shareProfileDto;
+            }   
         }
 
         public UserDto? GetLoggedUserInfoById(long? id)
