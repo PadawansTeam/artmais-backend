@@ -3,6 +3,7 @@ using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
@@ -28,6 +29,17 @@ namespace ArtmaisBackend.Infrastructure.Repository
             };
             context.Interest.Add(interest);
             context.SaveChanges();
+        }
+
+        public bool GetInterestByUserIdAndSubcategoryId(CategoryRating categoryRating)
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<ArtplusContext>();
+
+            return context.Interest
+                .Where(i => i.UserID.Equals(categoryRating.VisitorUserId) 
+                && i.SubcategoryID.Equals(categoryRating.VisitedSubcategoryId))
+                .Any();
         }
     }
 }

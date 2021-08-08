@@ -59,7 +59,10 @@ namespace ArtmaisBackend.Core.Profile.Services
             foreach(var categoryRating in categoriesRating)
             {
                 if (Math.Round(predictionEngine.Predict(categoryRating).Score, 1) >= 2)
-                    _asyncInterestRepository.Create(categoryRating);
+                {
+                    if (!_asyncInterestRepository.GetInterestByUserIdAndSubcategoryId(categoryRating))
+                        _asyncInterestRepository.Create(categoryRating);
+                }
             }
         }
 
