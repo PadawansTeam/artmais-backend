@@ -20,17 +20,17 @@ namespace ArtmaisBackend.Infrastructure.Repository
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ArtplusContext>();
-            var results = (from profileAccess in context.ProfileAccess
-                           join user in context.User on profileAccess.VisitedUserId equals user.UserID
-                           group user by profileAccess into grouped
-                           select new CategoryRating
-                           {
-                               VisitorUserId = grouped.Key.VisitorUserId,
-                               VisitedSubcategoryId = grouped.Key.VisitedUser.SubcategoryID,
-                               VisitNumber = grouped.Count()
-                           }).ToList();
+            var results = context.ProfileAccess.Select(p => new { p.VisitorUserId, p.VisitedUser.SubcategoryID }).ToList();
 
-            return results;
+            var groupedResults = results.GroupBy(p => p.VisitorUserId)
+                .Select(p => new CategoryRating 
+                { 
+                    VisitorUserId = p.Key,
+                    VisitedSubcategoryId = p.Select(p => p.SubcategoryID).First(),
+                    VisitNumber = p.Select(p => p.SubcategoryID).Count()
+                });
+
+            return groupedResults;
         }
     }
 }

@@ -86,6 +86,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                            join interest in this._context.Interest on subcategory.SubcategoryID equals interest.SubcategoryID
                            where subcategory.OtherSubcategory.Equals(false)
                            && interest.UserID.Equals(userId)
+                           && interest.UserSelected
                            select new SubcategoryDto
                            {
                                SubcategoryID = subcategory.SubcategoryID,

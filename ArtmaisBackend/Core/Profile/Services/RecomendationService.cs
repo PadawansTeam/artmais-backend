@@ -12,13 +12,15 @@ namespace ArtmaisBackend.Core.Profile.Services
 {
     public class RecomendationService : IHostedService, IDisposable
     {
-        public RecomendationService(IAsyncProfileAccessRepository asyncProfileAccessRepository)
+        public RecomendationService(IAsyncInterestRepository asyncInterestRepository, IAsyncProfileAccessRepository asyncProfileAccessRepository)
         {
             _mlContext = new MLContext();
+            _asyncInterestRepository = asyncInterestRepository;
             _asyncProfileAccessRepository = asyncProfileAccessRepository;
         }
 
         private readonly MLContext _mlContext;
+        private readonly IAsyncInterestRepository _asyncInterestRepository;
         private readonly IAsyncProfileAccessRepository _asyncProfileAccessRepository;
         private Timer _timer;
 
@@ -30,18 +32,18 @@ namespace ArtmaisBackend.Core.Profile.Services
 
         public void DoWork(object? state)
         {
-            var categoryRating = _asyncProfileAccessRepository.GetAllCategoryRating();
-            var trainingDataView = _mlContext.Data.LoadFromEnumerable(categoryRating);
-            var testDataView = _mlContext.Data.LoadFromEnumerable(categoryRating);
+            var categoriesRating = _asyncProfileAccessRepository.GetAllCategoryRating();
+            var trainingDataView = _mlContext.Data.LoadFromEnumerable(categoriesRating);
+            var testDataView = _mlContext.Data.LoadFromEnumerable(categoriesRating);
 
             var estimator = _mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "VisitorUserIdEnconded", inputColumnName: "VisitorUserId")
                 .Append(_mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "VisitedSubcategoryIdEnconded", inputColumnName: "VisitedSubcategoryId"));
 
             var options = new MatrixFactorizationTrainer.Options
             {
-                MatrixColumnIndexColumnName = "userIdVisitanteEncoded",
-                MatrixRowIndexColumnName = "subcategoriaDonoEncoded",
-                LabelColumnName = "Label",
+                MatrixColumnIndexColumnName = "VisitorUserIdEnconded",
+                MatrixRowIndexColumnName = "VisitedSubcategoryIdEnconded",
+                LabelColumnName = "VisitNumber",
                 NumberOfIterations = 200,
                 ApproximationRank = 100
             };
@@ -50,15 +52,14 @@ namespace ArtmaisBackend.Core.Profile.Services
             var model = trainerEstimator.Fit(trainingDataView);
 
             var prediction = model.Transform(testDataView);
-            _mlContext.Regression.Evaluate(prediction, labelColumnName: "Label", scoreColumnName: "Score");
+            _mlContext.Regression.Evaluate(prediction, labelColumnName: "VisitNumber", scoreColumnName: "Score");
 
             var predictionEngine = _mlContext.Model.CreatePredictionEngine<CategoryRating, CategoryRatingPrediction>(model);
-            var testInput = new CategoryRating { VisitorUserId = 10, VisitedSubcategoryId = 1 };
-            var categoryRatingPrediction = predictionEngine.Predict(testInput);
-
-            if (Math.Round(categoryRatingPrediction.Score, 1) > 1)
+            
+            foreach(var categoryRating in categoriesRating)
             {
-
+                if (Math.Round(predictionEngine.Predict(categoryRating).Score, 1) >= 2)
+                    _asyncInterestRepository.Create(categoryRating);
             }
         }
 

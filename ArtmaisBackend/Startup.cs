@@ -127,6 +127,7 @@ namespace ArtmaisBackend
             services.AddScoped<IExternalAuthorizationRepository, ExternalAuthorizationRepository>();
             services.AddScoped<IProfileAccessRepository, ProfileAccessRepository>();
             services.AddSingleton<IAsyncProfileAccessRepository, AsyncProfileAccessRepository>();
+            services.AddSingleton<IAsyncInterestRepository, AsyncInterestRepository>();
 
             //SignIn
             services.AddScoped<ISignInService, SignInService>();
