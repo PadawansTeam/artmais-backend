@@ -26,11 +26,11 @@ namespace ArtmaisBackend.Core.Profile.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromHours(12));
+            _timer = new Timer(InterestPrediction, null, TimeSpan.Zero, TimeSpan.FromHours(12));
             return Task.CompletedTask;
         }
 
-        public void DoWork(object? state)
+        public void InterestPrediction(object? state)
         {
             var categoriesRating = _asyncProfileAccessRepository.GetAllCategoryRating();
             var trainingDataView = _mlContext.Data.LoadFromEnumerable(categoriesRating);
