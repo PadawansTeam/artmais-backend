@@ -30,8 +30,6 @@ namespace ArtmaisBackend.Core.Portfolio.Service
                 throw new ArgumentNullException();
 
             var publicationContent = _publicationRepository.GetAllPublicationsByUserId(userId);
-            if (!publicationContent.Any())
-                throw new ArgumentNullException();
 
             return publicationContent;
         }
@@ -42,8 +40,6 @@ namespace ArtmaisBackend.Core.Portfolio.Service
                 throw new ArgumentNullException();
 
             var publicationContent = _publicationRepository.GetAllPublicationsByUserId(userId);
-            if (!publicationContent.Any())
-                throw new ArgumentNullException();
 
             return publicationContent;
         }
