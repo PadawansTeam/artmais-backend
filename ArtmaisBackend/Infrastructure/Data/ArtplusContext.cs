@@ -14,6 +14,9 @@ namespace ArtmaisBackend.Infrastructure.Data
         public DbSet<Address> Address { get; set; }
         public DbSet<ExternalAuthorization> ExternalAuthorization { get; set; }
         public DbSet<ProfileAcess> ProfileAcess { get; set; }
+        public DbSet<Media> Media { get; set; }
+        public DbSet<MediaType> MediaType { get; set; }
+        public DbSet<Publication> Publication { get; set; }
     }
 }
 

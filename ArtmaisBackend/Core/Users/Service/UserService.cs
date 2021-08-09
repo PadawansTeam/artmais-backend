@@ -14,7 +14,6 @@ namespace ArtmaisBackend.Core.Users.Service
 {
     public class UserService : IUserService
     {
-
         public UserService(IAddressRepository addressRepository, IContactRepository contactRepository, IOptions<SocialMediaConfiguration> options, IUserRepository userRepository, IMapper mapper)
         {
             this._addressRepository = addressRepository;
@@ -89,9 +88,9 @@ namespace ArtmaisBackend.Core.Users.Service
             }   
         }
 
-        public UserDto? GetLoggedUserInfoById(long? id)
+        public UserDto? GetLoggedUserInfoById(long? userId)
         {
-            var user = this._userRepository.GetUserById(id);
+            var user = this._userRepository.GetUserById(userId);
             if (user is null)
                 throw new ArgumentNullException();
 
@@ -135,9 +134,9 @@ namespace ArtmaisBackend.Core.Users.Service
             return userDto;
         }
 
-        public UserDto? GetUserInfoById(long? id)
+        public UserDto? GetUserInfoById(long? userId)
         {
-            var user = this._userRepository.GetUserById(id);
+            var user = this._userRepository.GetUserById(userId);
             if (user is null)
                 throw new ArgumentNullException();
 
@@ -260,14 +259,14 @@ namespace ArtmaisBackend.Core.Users.Service
             return true;
         }
 
-        public bool UpdateUserDescription(DescriptionRequest? descriptionRequest, long userId)
+        public bool UpdateUserDescription(UserDescriptionRequest? userDescriptionRequest, long userId)
         {
-            if (descriptionRequest is null)
+            if (userDescriptionRequest is null)
                 throw new ArgumentNullException();
 
             var userInfo = this._userRepository.GetUserById(userId);
 
-            this._mapper.Map(descriptionRequest, userInfo);
+            this._mapper.Map(userDescriptionRequest, userInfo);
             this._userRepository.Update(userInfo);
 
             return true;

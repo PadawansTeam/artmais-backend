@@ -4,6 +4,8 @@ using ArtmaisBackend.Core.Contact.Service;
 using ArtmaisBackend.Core.Contacts.Interface;
 using ArtmaisBackend.Core.OAuth.Google.Interface;
 using ArtmaisBackend.Core.OAuth.Google.Mediator;
+using ArtmaisBackend.Core.Portfolio.Interface;
+using ArtmaisBackend.Core.Portfolio.Service;
 using ArtmaisBackend.Core.Profile.Interface;
 using ArtmaisBackend.Core.Profile.Mediator;
 using ArtmaisBackend.Core.SignIn.Interface;
@@ -125,6 +127,9 @@ namespace ArtmaisBackend
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IExternalAuthorizationRepository, ExternalAuthorizationRepository>();
             services.AddScoped<IProfileAccessRepository, ProfileAccessRepository>();
+            services.AddScoped<IMediaRepository, MediaRepository>();
+            services.AddScoped<IMediaTypeRepository, MediaTypeRepository>();
+            services.AddScoped<IPublicationRepository, PublicationRepository>();
 
             //SignIn
             services.AddScoped<ISignInService, SignInService>();
@@ -147,11 +152,14 @@ namespace ArtmaisBackend
             //Address
             services.AddScoped<IAddressService, AddressService>();
 
-            //Services
+            //Google Services
             services.AddScoped<IGoogleService, GoogleService>();
 
             //OAuth Google
             services.AddScoped<IGoogleMediator, GoogleMediator>();
+
+            //Portfolio
+            services.AddScoped<IPortfolioService, PortfolioService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

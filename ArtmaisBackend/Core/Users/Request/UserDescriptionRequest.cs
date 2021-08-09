@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Users.Request
 {
-    public class DescriptionRequest
+    public class UserDescriptionRequest
     {
         public string Description { get; set; }
     }
