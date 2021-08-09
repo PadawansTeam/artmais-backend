@@ -4,6 +4,8 @@ using ArtmaisBackend.Core.Contact.Service;
 using ArtmaisBackend.Core.Contacts.Interface;
 using ArtmaisBackend.Core.OAuth.Google.Interface;
 using ArtmaisBackend.Core.OAuth.Google.Mediator;
+using ArtmaisBackend.Core.Portfolio.Interface;
+using ArtmaisBackend.Core.Portfolio.Service;
 using ArtmaisBackend.Core.Profile.Interface;
 using ArtmaisBackend.Core.Profile.Mediator;
 using ArtmaisBackend.Core.Profile.Services;
@@ -19,6 +21,7 @@ using ArtmaisBackend.Infrastructure.Repository;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using ArtmaisBackend.Services;
 using ArtmaisBackend.Services.Interface;
+using ArtmaisBackend.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -74,7 +77,9 @@ namespace ArtmaisBackend
             });
 
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new DateTimeConverter()));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ArtmaisBackend", Version = "v1" });
@@ -128,6 +133,9 @@ namespace ArtmaisBackend
             services.AddScoped<IProfileAccessRepository, ProfileAccessRepository>();
             services.AddSingleton<IAsyncProfileAccessRepository, AsyncProfileAccessRepository>();
             services.AddSingleton<IAsyncInterestRepository, AsyncInterestRepository>();
+            services.AddScoped<IMediaRepository, MediaRepository>();
+            services.AddScoped<IMediaTypeRepository, MediaTypeRepository>();
+            services.AddScoped<IPublicationRepository, PublicationRepository>();
 
             //SignIn
             services.AddScoped<ISignInService, SignInService>();
@@ -150,11 +158,14 @@ namespace ArtmaisBackend
             //Address
             services.AddScoped<IAddressService, AddressService>();
 
-            //Services
+            //Google Services
             services.AddScoped<IGoogleService, GoogleService>();
 
             //OAuth Google
             services.AddScoped<IGoogleMediator, GoogleMediator>();
+
+            //Portfolio
+            services.AddScoped<IPortfolioService, PortfolioService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
