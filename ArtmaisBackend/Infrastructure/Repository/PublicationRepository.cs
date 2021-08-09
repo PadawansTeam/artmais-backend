@@ -31,9 +31,9 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 .Where(publication => publication.UserID == userId)
                 .Select(publication => new PortfolioContentDto
                 {
-                    UserId = userId,
-                    PublicationId = publication.PublicationID,
-                    MediaId = publication.MediaID,
+                    UserID = userId,
+                    PublicationID = publication.PublicationID,
+                    MediaID = publication.MediaID,
                     S3UrlMedia = publication.Media.S3UrlMedia,
                     Description = publication.Description,
                     PublicationDate = publication.PublicationDate

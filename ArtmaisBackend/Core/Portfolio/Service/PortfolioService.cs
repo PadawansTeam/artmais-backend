@@ -67,10 +67,10 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
             var portfolioContentDto = new PortfolioContentDto
             {
-                UserId = userId,
-                PublicationId= publicationContent.PublicationID,
-                MediaId = mediaContent.MediaID,
-                MediaTypeId = mediaTypeContent.MediaTypeId,
+                UserID = userId,
+                PublicationID = publicationContent.PublicationID,
+                MediaID = mediaContent.MediaID,
+                MediaTypeID = mediaTypeContent.MediaTypeId,
                 S3UrlMedia = mediaContent.S3UrlMedia,
                 Description = publicationContent.Description,
                 PublicationDate = publicationContent.PublicationDate
