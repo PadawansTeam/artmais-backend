@@ -32,5 +32,13 @@ namespace ArtmaisBackend.Controllers
                 return this.Forbid();
             }
         }
+
+        [HttpGet]
+        [Route("users")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<RecomendationDto>> GetUsers()
+        {
+            return this.Ok(this._recomendationMediator.GetUsers());
+        }
     }
 }

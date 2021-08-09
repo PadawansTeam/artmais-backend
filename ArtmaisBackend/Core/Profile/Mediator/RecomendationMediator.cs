@@ -23,5 +23,10 @@ namespace ArtmaisBackend.Core.Profile.Mediator
             var userJwtData = this._jwtToken.ReadToken(userClaims);
             return this._userRepository.GetUsersByInterest(userJwtData.UserID);
         }
+
+        public IEnumerable<RecomendationDto> GetUsers()
+        {
+            return this._userRepository.GetUsers();
+        }
     }
 }

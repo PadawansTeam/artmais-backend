@@ -15,7 +15,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
         [Fact(DisplayName = "Create returns ProfileAcess")]
         public void CreateReturnsProfileAcess()
         {
-            var profileAcess = new ProfileAcess
+            var profileAcess = new ProfileAccess
             {
                 ProfileAcessId = 1,
                 VisitorUserId = 1,
@@ -58,7 +58,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
             jwtTokenServiceMock.Setup(j => j.ReadToken(null)).Returns(userJwtData);
 
             var profileAcessRepositoryMock = new Mock<IProfileAccessRepository>();
-            profileAcessRepositoryMock.Setup(p => p.Create(1, 1)).Returns((ProfileAcess)null);
+            profileAcessRepositoryMock.Setup(p => p.Create(1, 1)).Returns((ProfileAccess)null);
 
             var profileAcessMediator = new ProfileAccessMediator(jwtTokenServiceMock.Object, profileAcessRepositoryMock.Object);
             var result = profileAcessMediator.Create(null, 1);

@@ -8,6 +8,7 @@ using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Core.Portfolio.Service;
 using ArtmaisBackend.Core.Profile.Interface;
 using ArtmaisBackend.Core.Profile.Mediator;
+using ArtmaisBackend.Core.Profile.Services;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Core.SignIn.Service;
 using ArtmaisBackend.Core.SignUp.Interface;
@@ -112,6 +113,9 @@ namespace ArtmaisBackend
             services.AddDbContext<ArtplusContext>(
                 options => options.UseNpgsql(this.Configuration.GetConnectionString("DbContext")));
 
+            //HostedServices
+            services.AddHostedService<RecomendationService>();
+
             //Automapper
             services.AddAutoMapper(typeof(Startup).Assembly);
 
@@ -127,6 +131,8 @@ namespace ArtmaisBackend
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IExternalAuthorizationRepository, ExternalAuthorizationRepository>();
             services.AddScoped<IProfileAccessRepository, ProfileAccessRepository>();
+            services.AddSingleton<IAsyncProfileAccessRepository, AsyncProfileAccessRepository>();
+            services.AddSingleton<IAsyncInterestRepository, AsyncInterestRepository>();
             services.AddScoped<IMediaRepository, MediaRepository>();
             services.AddScoped<IMediaTypeRepository, MediaTypeRepository>();
             services.AddScoped<IPublicationRepository, PublicationRepository>();

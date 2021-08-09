@@ -18,7 +18,7 @@ namespace ArtmaisBackend.Core.Profile.Mediator
         private readonly IJwtTokenService _jwtTokenService;
         private readonly IProfileAccessRepository _profileAcessRepository;
 
-        public ProfileAcess? Create(ClaimsPrincipal visitorUserClaims, long visitedUserId)
+        public ProfileAccess? Create(ClaimsPrincipal visitorUserClaims, long visitedUserId)
         {
             var visitorUserData = _jwtTokenService.ReadToken(visitorUserClaims);
 

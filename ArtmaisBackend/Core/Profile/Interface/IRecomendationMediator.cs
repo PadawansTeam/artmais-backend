@@ -7,5 +7,6 @@ namespace ArtmaisBackend.Core.Profile.Interface
     public interface IRecomendationMediator
     {
         IEnumerable<RecomendationDto> Index(ClaimsPrincipal userClaims);
+        IEnumerable<RecomendationDto> GetUsers();
     }
 }

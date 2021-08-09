@@ -21,5 +21,8 @@ namespace ArtmaisBackend.Core.Entities
 
         [ForeignKey("SubcategoryID")]
         public Subcategory Subcategory { get; set; }
+
+        [Column("selecionadousuario")]
+        public bool UserSelected { get; set; }
     }
 }
