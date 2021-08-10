@@ -4,6 +4,7 @@ using ArtmaisBackend.Core.SignUp.Request;
 using ArtmaisBackend.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace ArtmaisBackend.Controllers
 {
@@ -43,6 +44,10 @@ namespace ArtmaisBackend.Controllers
             catch (UsernameAlreadyInUse ex)
             {
                 return this.UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
         }
     }

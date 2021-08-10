@@ -41,6 +41,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
             this._context.User.Add(user);
             this._context.SaveChanges();
 
+            _context.Entry(user).Reference(u => u.UserType).Load();
+
             return user;
         }
 
@@ -115,7 +117,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
         {
             return this._context.User.FirstOrDefault(user => user.Username == username);
         }
-        
+
         public User GetUserById(long? id)
         {
             return this._context.User.FirstOrDefault(user => user.UserID == id);
