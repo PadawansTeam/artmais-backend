@@ -120,7 +120,11 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public User GetUserById(long? id)
         {
-            return this._context.User.FirstOrDefault(user => user.UserID == id);
+            var user = this._context.User.FirstOrDefault(user => user.UserID == id);
+
+            _context.Entry(user).Reference(u => u.UserType).Load();
+
+            return user;
         }
 
         public User Update(User user)
