@@ -66,6 +66,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
             this._context.User.Add(user);
             this._context.SaveChanges();
 
+            _context.Entry(user).Reference(u => u.UserType).Load();
+
             return user;
         }
 
