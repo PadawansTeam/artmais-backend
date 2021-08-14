@@ -42,7 +42,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                return Ok(_googleMediator.SignUp(request));
+                return Ok(new { token = _googleMediator.SignUp(request) });
             }
             catch(UsernameAlreadyInUse ex)
             {
