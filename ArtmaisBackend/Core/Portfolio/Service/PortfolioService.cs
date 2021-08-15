@@ -46,7 +46,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
         public PortfolioContentDto? InsertPortfolioContent(PortfolioRequest? portfolioRequest, long userId, int mediaTypeId)
         {
-            if(portfolioRequest is null)
+            if (portfolioRequest.PortfolioImageUrl is null || portfolioRequest.Description is null)
                 throw new ArgumentNullException();
 
             var mediaTypeContent = _mediaTypeRepository.GetMediaTypeById(mediaTypeId);
@@ -77,7 +77,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
         public bool UpdateDescription(PortfolioDescriptionRequest? portfolioDescriptionRequest, long userId)
         {
-            if (portfolioDescriptionRequest is null)
+            if (portfolioDescriptionRequest.PublicationId is null || portfolioDescriptionRequest.PublicationDescription is null)
                 throw new ArgumentNullException();
 
             var portfolioInfo = this._publicationRepository.GetPublicationByIdAndUserId(userId, portfolioDescriptionRequest.PublicationId);
