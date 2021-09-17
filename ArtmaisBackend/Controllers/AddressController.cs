@@ -1,7 +1,7 @@
 ﻿using ArtmaisBackend.Core.Adresses.Dto;
 using ArtmaisBackend.Core.Adresses.Interface;
 using ArtmaisBackend.Core.Adresses.Request;
-using ArtmaisBackend.Core.SignIn.Interface;
+using ArtmaisBackend.Core.SignIn.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,14 +12,12 @@ namespace ArtmaisBackend.Controllers
     [Route("v1/[controller]")]
     public class AddressController : ControllerBase
     {
-        public AddressController(IAddressService addressService, IJwtTokenService jwtToken)
+        public AddressController(IAddressService addressService)
         {
             this._addressService = addressService;
-            this._jwtToken = jwtToken;
         }
 
         private readonly IAddressService _addressService;
-        private readonly IJwtTokenService _jwtToken;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -29,7 +27,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
+                var user = JwtTokenService.ReadToken(this.User);
                 var result = this._addressService.GetAddressByUser(user.UserID);
                 return this.Ok(result);
             }
@@ -47,7 +45,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
+                var user = JwtTokenService.ReadToken(this.User);
                 var result = this._addressService.CreateOrUpdateUserAddress(addressRequest, user.UserID);
                 return this.Ok(result);
             }

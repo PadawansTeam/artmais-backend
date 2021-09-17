@@ -1,4 +1,5 @@
 ﻿using ArtmaisBackend.Core.SignIn.Interface;
+using ArtmaisBackend.Core.SignIn.Service;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
 using ArtmaisBackend.Core.Users.Request;
@@ -12,14 +13,12 @@ namespace ArtmaisBackend.Controllers
     [Route("v1/[controller]")]
     public class UserController : ControllerBase
     {
-        public UserController(IUserService userService, IJwtTokenService jwtToken)
+        public UserController(IUserService userService)
         {
             this._userService = userService;
-            this._jwtToken = jwtToken;
         }
 
         private readonly IUserService _userService;
-        private readonly IJwtTokenService _jwtToken;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -29,7 +28,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
+                var user = JwtTokenService.ReadToken(this.User);
                 var result = this._userService.GetLoggedUserInfoById(user.UserID);
 
                 return this.Ok(result);
@@ -66,7 +65,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
+                var user = JwtTokenService.ReadToken(this.User);
                 var result = this._userService.UpdateUserPassword(passwordRequest, user.UserID);
 
                 return this.Ok(result);
@@ -93,7 +92,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
+                var user = JwtTokenService.ReadToken(this.User);
                 var result = this._userService.UpdateUserDescription(descriptionRequest, user.UserID);
 
                 return this.Ok(result);
@@ -112,7 +111,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
+                var user = JwtTokenService.ReadToken(this.User);
                 var result = this._userService.UpdateUserInfo(userRequest, user.UserID);
 
                 return this.Ok(result);
@@ -149,7 +148,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
+                var user = JwtTokenService.ReadToken(this.User);
                 var result = this._userService.GetShareLinkByLoggedUser(user.UserID);
 
                 return this.Ok(result);

@@ -39,7 +39,7 @@ namespace ArtmaisBackend
     {
         public Startup(IConfiguration configuration)
         {
-            this.Configuration = configuration;
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -109,9 +109,8 @@ namespace ArtmaisBackend
                 });
             });
 
-
             services.AddDbContext<ArtplusContext>(
-                options => options.UseNpgsql(this.Configuration.GetConnectionString("DbContext")));
+                options => options.UseNpgsql(Environment.GetEnvironmentVariable("pgsqldb")));
 
             //HostedServices
             services.AddHostedService<RecomendationService>();
@@ -120,8 +119,7 @@ namespace ArtmaisBackend
             services.AddAutoMapper(typeof(Startup).Assembly);
 
             //Options
-            services.Configure<SocialMediaConfiguration>(this.Configuration.GetSection("SocialMediaShareLink"));
-            services.Configure<GoogleConfiguration>(this.Configuration.GetSection("GoogleConfiguration"));
+            services.Configure<SocialMediaConfiguration>(Configuration.GetSection("SocialMediaShareLink"));
 
             //Repository
             services.AddScoped<IUserRepository, UserRepository>();
@@ -139,7 +137,6 @@ namespace ArtmaisBackend
 
             //SignIn
             services.AddScoped<ISignInService, SignInService>();
-            services.AddScoped<IJwtTokenService, JwtTokenService>();
 
             //Profile
             services.AddScoped<IInterestMediator, InterestMediator>();
