@@ -1,4 +1,5 @@
-﻿using ArtmaisBackend.Core.Entities;
+﻿using ArtmaisBackend.Core.Aws.Interface;
+using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Request;
 using ArtmaisBackend.Core.Users.Service;
@@ -23,6 +24,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User
             {
@@ -42,7 +44,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             );
 
             var userIdProfile = 3;
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object, mockAwsService.Object);
 
             var result = userService.GetShareLinkByLoggedUser(userIdProfile);
 
@@ -63,6 +65,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User { });
 
@@ -70,7 +73,7 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var url = mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object, mockAwsService.Object);
 
             Action act = () => userService.GetShareLinkByLoggedUser(userIdProfile);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -84,6 +87,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User
             {
@@ -105,7 +109,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             }
             );
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object, mockAwsService.Object);
 
             var result = userService.GetShareLinkByUserId(3);
 
@@ -126,6 +130,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User { });
 
@@ -133,7 +138,7 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object, mockAwsService.Object);
 
             Action act = () => userService.GetShareLinkByLoggedUser(userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -147,6 +152,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User { });
 
@@ -165,7 +171,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             }
             );
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object, mockAwsService.Object);
 
             var result = userService.GetShareProfile(3);
 
@@ -184,6 +190,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User { });
 
@@ -191,7 +198,7 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object, mockAwsService.Object);
 
             Action act = () => userService.GetShareProfile(userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -205,6 +212,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User
             {
@@ -237,7 +245,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 MainPhone = "999987766",
             };
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object, mockAwsService.Object);
 
             var contactProfile = userService?.GetShareProfile(3);
             var contactShareLink = userService?.GetShareLinkByLoggedUser(3);
@@ -259,6 +267,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User { });
             mockAddressRepository.Setup(x => x.GetAddressByUser((It.IsAny<int>()))).Returns(new Address { });
@@ -266,7 +275,7 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object, mockAwsService.Object);
 
             Action act = () => userService.GetLoggedUserInfoById(userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -280,6 +289,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User
             {
@@ -308,7 +318,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 Username = "Username"
             };
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object, mockAwsService.Object);
 
             var result = userService.GetUserInfoById(3);
 
@@ -326,12 +336,13 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User { });
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object, mockAwsService.Object);
 
             Action act = () => userService.GetUserInfoById(userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -354,6 +365,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             var userInfo = new User
             {
@@ -394,7 +406,8 @@ namespace ArtmaisBackend.Tests.Core.Users
                 mockContactRepository.Object,
                 mockOptions.Object,
                 mockUserRepository.Object,
-                mockMapper.Object);
+                mockMapper.Object,
+                mockAwsService.Object);
 
             var result = userService.UpdateUserInfo(userRequest, 3);
 
@@ -415,13 +428,15 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             var userService = new UserService(
                 mockAddressRepository.Object,
                 mockContactRepository.Object,
                 mockOptions.Object,
                 mockUserRepository.Object,
-                mockMapper.Object);
+                mockMapper.Object,
+                mockAwsService.Object);
 
             Action act = () => userService.UpdateUserInfo(userRequest, 3);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -443,6 +458,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             var userInfo = new User
             {
@@ -466,7 +482,8 @@ namespace ArtmaisBackend.Tests.Core.Users
                 mockContactRepository.Object,
                 mockOptions.Object,
                 mockUserRepository.Object,
-                mockMapper.Object);
+                mockMapper.Object,
+                mockAwsService.Object);
 
             var result = userService.UpdateUserPassword(passwordRequest, 3);
 
@@ -483,13 +500,15 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             var userService = new UserService(
                 mockAddressRepository.Object,
                 mockContactRepository.Object,
                 mockOptions.Object,
                 mockUserRepository.Object,
-                mockMapper.Object);
+                mockMapper.Object,
+                mockAwsService.Object);
 
             Action act = () => userService.UpdateUserPassword(passwordRequest, 3);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -509,6 +528,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             var userInfo = new User
             {
@@ -532,7 +552,8 @@ namespace ArtmaisBackend.Tests.Core.Users
                 mockContactRepository.Object,
                 mockOptions.Object,
                 mockUserRepository.Object,
-                mockMapper.Object);
+                mockMapper.Object,
+                mockAwsService.Object);
 
             var result = userService.UpdateUserDescription(descriptionRequest, 3);
 
@@ -549,13 +570,15 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
+            var mockAwsService = new Mock<IAwsService>();
 
             var userService = new UserService(
                 mockAddressRepository.Object,
                 mockContactRepository.Object,
                 mockOptions.Object,
                 mockUserRepository.Object,
-                mockMapper.Object);
+                mockMapper.Object,
+                mockAwsService.Object);
 
             Action act = () => userService.UpdateUserDescription(descriptionRequest, 3);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");

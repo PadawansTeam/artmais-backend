@@ -1,6 +1,5 @@
 ﻿using ArtmaisBackend.Core.Aws.Dto;
 using ArtmaisBackend.Core.Aws.Interface;
-using ArtmaisBackend.Core.Aws.Request;
 using ArtmaisBackend.Core.SignIn.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +32,6 @@ namespace ArtmaisBackend.Controllers
             {
                 try
                 {
-                    var user = this._jwtToken.ReadToken(this.User);
                     var result = this._awsService.UploadObject(file);
                     return this.Ok(result);
                 }
@@ -43,4 +41,6 @@ namespace ArtmaisBackend.Controllers
                 }
             }
         }
+    }
 }
+

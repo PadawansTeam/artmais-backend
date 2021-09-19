@@ -26,13 +26,13 @@ namespace ArtmaisBackend.Core.Aws.Service
         private static IAmazonS3 s3Client;
         private readonly IMapper _mapper;
 
-        public async Task<AwsDto?> UploadObject(FileStream file)
+        public AwsDto? UploadObject(FileStream file)
         {
             s3Client = new AmazonS3Client(bucketRegion);
             var fileTransferUtility = new TransferUtility(s3Client);
             
             // Aqui ele faz o upload 
-            await fileTransferUtility.UploadAsync(file, bucketName, objectKey);
+            var result = fileTransferUtility.UploadAsync(file, bucketName, objectKey);
             var urlPicture = Upload();
             return new AwsDto
             {

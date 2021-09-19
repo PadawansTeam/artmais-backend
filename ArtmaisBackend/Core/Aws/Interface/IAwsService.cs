@@ -6,7 +6,7 @@ namespace ArtmaisBackend.Core.Aws.Interface
 {
     public interface IAwsService
     {
-        Task<AwsDto?> UploadObject(FileStream file);
+        AwsDto? UploadObject(FileStream file);
         string GeneratePreSignedURL(double duration);
         string Upload();
     }
