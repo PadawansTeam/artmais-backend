@@ -1,4 +1,4 @@
-﻿using ArtmaisBackend.Core.SignIn.Interface;
+﻿using ArtmaisBackend.Core.SignIn.Service;
 using ArtmaisBackend.Core.SignUp.Dto;
 using ArtmaisBackend.Core.SignUp.Interface;
 using ArtmaisBackend.Core.SignUp.Request;
@@ -11,16 +11,14 @@ namespace ArtmaisBackend.Core.SignUp.Service
 {
     public class SignUpService : ISignUpService
     {
-        public SignUpService(IUserRepository userRepository, ICategorySubcategoryRepository categorySubcategoryRepository, IJwtTokenService jwtToken)
+        public SignUpService(IUserRepository userRepository, ICategorySubcategoryRepository categorySubcategoryRepository)
         {
             this._userRepository = userRepository;
             this._categorySubcategoryRepository = categorySubcategoryRepository;
-            this._jwtToken = jwtToken;
         }
 
         private readonly IUserRepository _userRepository;
         private readonly ICategorySubcategoryRepository _categorySubcategoryRepository;
-        private readonly IJwtTokenService _jwtToken;
 
         public IEnumerable<CategorySubcategoryDto> Index()
         {
@@ -59,7 +57,7 @@ namespace ArtmaisBackend.Core.SignUp.Service
         {
             var user = _userRepository.Create(signUpRequest, userTypeId);
 
-            return this._jwtToken.GenerateToken(user);
+            return JwtTokenUtil.GenerateToken(user);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using ArtmaisBackend.Core.Contacts.Dto;
 using ArtmaisBackend.Core.Contacts.Interface;
 using ArtmaisBackend.Core.Contacts.Request;
-using ArtmaisBackend.Core.SignIn.Interface;
+using ArtmaisBackend.Core.SignIn.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,14 +12,12 @@ namespace ArtmaisBackend.Controllers
     [Route("v1/[controller]")]
     public class ContactController : ControllerBase
     {
-        public ContactController(IContactService contactService, IJwtTokenService jwtToken)
+        public ContactController(IContactService contactService)
         {
             this._contactService = contactService;
-            this._jwtToken = jwtToken;
         }
 
         private readonly IContactService _contactService;
-        private readonly IJwtTokenService _jwtToken;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -29,7 +27,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._contactService.GetContactByUser(user.UserID);
 
                 return this.Ok(result);
@@ -48,7 +46,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._contactService.CreateOrUpdateUserContact(contactRequest, user.UserID);
 
                 return this.Ok(result);
@@ -67,7 +65,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._contactService.GetContactByUser(user.UserID);
 
                 return this.Ok(result);

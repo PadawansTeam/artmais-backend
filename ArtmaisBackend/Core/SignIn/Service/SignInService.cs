@@ -7,14 +7,12 @@ namespace ArtmaisBackend.Core.SignIn.Service
 {
     public class SignInService : ISignInService
     {
-        public SignInService(IUserRepository userRepository, IJwtTokenService jwtToken)
+        public SignInService(IUserRepository userRepository)
         {
             this._userRepository = userRepository;
-            this._jwtToken = jwtToken;
         }
 
         private readonly IUserRepository _userRepository;
-        private readonly IJwtTokenService _jwtToken;
 
         public string Authenticate(SigInRequest signInRequest)
         {
@@ -30,7 +28,7 @@ namespace ArtmaisBackend.Core.SignIn.Service
             var encryptedPassword = PasswordUtil.Encrypt(signInRequest.Password, salt);
 
             if (encryptedPassword.Equals(user.Password))
-                return this._jwtToken.GenerateToken(user);
+                return JwtTokenUtil.GenerateToken(user);
 
             throw new Unauthorized("Usuário e/ou senha inválidos");
         }
