@@ -1,4 +1,5 @@
-﻿using ArtmaisBackend.Core.Contacts.Request;
+﻿using ArtmaisBackend.Core.Aws.Interface;
+using ArtmaisBackend.Core.Contacts.Request;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
 using ArtmaisBackend.Core.Users.Request;
@@ -9,20 +10,23 @@ using ArtmaisBackend.Util;
 using AutoMapper;
 using Microsoft.Extensions.Options;
 using System;
+using System.IO;
 
 namespace ArtmaisBackend.Core.Users.Service
 {
     public class UserService : IUserService
     {
-        public UserService(IAddressRepository addressRepository, IContactRepository contactRepository, IOptions<SocialMediaConfiguration> options, IUserRepository userRepository, IMapper mapper)
+        public UserService(IAddressRepository addressRepository, IContactRepository contactRepository, IOptions<SocialMediaConfiguration> options, IUserRepository userRepository, IMapper mapper, IAwsService awsService)
         {
             this._addressRepository = addressRepository;
             this._contactRepository = contactRepository;
             this._socialMediaConfiguration = options.Value;
             this._userRepository = userRepository;
             this._mapper = mapper;
+            this._awsService = awsService;
         }
 
+        private readonly IAwsService _awsService;
         private readonly IAddressRepository _addressRepository;
         private readonly IContactRepository _contactRepository;
         private readonly SocialMediaConfiguration _socialMediaConfiguration;
@@ -71,7 +75,7 @@ namespace ArtmaisBackend.Core.Users.Service
 
             var contact = this._contactRepository.GetContactByUser(user.UserID);
 
-            if(contact is null)
+            if (contact is null)
             {
                 return new ShareProfileBaseDto { };
             }
@@ -85,7 +89,7 @@ namespace ArtmaisBackend.Core.Users.Service
                 };
 
                 return shareProfileDto;
-            }   
+            }
         }
 
         public UserDto? GetLoggedUserInfoById(long? userId)
@@ -98,7 +102,7 @@ namespace ArtmaisBackend.Core.Users.Service
             var contact = this._contactRepository.GetContactByUser(user.UserID);
             var address = this._addressRepository.GetAddressByUser(user.UserID);
             var contactProfile = this.GetShareProfile(user.UserID);
-            var contactShareLink = GetShareLinkByLoggedUser(user.UserID);
+            var contactShareLink = this.GetShareLinkByLoggedUser(user.UserID);
 
             var userDto = new UserDto()
             {
@@ -144,7 +148,7 @@ namespace ArtmaisBackend.Core.Users.Service
             var contact = this._contactRepository.GetContactByUser(user.UserID);
             var address = this._addressRepository.GetAddressByUser(user.UserID);
             var contactProfile = this.GetShareProfile(user.UserID);
-            var contactShareLink = GetShareLinkByUserId(user.UserID);
+            var contactShareLink = this.GetShareLinkByUserId(user.UserID);
 
             var userDto = new UserDto()
             {
@@ -183,15 +187,18 @@ namespace ArtmaisBackend.Core.Users.Service
             if (userRequest is null)
                 throw new ArgumentNullException();
 
+            FileInfo fi = new FileInfo(@"D:\bango.png");
+            FileStream fstr = fi.Create();
             var userInfo = this._userRepository.GetUserById(userId);
+            var userPicture = this._awsService.UploadObject(fstr);
             userInfo = this._mapper.Map(userRequest, userInfo);
             var user = this._userRepository.Update(userInfo);
 
             var userContactInfo = this._contactRepository.GetContactByUser(user.UserID);
-          
+
             if (userContactInfo is null)
             {
-                var contactRequest =  this._mapper.Map<ContactRequest>(userRequest);
+                var contactRequest = this._mapper.Map<ContactRequest>(userRequest);
                 var newContact = this._contactRepository.Create(contactRequest, user.UserID);
                 if (newContact is null)
                     throw new ArgumentNullException();
@@ -221,7 +228,7 @@ namespace ArtmaisBackend.Core.Users.Service
                     UserId = user.UserID,
                     Name = user?.Name,
                     Username = user?.Username,
-                    UserPicture = user?.UserPicture,
+                    UserPicture = userPicture?.Picture,
                     BackgroundPicture = user?.BackgroundPicture,
                     BirthDate = user?.BirthDate,
                     MainPhone = contact?.MainPhone,
@@ -242,17 +249,17 @@ namespace ArtmaisBackend.Core.Users.Service
                 throw new ArgumentException();
 
             var userInfo = this._userRepository.GetUserById(userId);
-            if(userInfo is null)
+            if (userInfo is null)
                 throw new ArgumentNullException();
 
             var salt = userInfo.Password.Substring(0, 24);
             var encryptedPassword = PasswordUtil.Encrypt(passwordRequest.OldPassword, salt);
 
-            if(!encryptedPassword.Equals(userInfo.Password))
+            if (!encryptedPassword.Equals(userInfo.Password))
                 throw new AccessViolationException();
 
             passwordRequest.Password = PasswordUtil.Encrypt(passwordRequest.Password);
-           
+
             this._mapper.Map(passwordRequest, userInfo);
             this._userRepository.Update(userInfo);
 
