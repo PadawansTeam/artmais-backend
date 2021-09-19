@@ -18,7 +18,7 @@ namespace ArtmaisBackend.Core.Profile.Mediator
 
         public IEnumerable<RecomendationDto> Index(ClaimsPrincipal userClaims)
         {
-            var userJwtData = JwtTokenService.ReadToken(userClaims);
+            var userJwtData = JwtTokenUtil.ReadToken(userClaims);
             return this._userRepository.GetUsersByInterest(userJwtData.UserID);
         }
 

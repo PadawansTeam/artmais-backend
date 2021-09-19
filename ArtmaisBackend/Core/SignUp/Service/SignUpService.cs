@@ -57,7 +57,7 @@ namespace ArtmaisBackend.Core.SignUp.Service
         {
             var user = _userRepository.Create(signUpRequest, userTypeId);
 
-            return JwtTokenService.GenerateToken(user);
+            return JwtTokenUtil.GenerateToken(user);
         }
     }
 }

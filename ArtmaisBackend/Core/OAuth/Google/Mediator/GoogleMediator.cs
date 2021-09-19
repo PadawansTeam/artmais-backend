@@ -32,7 +32,7 @@ namespace ArtmaisBackend.Core.OAuth.Google.Mediator
 
             var user = _userRepository.GetUserById(externalAuthorization.UserId);
 
-            return JwtTokenService.GenerateToken(user);
+            return JwtTokenUtil.GenerateToken(user);
         }
 
         public string SignUp(OAuthSignUpRequest request)
@@ -61,7 +61,7 @@ namespace ArtmaisBackend.Core.OAuth.Google.Mediator
             var user = _userRepository.CreateOAuthUser(request, "google", userTypeId);
             _externalAuthorizationRepository.Create(request.ExternalAuthorizationId, user.UserID);
 
-            return JwtTokenService.GenerateToken(user);
+            return JwtTokenUtil.GenerateToken(user);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = JwtTokenService.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._contactService.GetContactByUser(user.UserID);
 
                 return this.Ok(result);
@@ -46,7 +46,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = JwtTokenService.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._contactService.CreateOrUpdateUserContact(contactRequest, user.UserID);
 
                 return this.Ok(result);
@@ -65,7 +65,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = JwtTokenService.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._contactService.GetContactByUser(user.UserID);
 
                 return this.Ok(result);

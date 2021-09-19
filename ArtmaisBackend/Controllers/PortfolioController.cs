@@ -27,7 +27,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = JwtTokenService.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._portfolioService.GetLoggedUserPortfolioById(user.UserID);
 
                 return this.Ok(result);
@@ -64,7 +64,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = JwtTokenService.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._portfolioService.InsertPortfolioContent(portfolioRequest, user.UserID, 1);
                 return this.Ok(result);
             }
@@ -82,7 +82,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = JwtTokenService.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._portfolioService.UpdateDescription(portfolioDescriptionRequest, user.UserID);
                 return this.Ok(result);
             }

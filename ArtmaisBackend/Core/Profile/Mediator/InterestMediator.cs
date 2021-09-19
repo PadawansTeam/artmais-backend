@@ -19,7 +19,7 @@ namespace ArtmaisBackend.Core.Profile.Mediator
 
         public InterestDto Index(ClaimsPrincipal userClaims)
         {
-            var userJwtData = JwtTokenService.ReadToken(userClaims);
+            var userJwtData = JwtTokenUtil.ReadToken(userClaims);
 
             var dto = new InterestDto
             {
@@ -32,7 +32,7 @@ namespace ArtmaisBackend.Core.Profile.Mediator
 
         public dynamic Create(InterestRequest interestRequest, ClaimsPrincipal userClaims)
         {
-            var userJwtData = JwtTokenService.ReadToken(userClaims);
+            var userJwtData = JwtTokenUtil.ReadToken(userClaims);
             return this._interestRepository.DeleteAllAndCreateAll(interestRequest, userJwtData.UserID);
         }
     }

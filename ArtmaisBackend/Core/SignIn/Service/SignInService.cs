@@ -28,7 +28,7 @@ namespace ArtmaisBackend.Core.SignIn.Service
             var encryptedPassword = PasswordUtil.Encrypt(signInRequest.Password, salt);
 
             if (encryptedPassword.Equals(user.Password))
-                return JwtTokenService.GenerateToken(user);
+                return JwtTokenUtil.GenerateToken(user);
 
             throw new Unauthorized("Usuário e/ou senha inválidos");
         }

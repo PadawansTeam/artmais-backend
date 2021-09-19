@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ArtmaisBackend.Core.SignIn.Service
 {
-    public static class JwtTokenService
+    public static class JwtTokenUtil
     {
         public static string GenerateToken(User user)
         {

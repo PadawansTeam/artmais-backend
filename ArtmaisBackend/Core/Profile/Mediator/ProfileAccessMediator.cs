@@ -17,7 +17,7 @@ namespace ArtmaisBackend.Core.Profile.Mediator
 
         public ProfileAccess? Create(ClaimsPrincipal visitorUserClaims, long visitedUserId)
         {
-            var visitorUserData = JwtTokenService.ReadToken(visitorUserClaims);
+            var visitorUserData = JwtTokenUtil.ReadToken(visitorUserClaims);
 
             if (visitorUserData.UserID.Equals(visitedUserId))
                 return null;

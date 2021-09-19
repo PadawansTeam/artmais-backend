@@ -28,7 +28,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = JwtTokenService.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._userService.GetLoggedUserInfoById(user.UserID);
 
                 return this.Ok(result);
@@ -65,7 +65,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = JwtTokenService.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._userService.UpdateUserPassword(passwordRequest, user.UserID);
 
                 return this.Ok(result);
@@ -92,7 +92,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = JwtTokenService.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._userService.UpdateUserDescription(descriptionRequest, user.UserID);
 
                 return this.Ok(result);
@@ -111,7 +111,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = JwtTokenService.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._userService.UpdateUserInfo(userRequest, user.UserID);
 
                 return this.Ok(result);
@@ -148,7 +148,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = JwtTokenService.ReadToken(this.User);
+                var user = JwtTokenUtil.ReadToken(this.User);
                 var result = this._userService.GetShareLinkByLoggedUser(user.UserID);
 
                 return this.Ok(result);
