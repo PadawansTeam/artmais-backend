@@ -1,25 +1,24 @@
-﻿using ArtmaisBackend.Infrastructure.Options;
-using ArtmaisBackend.Services.Interface;
+﻿using ArtmaisBackend.Services.Interface;
 using Google.Apis.Auth;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Services
 {
     public class GoogleService : IGoogleService
     {
-        public GoogleService(IOptions<GoogleConfiguration> options)
+        public GoogleService(IConfiguration configuration)
         {
-            _configuration = options.Value;
+            _configuration = configuration;
         }
 
-        private readonly GoogleConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
         public async Task<GoogleJsonWebSignature.Payload> ValidateToken(string token)
         {
             var googleUser = await GoogleJsonWebSignature.ValidateAsync(token, new GoogleJsonWebSignature.ValidationSettings()
             {
-                Audience = new[] { _configuration.ClientId }
+                Audience = new[] { _configuration.GetConnectionString("GoogleClientId") }
             });
 
             return googleUser;

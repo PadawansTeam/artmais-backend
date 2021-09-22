@@ -37,17 +37,17 @@ namespace ArtmaisBackend
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfigurationBuilder configuration)
         {
-            this.Configuration = configuration;
+            this.Configuration = configuration.AddEnvironmentVariables()
+                .AddJsonFile("appsettings.Production.json")
+                .Build();
         }
 
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-
-            var key = Encoding.ASCII.GetBytes(this.Configuration.GetValue("Secret", ""));
 
             services.AddAuthentication(x =>
             {
@@ -60,7 +60,7 @@ namespace ArtmaisBackend
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(this.Configuration.GetValue("Secret", ""))),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                 };
@@ -75,7 +75,6 @@ namespace ArtmaisBackend
                                       builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
                                   });
             });
-
 
             services.AddControllers()
                 .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new DateTimeConverter()));
@@ -121,7 +120,6 @@ namespace ArtmaisBackend
 
             //Options
             services.Configure<SocialMediaConfiguration>(this.Configuration.GetSection("SocialMediaShareLink"));
-            services.Configure<GoogleConfiguration>(this.Configuration.GetSection("GoogleConfiguration"));
 
             //Repository
             services.AddScoped<IUserRepository, UserRepository>();
