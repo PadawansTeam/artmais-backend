@@ -5,6 +5,7 @@ using Amazon.S3.Transfer;
 using ArtmaisBackend.Core.Aws.Dto;
 using ArtmaisBackend.Core.Aws.Interface;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -13,64 +14,36 @@ namespace ArtmaisBackend.Core.Aws.Service
 {
     public class AwsService : IAwsService
     {
-        public AwsService(IMapper mapper)
+        public AwsService(IMapper mapper, IAmazonS3 amazonS3)
         {
             this._mapper = mapper;
+            this._amazonS3 = amazonS3;
         }
 
         private const string bucketName = "bucket-artmais";
-        private static readonly string objectKey = $"DEL{DateTime.Today.ToString("yyyyMMdd")}{new Random((int)DateTime.Now.Ticks).Next().ToString("D14")}";
-        private const string filePath = "*** provide the full path name of the file to upload ***";
-        private const double timeoutDuration = 12;
+        private static readonly string objectKey = $"ARTMAIS{DateTime.Today.ToString("yyyyMMdd")}{new Random((int)DateTime.Now.Ticks).Next().ToString("D14")}";
+        private const string filePath = "profile-pictures/";
         private static readonly RegionEndpoint bucketRegion = RegionEndpoint.USWest2;
-        private static IAmazonS3 s3Client;
+        private readonly IAmazonS3 _amazonS3;
         private readonly IMapper _mapper;
 
-        public AwsDto? UploadObject(FileStream file)
+        public async Task<AwsDto?> UploadObjectAsync(IFormFile? file, long userId)
         {
-            s3Client = new AmazonS3Client(bucketRegion);
-            var fileTransferUtility = new TransferUtility(s3Client);
+            var putRequest = new PutObjectRequest()
+            {
+                BucketName = bucketName,
+                Key = filePath + userId + "/" + objectKey + ".jpg",
+                ContentType = file.ContentType,
+                ContentBody = file.ContentDisposition,
+                CannedACL = S3CannedACL.PublicRead,
+            };
+
+            var result = await this._amazonS3.PutObjectAsync(putRequest);
             
-            // Aqui ele faz o upload 
-            var result = fileTransferUtility.UploadAsync(file, bucketName, objectKey);
-            var urlPicture = Upload();
             return new AwsDto
             {
-                Picture = urlPicture
+                Picture = result.RequestCharged
             };
-        }
-
-        // Pelo que eu entendi, aqui ele só gera o url assinado
-        // Não esta fazendo o upload
-        public string GeneratePreSignedURL(double duration)
-        {
-            string urlString = "";
-            try
-            {
-                GetPreSignedUrlRequest request1 = new GetPreSignedUrlRequest
-                {
-                    BucketName = bucketName,
-                    Key = objectKey,
-                    Expires = DateTime.UtcNow.AddHours(duration)
-                };
-                urlString = s3Client.GetPreSignedURL(request1);
-            }
-            catch (AmazonS3Exception e)
-            {
-                Console.WriteLine("Error encountered on server. Message:'{0}' when writing an object", e.Message);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Unknown encountered on server. Message:'{0}' when writing an object", e.Message);
-            }
-            return urlString;
-        }
-
-        public string Upload()
-        {
-            s3Client = new AmazonS3Client(bucketRegion);
-            string urlString = GeneratePreSignedURL(timeoutDuration);
-            return urlString;
         }
     }
 }

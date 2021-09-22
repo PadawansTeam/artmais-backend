@@ -8,37 +8,34 @@ using System.IO;
 
 namespace ArtmaisBackend.Controllers
 {
+    [ApiController]
+    [Route("v1/[controller]")]
     public class AwsController : ControllerBase
     {
-
-        [ApiController]
-        [Route("v1/[controller]")]
-        public class AddressController : ControllerBase
+        public AwsController(IAwsService awsService, IJwtTokenService jwtToken)
         {
-            public AddressController(IAwsService awsService, IJwtTokenService jwtToken)
+            this._awsService = awsService;
+            this._jwtToken = jwtToken;
+        }
+
+        private readonly IAwsService _awsService;
+        private readonly IJwtTokenService _jwtToken;
+
+        [HttpPost("[Action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<AwsDto> InsertImage([FromForm] IFormFile file)
+        {
+            try
             {
-                this._awsService = awsService;
-                this._jwtToken = jwtToken;
+                var user = this._jwtToken.ReadToken(this.User);
+                var result = this._awsService.UploadObjectAsync(file, user.UserID);
+                return this.Ok(result);
             }
-
-            private readonly IAwsService _awsService;
-            private readonly IJwtTokenService _jwtToken;
-
-            [HttpPost]
-            [ProducesResponseType(StatusCodes.Status200OK)]
-            [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-            [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-            public ActionResult<AwsDto> InsertImage(FileStream file)
+            catch (ArgumentNullException ex)
             {
-                try
-                {
-                    var result = this._awsService.UploadObject(file);
-                    return this.Ok(result);
-                }
-                catch (ArgumentNullException ex)
-                {
-                    return this.UnprocessableEntity(new { message = ex.Message });
-                }
+                return this.UnprocessableEntity(new { message = ex.Message });
             }
         }
     }

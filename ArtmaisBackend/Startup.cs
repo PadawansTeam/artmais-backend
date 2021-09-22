@@ -1,5 +1,8 @@
+using Amazon.S3;
 using ArtmaisBackend.Core.Adresses.Interface;
 using ArtmaisBackend.Core.Adresses.Service;
+using ArtmaisBackend.Core.Aws.Interface;
+using ArtmaisBackend.Core.Aws.Service;
 using ArtmaisBackend.Core.Contact.Service;
 using ArtmaisBackend.Core.Contacts.Interface;
 using ArtmaisBackend.Core.OAuth.Google.Interface;
@@ -166,6 +169,10 @@ namespace ArtmaisBackend
 
             //Portfolio
             services.AddScoped<IPortfolioService, PortfolioService>();
+
+            //Aws
+            services.AddScoped<IAwsService, AwsService>();
+            services.AddAWSService<IAmazonS3>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

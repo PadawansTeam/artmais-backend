@@ -187,10 +187,8 @@ namespace ArtmaisBackend.Core.Users.Service
             if (userRequest is null)
                 throw new ArgumentNullException();
 
-            FileInfo fi = new FileInfo(@"D:\bango.png");
-            FileStream fstr = fi.Create();
             var userInfo = this._userRepository.GetUserById(userId);
-            var userPicture = this._awsService.UploadObject(fstr);
+            var userPicture = this._awsService.UploadObjectAsync(userRequest?.UserPicture, userId);
             userInfo = this._mapper.Map(userRequest, userInfo);
             var user = this._userRepository.Update(userInfo);
 
@@ -208,7 +206,7 @@ namespace ArtmaisBackend.Core.Users.Service
                     UserId = user.UserID,
                     Name = user?.Name,
                     Username = user?.Username,
-                    UserPicture = user?.UserPicture,
+                    UserPicture = userPicture?.Result.Picture,
                     BackgroundPicture = user?.BackgroundPicture,
                     BirthDate = user?.BirthDate,
                     MainPhone = newContact?.MainPhone,
@@ -228,7 +226,7 @@ namespace ArtmaisBackend.Core.Users.Service
                     UserId = user.UserID,
                     Name = user?.Name,
                     Username = user?.Username,
-                    UserPicture = userPicture?.Picture,
+                    UserPicture = userPicture?.Result.Picture,
                     BackgroundPicture = user?.BackgroundPicture,
                     BirthDate = user?.BirthDate,
                     MainPhone = contact?.MainPhone,
