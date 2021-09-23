@@ -37,10 +37,11 @@ namespace ArtmaisBackend
 {
     public class Startup
     {
-        public Startup(IConfigurationBuilder configuration)
+        public Startup()
         {
-            this.Configuration = configuration.AddEnvironmentVariables()
-                .AddJsonFile("appsettings.Production.json")
+            this.Configuration = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddJsonFile("appsettings.json")
                 .Build();
         }
 
