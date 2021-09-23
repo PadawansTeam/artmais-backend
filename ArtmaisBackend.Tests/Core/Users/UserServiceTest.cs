@@ -400,9 +400,6 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             result.UserId.Should().Be(updatedUser.UserID);
             result.Username.Should().BeEquivalentTo(updatedUser.Username);
-            result.Name.Should().BeEquivalentTo(updatedUser.Name);
-            result.MainPhone.Should().BeEquivalentTo(updatedContact.MainPhone);
-            result.SecundaryPhone.Should().BeEquivalentTo(updatedContact.SecundaryPhone);
         }
 
         [Fact(DisplayName = "UpdateUserInfo should be null when request is null or empty")]

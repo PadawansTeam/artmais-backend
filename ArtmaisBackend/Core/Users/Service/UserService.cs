@@ -199,14 +199,7 @@ namespace ArtmaisBackend.Core.Users.Service
                 var userDto = new UserProfileInfoDto
                 {
                     UserId = user.UserID,
-                    Name = user?.Name,
                     Username = user?.Username,
-                    UserPicture = user?.UserPicture,
-                    BackgroundPicture = user?.BackgroundPicture,
-                    BirthDate = user?.BirthDate,
-                    MainPhone = newContact?.MainPhone,
-                    SecundaryPhone = newContact?.SecundaryPhone,
-                    ThirdPhone = newContact?.ThirdPhone
                 };
 
                 return userDto;
@@ -214,19 +207,12 @@ namespace ArtmaisBackend.Core.Users.Service
             else
             {
                 userContactInfo = this._mapper.Map(userRequest, userContactInfo);
-                var contact = this._contactRepository.Update(userContactInfo);
+                this._contactRepository.Update(userContactInfo);
 
                 var userDto = new UserProfileInfoDto
                 {
                     UserId = user.UserID,
-                    Name = user?.Name,
                     Username = user?.Username,
-                    UserPicture = user?.UserPicture,
-                    BackgroundPicture = user?.BackgroundPicture,
-                    BirthDate = user?.BirthDate,
-                    MainPhone = contact?.MainPhone,
-                    SecundaryPhone = contact?.SecundaryPhone,
-                    ThirdPhone = contact?.ThirdPhone
                 };
 
                 return userDto;
