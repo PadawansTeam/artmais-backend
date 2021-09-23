@@ -21,7 +21,7 @@ namespace ArtmaisBackend.Core.SignIn.Service
         public string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(this.Configuration.GetValue("Secret", ""));
+            var key = Encoding.ASCII.GetBytes(this.Configuration["Secret"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

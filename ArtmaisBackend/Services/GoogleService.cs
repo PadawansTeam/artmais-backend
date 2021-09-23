@@ -18,7 +18,7 @@ namespace ArtmaisBackend.Services
         {
             var googleUser = await GoogleJsonWebSignature.ValidateAsync(token, new GoogleJsonWebSignature.ValidationSettings()
             {
-                Audience = new[] { _configuration.GetConnectionString("GoogleClientId") }
+                Audience = new[] { _configuration["GoogleClientId"] }
             });
 
             return googleUser;

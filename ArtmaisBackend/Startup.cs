@@ -61,7 +61,7 @@ namespace ArtmaisBackend
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(this.Configuration.GetValue("Secret", ""))),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(this.Configuration["Secret"])),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                 };
@@ -111,7 +111,7 @@ namespace ArtmaisBackend
 
 
             services.AddDbContext<ArtplusContext>(
-                options => options.UseNpgsql(this.Configuration.GetConnectionString("DbContext")));
+                options => options.UseNpgsql(this.Configuration["DbContext"]));
 
             //HostedServices
             services.AddHostedService<RecomendationService>();
