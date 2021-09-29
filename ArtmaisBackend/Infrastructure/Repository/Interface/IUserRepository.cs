@@ -18,5 +18,6 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
         User Update(User user);
         UserCategoryDto GetSubcategoryByUserId(long userId);
         IEnumerable<RecomendationDto> GetUsers();
+        IEnumerable<RecomendationDto> GetUsersByUsernameOrNameOrSubcategoryOrCategory(string searchValue);
     }
 }

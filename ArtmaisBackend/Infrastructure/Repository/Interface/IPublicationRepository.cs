@@ -11,6 +11,5 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
         List<PortfolioContentDto> GetAllPublicationsByUserId(long? userId);
         Publication Create(PortfolioRequest portfolioRequest, long userId, Media media);
         Publication Update(Publication publication);
-
     }
 }
