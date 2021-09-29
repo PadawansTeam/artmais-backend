@@ -12,34 +12,57 @@ namespace ArtmaisBackend.Core.Aws.Service
 {
     public class AwsService : IAwsService
     {
-        public AwsService(IAmazonS3 amazonS3)
+        public AwsService(IMapper mapper)
         {
-            _amazonS3Client = new AmazonS3Client(bucketRegion);
+            this._mapper = mapper;
         }
 
         private const string bucketName = "bucket-artmais";
-        private static readonly string objectKey = $"ARTMAIS{DateTime.Today.ToString("yyyyMMdd")}{new Random((int)DateTime.Now.Ticks).Next().ToString("D14")}";
         private const string filePath = "profile-pictures/";
+        private static readonly string objectKey = $"{DateTime.Today.ToString("yyyyMMdd")}{new Random((int)DateTime.Now.Ticks).Next().ToString("D14")}";
         private static readonly RegionEndpoint bucketRegion = RegionEndpoint.USEast1;
-        private readonly IAmazonS3 _amazonS3Client;
+        public static S3CannedACL fileCannedACL = S3CannedACL.PublicRead;
+        private static IAmazonS3 client;
+        private readonly IMapper _mapper;
 
         public async Task<AwsDto?> UploadObjectAsync(IFormFile? file, long userId)
         {
-            var putRequest = new PutObjectRequest
-            {
-                BucketName = bucketName,
-                Key = filePath + userId + "/" + objectKey + ".jpg",
-                ContentType = file.ContentType,
-                ContentBody = file.ContentDisposition,
-                CannedACL = S3CannedACL.PublicRead,
-            };
-
-            var result = await _amazonS3Client.PutObjectAsync(putRequest);
-
+            client = new AmazonS3Client(bucketRegion);
+            var response = await WritingAnObjectAsync(file, userId);
             return new AwsDto
             {
-                Picture = result.RequestCharged
+                Picture = response
             };
+        }
+        public async Task<string> WritingAnObjectAsync(IFormFile? file, long userId)
+        {
+            try
+            {
+                var fs = file.OpenReadStream();
+                var extension = file.FileName.Split(".");
+                var keyName = filePath + userId + "/" + objectKey + "." + extension[1];
+                var putRequest1 = new PutObjectRequest
+                {
+                    BucketName = bucketName,
+                    Key = keyName,
+                    InputStream = fs,
+                    ContentType = file.ContentType,
+                    CannedACL = fileCannedACL
+                };
+
+                PutObjectResponse response = await client.PutObjectAsync(putRequest1);
+                return string.Format("http://{0}.s3.amazonaws.com/{1}", bucketName, keyName); ;
+            }
+            catch (AmazonS3Exception)
+            {
+                var error = "Error encountered ***. Message:'{0}' when writing an object";
+                return error;
+            }
+            catch (Exception)
+            {
+                var error = "Unknown encountered on server. Message:'{0}' when writing an object";
+                return error;
+            }
         }
     }
 }
