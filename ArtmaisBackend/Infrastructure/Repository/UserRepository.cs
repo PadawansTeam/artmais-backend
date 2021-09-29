@@ -169,5 +169,28 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
             return results;
         }
+
+        public IEnumerable<RecomendationDto> GetUsersByUsernameOrNameOrSubcategoryOrCategory(string searchValue)
+        {
+            var results = (from user in this._context.User
+                           join subcategory in this._context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
+                           join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
+                           where user.Username.Contains(searchValue)
+                           || user.Name.Contains(searchValue)
+                           || subcategory.UserSubcategory.Contains(searchValue)
+                           || category.UserCategory.Contains(searchValue)
+                           || user.Description.Contains(searchValue)
+                           select new RecomendationDto
+                           {
+                               UserId = user.UserID,
+                               Username = user.Username,
+                               UserPicture = user.UserPicture,
+                               BackgroundPicture = user.BackgroundPicture,
+                               Category = category.UserCategory,
+                               Subcategory = subcategory.UserSubcategory
+                           }).ToList();
+
+            return results;
+        }
     }
 }
