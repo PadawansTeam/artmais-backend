@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ArtmaisBackend.Controllers
 {
@@ -23,13 +24,19 @@ namespace ArtmaisBackend.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("{searchValue}")]
         public ActionResult<IEnumerable<RecomendationDto>> Index([FromRoute] string searchValue)
         {
             try
             {
-                return Ok(_userRepostiory.GetUsersByUsernameOrNameOrSubcategoryOrCategory(searchValue));
+                var results = _userRepostiory.GetUsersByUsernameOrNameOrSubcategoryOrCategory(searchValue);
+
+                if (results.Any())
+                    return Ok(results);
+                
+                return NotFound();
             }
             catch (Exception ex)
             {
