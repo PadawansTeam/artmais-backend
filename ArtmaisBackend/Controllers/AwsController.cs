@@ -4,7 +4,6 @@ using ArtmaisBackend.Core.SignIn.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Controllers
@@ -22,14 +21,15 @@ namespace ArtmaisBackend.Controllers
         private readonly IAwsService _awsService;
         private readonly IJwtTokenService _jwtToken;
 
-        [HttpPost("[Action]")]
+        [HttpPost("[Action]"), DisableRequestSizeLimit]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<AwsDto>> InsertImage([FromForm] IFormFile file)
+        public async Task<ActionResult<AwsDto>> InsertImage()
         {
             try
             {
+                var file = Request.Form.Files[0];
                 var user = this._jwtToken.ReadToken(this.User);
                 var result = await this._awsService.UploadObjectAsync(file, user.UserID);
                 return this.Ok(result);
