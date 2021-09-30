@@ -34,6 +34,7 @@ namespace ArtmaisBackend.Core.Aws.Service
                 Picture = response
             };
         }
+
         public async Task<string> WritingAnObjectAsync(IFormFile? file, long userId)
         {
             try

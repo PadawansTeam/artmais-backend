@@ -29,9 +29,8 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var file = Request.Form.Files[0];
                 var user = this._jwtToken.ReadToken(this.User);
-                var result = await this._awsService.UploadObjectAsync(file, user.UserID);
+                var result = await this._awsService.UploadObjectAsync(Request.Form.Files[0], user.UserID);
                 return this.Ok(result);
             }
             catch (ArgumentNullException ex)
