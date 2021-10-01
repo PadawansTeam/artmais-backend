@@ -16,17 +16,15 @@ namespace ArtmaisBackend.Core.Users.Service
 {
     public class UserService : IUserService
     {
-        public UserService(IAddressRepository addressRepository, IContactRepository contactRepository, IOptions<SocialMediaConfiguration> options, IUserRepository userRepository, IMapper mapper, IAwsService awsService)
+        public UserService(IAddressRepository addressRepository, IContactRepository contactRepository, IOptions<SocialMediaConfiguration> options, IUserRepository userRepository, IMapper mapper)
         {
             this._addressRepository = addressRepository;
             this._contactRepository = contactRepository;
             this._socialMediaConfiguration = options.Value;
             this._userRepository = userRepository;
             this._mapper = mapper;
-            this._awsService = awsService;
         }
 
-        private readonly IAwsService _awsService;
         private readonly IAddressRepository _addressRepository;
         private readonly IContactRepository _contactRepository;
         private readonly SocialMediaConfiguration _socialMediaConfiguration;
@@ -188,7 +186,6 @@ namespace ArtmaisBackend.Core.Users.Service
                 throw new ArgumentNullException();
 
             var userInfo = this._userRepository.GetUserById(userId);
-            var userPicture = this._awsService.UploadObjectAsync(userRequest?.UserPicture, userId);
             userInfo = this._mapper.Map(userRequest, userInfo);
             var user = this._userRepository.Update(userInfo);
 
@@ -206,7 +203,6 @@ namespace ArtmaisBackend.Core.Users.Service
                     UserId = user.UserID,
                     Name = user?.Name,
                     Username = user?.Username,
-                    UserPicture = userPicture?.Result.Picture,
                     BackgroundPicture = user?.BackgroundPicture,
                     BirthDate = user?.BirthDate,
                     MainPhone = newContact?.MainPhone,
@@ -226,7 +222,6 @@ namespace ArtmaisBackend.Core.Users.Service
                     UserId = user.UserID,
                     Name = user?.Name,
                     Username = user?.Username,
-                    UserPicture = userPicture?.Result.Picture,
                     BackgroundPicture = user?.BackgroundPicture,
                     BirthDate = user?.BirthDate,
                     MainPhone = contact?.MainPhone,

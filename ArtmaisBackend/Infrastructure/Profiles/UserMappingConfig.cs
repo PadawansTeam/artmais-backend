@@ -1,5 +1,6 @@
 ﻿using ArtmaisBackend.Core.Adresses.Dto;
 using ArtmaisBackend.Core.Adresses.Request;
+using ArtmaisBackend.Core.Aws.Dto;
 using ArtmaisBackend.Core.Contacts.Dto;
 using ArtmaisBackend.Core.Contacts.Request;
 using ArtmaisBackend.Core.Entities;
@@ -18,6 +19,7 @@ namespace ArtmaisBackend.Infrastructure.Profiles
             this.CreateMap<UserRequest, User>();
             this.CreateMap<PasswordRequest, User>();
             this.CreateMap<UserDescriptionRequest, User>();
+            this.CreateMap<AwsDto, User>();
             this.CreateMap<UserRequest, Contact>();
             this.CreateMap<Contact, ContactDto>();
             this.CreateMap<PortfolioDescriptionRequest, Publication>()

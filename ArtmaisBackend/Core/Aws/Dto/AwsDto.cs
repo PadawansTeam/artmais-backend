@@ -2,6 +2,11 @@
 {
     public class AwsDto
     {
-        public string Picture { get; set; }
+        public string UserPicture { get; set; }
+
+        public AwsDto(string userPicture) 
+        {
+            UserPicture = userPicture;
+        }
     }
 }

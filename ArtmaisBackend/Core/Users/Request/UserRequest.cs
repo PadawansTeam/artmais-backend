@@ -7,7 +7,6 @@ namespace ArtmaisBackend.Core.Users.Request
     {
         public string? Name { get; set; }
         public string? Username { get; set; }
-        public IFormFile? UserPicture { get; set; }
         public string? BackgroundPicture { get; set; }
         public DateTime? BirthDate { get; set; }
         public string? MainPhone { get; set; }

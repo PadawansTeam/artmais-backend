@@ -21,17 +21,17 @@ namespace ArtmaisBackend.Controllers
         private readonly IAwsService _awsService;
         private readonly IJwtTokenService _jwtToken;
 
-        [HttpPost("[Action]"), DisableRequestSizeLimit]
+        [HttpPut("[Action]"), DisableRequestSizeLimit]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<AwsDto>> InsertImage()
+        public async Task<ActionResult<string>> InsertImage()
         {
             try
             {
                 var user = this._jwtToken.ReadToken(this.User);
-                var result = await this._awsService.UploadObjectAsync(Request.Form.Files[0], user.UserID);
-                return this.Ok(result);
+                await this._awsService.UploadObjectAsync(Request.Form.Files[0], user.UserID);
+                return this.Ok();
             }
             catch (ArgumentNullException ex)
             {

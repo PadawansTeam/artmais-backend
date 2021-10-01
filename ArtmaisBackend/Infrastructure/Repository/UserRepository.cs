@@ -1,4 +1,5 @@
-﻿using ArtmaisBackend.Core.Entities;
+﻿using ArtmaisBackend.Core.Aws.Dto;
+using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.OAuth.Google;
 using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.SignUp.Request;
@@ -168,6 +169,11 @@ namespace ArtmaisBackend.Infrastructure.Repository
                            }).ToList();
 
             return results;
+        }
+
+        public bool UpdateUserPicture(string userPicture)
+        {
+            return true;
         }
     }
 }
