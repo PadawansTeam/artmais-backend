@@ -1,8 +1,8 @@
-﻿using ArtmaisBackend.Core.Aws.Dto;
-using ArtmaisBackend.Core.Aws.Interface;
+﻿using ArtmaisBackend.Core.Aws.Interface;
 using ArtmaisBackend.Core.SignIn.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -12,7 +12,7 @@ namespace ArtmaisBackend.Controllers
     [Route("v1/[controller]")]
     public class AwsController : ControllerBase
     {
-        public AwsController(IAwsService awsService, IJwtTokenService jwtToken)
+        public AwsController(IAwsService awsService, IJwtTokenService jwtToken, ILogger<AwsController> logger)
         {
             this._awsService = awsService;
             this._jwtToken = jwtToken;
@@ -20,6 +20,7 @@ namespace ArtmaisBackend.Controllers
 
         private readonly IAwsService _awsService;
         private readonly IJwtTokenService _jwtToken;
+        private readonly ILogger _logger;
 
         [HttpPut("[Action]"), DisableRequestSizeLimit]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -36,6 +37,11 @@ namespace ArtmaisBackend.Controllers
             catch (ArgumentNullException ex)
             {
                 return this.UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"The error {ex.Message}, occurred while inserting user profile picture at: {ex.StackTrace}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }
