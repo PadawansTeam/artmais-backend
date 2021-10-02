@@ -5,6 +5,7 @@ using ArtmaisBackend.Core.Aws.Dto;
 using ArtmaisBackend.Core.Aws.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Aws.Service
@@ -38,8 +39,8 @@ namespace ArtmaisBackend.Core.Aws.Service
         {
             try
             {
-                var extension = uploadObjectCommand.File.FileName.Split(".");
-                var keyName = $"{uploadObjectCommand.FilePath}/{uploadObjectCommand.UserId}/{uploadObjectCommand.ObjectKey}.{extension[1]}";
+                var extension = Path.GetExtension(uploadObjectCommand.File.FileName);
+                var keyName = $"{uploadObjectCommand.FilePath}/{uploadObjectCommand.UserId}/{uploadObjectCommand.ObjectKey}{extension}";
 
                 var putRequest = new PutObjectRequest
                 {
