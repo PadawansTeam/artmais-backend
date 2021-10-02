@@ -170,10 +170,5 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
             return results;
         }
-
-        public bool UpdateUserPicture(string userPicture)
-        {
-            return true;
-        }
     }
 }
