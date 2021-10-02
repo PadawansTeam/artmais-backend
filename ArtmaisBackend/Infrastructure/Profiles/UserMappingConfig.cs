@@ -19,7 +19,8 @@ namespace ArtmaisBackend.Infrastructure.Profiles
             this.CreateMap<UserRequest, User>();
             this.CreateMap<PasswordRequest, User>();
             this.CreateMap<UserDescriptionRequest, User>();
-            this.CreateMap<AwsDto, User>();
+            this.CreateMap<AwsDto, User>()
+                .ForMember(dest => dest.UserPicture, opt => opt.MapFrom(src => src.Content));
             this.CreateMap<UserRequest, Contact>();
             this.CreateMap<Contact, ContactDto>();
             this.CreateMap<PortfolioDescriptionRequest, Publication>()
