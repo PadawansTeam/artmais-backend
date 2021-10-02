@@ -5,8 +5,6 @@ using ArtmaisBackend.Core.Aws.Dto;
 using ArtmaisBackend.Core.Aws.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using System;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Aws.Service
@@ -23,46 +21,52 @@ namespace ArtmaisBackend.Core.Aws.Service
         private static readonly IAmazonS3 client = new AmazonS3Client(RegionEndpoint.USEast1);
         private readonly IMapper _mapper;
 
-        public async Task<AwsDto?> UploadObjectAsync(IFormFile? file, long userId)
-        {       
-            var response = await this.WritingAnObjectAsync(file, userId);
-            return new AwsDto(response);
+        public async Task<AwsDto?> UploadObjectAsync(UploadObjectCommand uploadObjectCommand)
+        {
+            var response = await this.WritingAnObjectAsync(uploadObjectCommand);
+
+            if (uploadObjectCommand.IsProfileContent)
+            {
+                UpdateProfilePicture(response, uploadObjectCommand.UserId);
+                return response;
+            }
+            
+            return response;
         }
 
-        public async Task<string> WritingAnObjectAsync(IFormFile? file, long userId)
+        public async Task<AwsDto> WritingAnObjectAsync(UploadObjectCommand uploadObjectCommand)
         {
-            if (file is null) throw new ArgumentNullException();
-
             try
             {
-                var fs = file.OpenReadStream();
-                var extension = file.FileName.Split(".");
-                var keyName = $"{AwsConfiguration.FilePath}{userId}/{AwsConfiguration.ObjectKey}.{extension[1]}";
+                var extension = uploadObjectCommand.File.FileName.Split(".");
+                var keyName = $"{uploadObjectCommand.FilePath}/{uploadObjectCommand.UserId}/{uploadObjectCommand.ObjectKey}.{extension[1]}";
 
                 var putRequest = new PutObjectRequest
                 {
-                    BucketName = AwsConfiguration.BucketName,
+                    BucketName = uploadObjectCommand.BucketName,
                     Key = keyName,
-                    InputStream = fs,
-                    ContentType = file.ContentType,
+                    InputStream = uploadObjectCommand.File.OpenReadStream(),
+                    ContentType = uploadObjectCommand.File.ContentType,
                     CannedACL = S3CannedACL.PublicRead
                 };
 
                 await client.PutObjectAsync(putRequest);
 
-                var urlAws = string.Format("http://{0}.s3.amazonaws.com/{1}", AwsConfiguration.BucketName, keyName);
-                var dto = new AwsDto(urlAws);
-               
-                var userInfo = this._userRepository.GetUserById(userId);
-                this._mapper.Map(dto, userInfo);
-                this._userRepository.Update(userInfo);
+                var urlAws = string.Format("http://{0}.s3.amazonaws.com/{1}", uploadObjectCommand.BucketName, keyName);
 
-                return urlAws;
+                return new AwsDto(urlAws);
             }
             catch (AmazonS3Exception e)
             {
                 throw new AmazonS3Exception(e.Message);
             }
+        }
+
+        private void UpdateProfilePicture(AwsDto awsDto, long userId)
+        {
+            var userInfo = this._userRepository.GetUserById(userId);
+            this._mapper.Map(awsDto, userInfo);
+            this._userRepository.Update(userInfo);
         }
     }
 }
