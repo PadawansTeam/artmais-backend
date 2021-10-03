@@ -4,10 +4,12 @@ using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Core.Portfolio.Request;
 using ArtmaisBackend.Core.SignIn.Interface;
+using ArtmaisBackend.Util.File;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Controllers
@@ -62,9 +64,12 @@ namespace ArtmaisBackend.Controllers
             try
             {
                 var user = this._jwtToken.ReadToken(this.User);
-                var uploadObjectCommand = new UploadObjectCommandFactory(user.UserID, Request.Form.Files[0], Channel.PORTFOLIO).Create();
+                var file = Request.Form.Files[0];
+                var uploadObjectCommand = new UploadObjectCommandFactory(user.UserID, file, Channel.PORTFOLIO).Create();
 
                 var awsDto = await this._awsService.UploadObjectAsync(uploadObjectCommand);
+
+                var fileExtension = FileExtensionUtil.GetMediaTypeValue(Path.GetExtension(file.FileName));
 
                 var portfolioContentDto = _portfolioService.InsertPortfolioContent(new PortfolioRequest
                 {
@@ -72,7 +77,7 @@ namespace ArtmaisBackend.Controllers
                     Description = Request.Form["description"]
                 },
                 user.UserID,
-                1
+                (int)fileExtension
                 );
 
                 return this.Ok(portfolioContentDto);
