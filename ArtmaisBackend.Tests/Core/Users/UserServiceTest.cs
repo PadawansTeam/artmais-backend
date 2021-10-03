@@ -1,4 +1,5 @@
-﻿using ArtmaisBackend.Core.Entities;
+﻿using ArtmaisBackend.Core.Aws.Interface;
+using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Request;
 using ArtmaisBackend.Core.Users.Service;
