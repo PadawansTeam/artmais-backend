@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace ArtmaisBackend.Util.File
 {
-    public static class FileExtensionUtil
+    public static class MediaTypeUtil
     {
         public static MediaType GetMediaTypeValue(string fileExtension)
         {

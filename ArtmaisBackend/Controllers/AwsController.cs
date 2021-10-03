@@ -69,7 +69,7 @@ namespace ArtmaisBackend.Controllers
 
                 var awsDto = await this._awsService.UploadObjectAsync(uploadObjectCommand);
 
-                var fileExtension = FileExtensionUtil.GetMediaTypeValue(Path.GetExtension(file.FileName));
+                var fileExtension = MediaTypeUtil.GetMediaTypeValue(Path.GetExtension(file.FileName));
 
                 var portfolioContentDto = _portfolioService.InsertPortfolioContent(new PortfolioRequest
                 {
