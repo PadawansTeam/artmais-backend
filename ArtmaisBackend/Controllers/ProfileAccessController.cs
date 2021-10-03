@@ -1,5 +1,6 @@
 ﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.Profile.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -17,12 +18,15 @@ namespace ArtmaisBackend.Controllers
         private readonly IProfileAccessMediator _profileAcessMediator;
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("{visitedUserId}")]
-        public ActionResult<ProfileAccess> Create([FromRoute] long visitedUserId)
+        public ActionResult Create([FromRoute] long visitedUserId)
         {
             try
             {
-                return Ok(_profileAcessMediator.Create(User, visitedUserId));
+                _profileAcessMediator.Create(User, visitedUserId);
+                return Ok();
             }
             catch (Exception ex)
             {

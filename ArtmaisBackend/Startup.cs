@@ -42,17 +42,18 @@ namespace ArtmaisBackend
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup()
         {
-            this.Configuration = configuration;
+            this.Configuration = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddJsonFile("appsettings.json")
+                .Build();
         }
 
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-
-            var key = Encoding.ASCII.GetBytes(this.Configuration.GetValue("Secret", ""));
 
             services.AddAuthentication(x =>
             {
@@ -65,7 +66,7 @@ namespace ArtmaisBackend
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(this.Configuration["Secret"])),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                 };
@@ -80,7 +81,6 @@ namespace ArtmaisBackend
                                       builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
                                   });
             });
-
 
             services.AddControllers()
                 .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new DateTimeConverter()));
@@ -116,7 +116,7 @@ namespace ArtmaisBackend
 
 
             services.AddDbContext<ArtplusContext>(
-                options => options.UseNpgsql(this.Configuration.GetConnectionString("DbContext")));
+                options => options.UseNpgsql(this.Configuration["DbContext"]));
 
             //HostedServices
             services.AddHostedService<RecomendationService>();
@@ -126,7 +126,6 @@ namespace ArtmaisBackend
 
             //Options
             services.Configure<SocialMediaConfiguration>(this.Configuration.GetSection("SocialMediaShareLink"));
-            services.Configure<GoogleConfiguration>(this.Configuration.GetSection("GoogleConfiguration"));
 
             //Repository
             services.AddScoped<IUserRepository, UserRepository>();
