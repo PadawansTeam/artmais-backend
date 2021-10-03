@@ -42,7 +42,7 @@ namespace ArtmaisBackend.Controllers
                 await this._awsService.UploadObjectAsync(uploadObjectCommand);
                 return this.Ok();
             }
-            catch (ArgumentNullException ex)
+            catch (InvalidOperationException ex)
             {
                 return this.UnprocessableEntity(new { message = ex.Message });
             }

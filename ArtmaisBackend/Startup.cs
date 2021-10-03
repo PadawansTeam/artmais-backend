@@ -1,3 +1,5 @@
+using Amazon;
+using Amazon.Extensions.NETCore.Setup;
 using Amazon.S3;
 using ArtmaisBackend.Core.Adresses.Interface;
 using ArtmaisBackend.Core.Adresses.Service;
@@ -172,7 +174,8 @@ namespace ArtmaisBackend
 
             //Aws
             services.AddScoped<IAwsService, AwsService>();
-            services.AddAWSService<IAmazonS3>();
+            var awsConfigRegion = Configuration.GetSection("AWSConfig:Region").Value;
+            services.AddAWSService<IAmazonS3>(new AWSOptions { Region = RegionEndpoint.GetBySystemName(awsConfigRegion) }); ;
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

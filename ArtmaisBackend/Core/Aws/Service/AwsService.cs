@@ -5,6 +5,7 @@ using ArtmaisBackend.Core.Aws.Dto;
 using ArtmaisBackend.Core.Aws.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -12,14 +13,15 @@ namespace ArtmaisBackend.Core.Aws.Service
 {
     public class AwsService : IAwsService
     {
-        public AwsService(IMapper mapper, IUserRepository userRepository)
+        public AwsService(IMapper mapper, IUserRepository userRepository, IAmazonS3 client)
         {
             this._mapper = mapper;
             this._userRepository = userRepository;
+            this._client = client;
         }
 
         private readonly IUserRepository _userRepository;
-        private static readonly IAmazonS3 client = new AmazonS3Client(RegionEndpoint.USEast1);
+        private readonly IAmazonS3 _client;
         private readonly IMapper _mapper;
 
         public async Task<AwsDto?> UploadObjectAsync(UploadObjectCommand uploadObjectCommand)
@@ -41,17 +43,18 @@ namespace ArtmaisBackend.Core.Aws.Service
             {
                 var extension = Path.GetExtension(uploadObjectCommand.File.FileName);
                 var keyName = $"{uploadObjectCommand.FilePath}/{uploadObjectCommand.UserId}/{uploadObjectCommand.ObjectKey}{extension}";
+                using var fileStream = uploadObjectCommand.File.OpenReadStream();
 
                 var putRequest = new PutObjectRequest
                 {
                     BucketName = uploadObjectCommand.BucketName,
                     Key = keyName,
-                    InputStream = uploadObjectCommand.File.OpenReadStream(),
+                    InputStream = fileStream,
                     ContentType = uploadObjectCommand.File.ContentType,
                     CannedACL = S3CannedACL.PublicRead
                 };
 
-                await client.PutObjectAsync(putRequest);
+                await _client.PutObjectAsync(putRequest);
 
                 var urlAws = string.Format("http://{0}.s3.amazonaws.com/{1}", uploadObjectCommand.BucketName, keyName);
 
@@ -59,7 +62,7 @@ namespace ArtmaisBackend.Core.Aws.Service
             }
             catch (AmazonS3Exception e)
             {
-                throw new AmazonS3Exception(e.Message);
+                throw new InvalidOperationException("Error to connect to AWS Service", e);
             }
         }
 
