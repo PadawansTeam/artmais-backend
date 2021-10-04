@@ -1,5 +1,4 @@
-﻿using Amazon;
-using Amazon.S3;
+﻿using Amazon.S3;
 using Amazon.S3.Model;
 using ArtmaisBackend.Core.Aws.Dto;
 using ArtmaisBackend.Core.Aws.Interface;
@@ -30,10 +29,10 @@ namespace ArtmaisBackend.Core.Aws.Service
 
             if (uploadObjectCommand.IsProfileContent)
             {
-                UpdateProfilePicture(response, uploadObjectCommand.UserId);
+                this.UpdateProfilePicture(response, uploadObjectCommand.UserId);
                 return response;
             }
-            
+
             return response;
         }
 
@@ -54,7 +53,7 @@ namespace ArtmaisBackend.Core.Aws.Service
                     CannedACL = S3CannedACL.PublicRead
                 };
 
-                await _client.PutObjectAsync(putRequest);
+                await this._client.PutObjectAsync(putRequest);
 
                 var urlAws = string.Format("http://{0}.s3.amazonaws.com/{1}", uploadObjectCommand.BucketName, keyName);
 

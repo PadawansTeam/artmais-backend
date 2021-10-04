@@ -1,19 +1,16 @@
-﻿using Amazon;
-using Amazon.S3;
+﻿using Amazon.S3;
 using Amazon.S3.Model;
+using ArtmaisBackend.Core.Aws;
 using ArtmaisBackend.Core.Aws.Dto;
 using ArtmaisBackend.Core.Aws.Service;
 using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Users.Service;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -22,13 +19,13 @@ namespace ArtmaisBackend.Tests.Core.Aws
 {
     public class AwsServiceTest
     {
-        private const string BUCKET_NAME = "bucket-artmais";
-        private const string FILE_PATH = "profile-pictures/";
-        private static readonly string objectKey = $"{DateTime.Today.ToString("yyyyMMdd")}{new Random((int)DateTime.Now.Ticks).Next().ToString("D14")}";
+        private const string BUCKET_NAME = "bucket-name";
+        private const string FILE_PATH = "file-path-name/";
+        private static readonly string objectKey = "objectKey-name";
         public static S3CannedACL fileCannedACL = S3CannedACL.PublicRead;
 
-        [Fact(DisplayName = "UploadObjectAsync should not be null and update database")]
-        public async Task UploadObjectAsyncShouldNotBeNull()
+        [Fact(DisplayName = "WritingAnObjectAsync should not be null and update database")]
+        public async Task WritingAnObjectAsyncShouldNotBeNull()
         {
             #region Mocks
             var descriptionRequest = new AwsDto("UserPicture");
@@ -80,7 +77,7 @@ namespace ArtmaisBackend.Tests.Core.Aws
 
             var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object);
 
-            var result = await awsService.WritingAnObjectAsync(new ArtmaisBackend.Core.Aws.UploadObjectCommand
+            var result = await awsService.WritingAnObjectAsync(new UploadObjectCommand
             {
                 File = file,
                 BucketName = putRequest.BucketName
@@ -90,8 +87,8 @@ namespace ArtmaisBackend.Tests.Core.Aws
             result.Should().NotBeNull();
         }
 
-        [Fact(DisplayName = "UpdateUserDescription should be false when request is null or empty")]
-        public async Task UpdateUserDescriptionShouldBeFalse()
+        [Fact(DisplayName = "WritingAnObjectAsync should be false when request is null or empty")]
+        public async Task WritingAnObjectAsyncShouldBeFalse()
         {
             var mockUserRepository = new Mock<IUserRepository>();
             var mockMapper = new Mock<IMapper>();
@@ -102,12 +99,87 @@ namespace ArtmaisBackend.Tests.Core.Aws
             mockS3Client.Setup(x => x.PutObjectAsync(It.IsAny<PutObjectRequest>(), It.IsAny<CancellationToken>())).ThrowsAsync(new AmazonS3Exception(string.Empty));
 
 
-            Func<Task> result = async () => { await awsService.WritingAnObjectAsync(new ArtmaisBackend.Core.Aws.UploadObjectCommand
+            Func<Task> result = async () =>
             {
-                File = file,
-                BucketName = BUCKET_NAME
-            }); };
+                await awsService.WritingAnObjectAsync(new UploadObjectCommand
+                {
+                    File = file,
+                    BucketName = BUCKET_NAME
+                });
+            };
             await result.Should().ThrowAsync<InvalidOperationException>();
+        }
+
+        [Fact(DisplayName = "UploadObjectAsync should not be null and update database")]
+        public async Task UploadObjectAsyncShouldNotBeNullWithProfilePicture()
+        {
+            #region Mocks
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockMapper = new Mock<IMapper>();
+            var fileMock = new Mock<IFormFile>();
+            var mockS3Client = new Mock<IAmazonS3>();
+
+            var keyName = FILE_PATH + 3 + "/" + objectKey + ".png";
+            var content = "UserPicture";
+            var fileName = "UserPicture.png";
+            var fileContent = "image/png";
+            var ms = new MemoryStream();
+            var writer = new StreamWriter(ms);
+            writer.Write(content);
+            writer.Flush();
+            ms.Position = 0;
+            fileMock.Setup(_ => _.OpenReadStream()).Returns(ms);
+            fileMock.Setup(_ => _.FileName).Returns(fileName);
+            fileMock.Setup(_ => _.Length).Returns(ms.Length);
+            fileMock.Setup(_ => _.ContentType).Returns(fileContent);
+            var file = fileMock.Object;
+
+            var uploadObjectCommand = new UploadObjectCommandFactory(3, file, Channel.PROFILE).Create();
+
+            #endregion
+
+            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object);
+
+            var result = await awsService.UploadObjectAsync(uploadObjectCommand);
+
+            result.Content.Should().NotBeNull();
+            result.Should().NotBeNull();
+        }
+
+        [Fact(DisplayName = "UploadObjectAsync should not be null and update database")]
+        public async Task UploadObjectAsyncShouldNotBeNullWithPortfolioContent()
+        {
+            #region Mocks
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockMapper = new Mock<IMapper>();
+            var fileMock = new Mock<IFormFile>();
+            var mockS3Client = new Mock<IAmazonS3>();
+
+            var keyName = FILE_PATH + 3 + "/" + objectKey + ".png";
+            var content = "UserPicture";
+            var fileName = "UserPicture.png";
+            var fileContent = "image/png";
+            var ms = new MemoryStream();
+            var writer = new StreamWriter(ms);
+            writer.Write(content);
+            writer.Flush();
+            ms.Position = 0;
+            fileMock.Setup(_ => _.OpenReadStream()).Returns(ms);
+            fileMock.Setup(_ => _.FileName).Returns(fileName);
+            fileMock.Setup(_ => _.Length).Returns(ms.Length);
+            fileMock.Setup(_ => _.ContentType).Returns(fileContent);
+            var file = fileMock.Object;
+
+            var uploadObjectCommand = new UploadObjectCommandFactory(3, file, Channel.PORTFOLIO).Create();
+
+            #endregion
+
+            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object);
+
+            var result = await awsService.UploadObjectAsync(uploadObjectCommand);
+
+            result.Content.Should().NotBeNull();
+            result.Should().NotBeNull();
         }
     }
 }

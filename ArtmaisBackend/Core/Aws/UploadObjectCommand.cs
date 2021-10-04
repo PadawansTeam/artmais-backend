@@ -9,12 +9,12 @@ namespace ArtmaisBackend.Core.Aws
         public string Channel { get; set; }
         public string BucketName { get; set; }
         public string ObjectKey { get; set; }
-        public bool IsProfileContent => Channel == "PROFILE";
-        public string FilePath => GetFilePath();
+        public bool IsProfileContent => this.Channel == "PROFILE";
+        public string FilePath => this.GetFilePath();
 
         private string GetFilePath()
         {
-            if (IsProfileContent) return "profile-pictures";
+            if (this.IsProfileContent) return "profile-pictures";
 
             return "portfolio-contents";
         }

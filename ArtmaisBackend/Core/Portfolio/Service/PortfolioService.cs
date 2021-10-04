@@ -5,7 +5,6 @@ using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ArtmaisBackend.Core.Portfolio.Service
 {
@@ -29,7 +28,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             if (userId is null)
                 throw new ArgumentNullException();
 
-            var publicationContent = _publicationRepository.GetAllPublicationsByUserId(userId);
+            var publicationContent = this._publicationRepository.GetAllPublicationsByUserId(userId);
 
             return publicationContent;
         }
@@ -39,25 +38,28 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             if (userId is null)
                 throw new ArgumentNullException();
 
-            var publicationContent = _publicationRepository.GetAllPublicationsByUserId(userId);
+            var publicationContent = this._publicationRepository.GetAllPublicationsByUserId(userId);
 
             return publicationContent;
         }
 
         public PortfolioContentDto? InsertPortfolioContent(PortfolioRequest? portfolioRequest, long userId, int mediaTypeId)
         {
-            if (portfolioRequest.PortfolioImageUrl is null || portfolioRequest.Description is null)
+            if (portfolioRequest.PortfolioImageUrl is null)
                 throw new ArgumentNullException();
 
-            var mediaTypeContent = _mediaTypeRepository.GetMediaTypeById(mediaTypeId);
+            if (portfolioRequest.Description is null)
+                portfolioRequest.Description = "";
+
+            var mediaTypeContent = this._mediaTypeRepository.GetMediaTypeById(mediaTypeId);
             if (mediaTypeContent is null)
                 throw new ArgumentNullException();
 
-            var mediaContent = _mediaRepository.Create(portfolioRequest, userId, mediaTypeContent);
+            var mediaContent = this._mediaRepository.Create(portfolioRequest, userId, mediaTypeContent);
             if (mediaContent is null)
                 throw new ArgumentNullException();
 
-            var publicationContent = _publicationRepository.Create(portfolioRequest, userId, mediaContent);
+            var publicationContent = this._publicationRepository.Create(portfolioRequest, userId, mediaContent);
             if (publicationContent is null)
                 throw new ArgumentNullException();
 
@@ -68,7 +70,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
                 MediaID = mediaContent.MediaID,
                 MediaTypeID = mediaTypeContent.MediaTypeId,
                 S3UrlMedia = mediaContent.S3UrlMedia,
-                Description = publicationContent.Description,
+                Description = publicationContent?.Description,
                 PublicationDate = publicationContent.PublicationDate
             };
 
