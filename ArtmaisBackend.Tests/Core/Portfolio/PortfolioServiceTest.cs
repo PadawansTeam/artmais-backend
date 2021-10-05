@@ -14,19 +14,19 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
 {
     public class PortfolioServiceTest
     {
-        [Fact(DisplayName = "Get Logged User Portfolio Content By User Id should be returns list of PortfolioContentDto")]
+        [Fact(DisplayName = "Get Logged User Portfolio Content By User Id should be returns list of PortfolioContentListDto")]
         public void GetLoggedUserPortfolioByIdShouldBeReturnsPortfolioContentDto()
         {
             #region Mocks
             var userId = 113;
-            var expectedList = new List<PortfolioContentDto>
+            var firstList = new List<PortfolioContentDto>
             {
                 new PortfolioContentDto
                 {
                     UserID = 1,
                     PublicationID = 1,
                     MediaID = 1,
-                    MediaTypeID = 1,
+                    MediaTypeID = 2,
                     S3UrlMedia = "S3UrlMedia1",
                     Description = "Description1",
                     PublicationDate = new DateTime()
@@ -43,6 +43,56 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                 },
                 new PortfolioContentDto
                 {
+                    UserID = 1,
+                    PublicationID = 1,
+                    MediaID = 1,
+                    MediaTypeID = 1,
+                    S3UrlMedia = "S3UrlMedia1",
+                    Description = "Description1",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 1,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 3,
+                    PublicationID = 3,
+                    MediaID = 3,
+                    MediaTypeID = 1,
+                    S3UrlMedia = "S3UrlMedia3",
+                    Description = "Description3",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 1,
+                    PublicationID = 1,
+                    MediaID = 1,
+                    MediaTypeID = 3,
+                    S3UrlMedia = "S3UrlMedia1",
+                    Description = "Description1",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 3,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
                     UserID = 3,
                     PublicationID = 3,
                     MediaID = 3,
@@ -52,12 +102,107 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                     PublicationDate = new DateTime()
                 }
             };
+            var image = new List<PortfolioContentDto>
+            {
+                new PortfolioContentDto
+                {
+                    UserID = 1,
+                    PublicationID = 1,
+                    MediaID = 1,
+                    MediaTypeID = 1,
+                    S3UrlMedia = "S3UrlMedia1",
+                    Description = "Description1",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 1,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 3,
+                    PublicationID = 3,
+                    MediaID = 3,
+                    MediaTypeID = 1,
+                    S3UrlMedia = "S3UrlMedia3",
+                    Description = "Description3",
+                    PublicationDate = new DateTime()
+                }
+            };
+            var video = new List<PortfolioContentDto>
+            {
+                new PortfolioContentDto
+                {
+                    UserID = 1,
+                    PublicationID = 1,
+                    MediaID = 1,
+                    MediaTypeID = 2,
+                    S3UrlMedia = "S3UrlMedia1",
+                    Description = "Description1",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 2,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
+                }
+            };
+            var audio = new List<PortfolioContentDto>
+            {
+                new PortfolioContentDto
+                {
+                    UserID = 1,
+                    PublicationID = 1,
+                    MediaID = 1,
+                    MediaTypeID = 3,
+                    S3UrlMedia = "S3UrlMedia1",
+                    Description = "Description1",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 3,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 3,
+                    PublicationID = 3,
+                    MediaID = 3,
+                    MediaTypeID = 3,
+                    S3UrlMedia = "S3UrlMedia3",
+                    Description = "Description3",
+                    PublicationDate = new DateTime()
+                }
+            };
+            var expectedList = new PortfolioContentListDto
+            {
+                Image = image,
+                Audio = audio,
+                Video = video
+            };
 
             var mockMediaRepository = new Mock<IMediaRepository>();
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockMapper = new Mock<IMapper>();
-            mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(expectedList);
+            mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(firstList);
             #endregion
 
             var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockMapper.Object);
@@ -69,15 +214,25 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
         [Fact(DisplayName = "Get Logged User Portfolio Content By User Id should be returns Empty List")]
         public void GetLoggedUserPortfolioByIdShouldBeReturnsEmptyList()
         {
+            #region Mocks
             var userId = 113;
-
-            var expectedList = new List<PortfolioContentDto> { };
+            var firstList = new List<PortfolioContentDto> { };
+            var image = new List<PortfolioContentDto> { };
+            var video = new List<PortfolioContentDto> { };
+            var audio = new List<PortfolioContentDto> { };
+            var expectedList = new PortfolioContentListDto
+            {
+                Image = image,
+                Audio = audio,
+                Video = video
+            };
 
             var mockMediaRepository = new Mock<IMediaRepository>();
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockMapper = new Mock<IMapper>();
-            mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(expectedList);
+            mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(firstList);
+            #endregion
 
             var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockMapper.Object);
             var result = portfolioService.GetLoggedUserPortfolioById(userId);
@@ -104,19 +259,19 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
-        [Fact(DisplayName = "Get Portfolio Content By User Id should be returns list of PortfolioContentDto")]
+        [Fact(DisplayName = "Get Portfolio Content By User Id should be returns list of PortfolioContentListDto")]
         public void GetPortfolioByUserIdShouldBeReturnsPortfolioContentDto()
         {
             #region Mocks
             var userId = 113;
-            var expectedList = new List<PortfolioContentDto>
+            var firstList = new List<PortfolioContentDto>
             {
                 new PortfolioContentDto
                 {
                     UserID = 1,
                     PublicationID = 1,
                     MediaID = 1,
-                    MediaTypeID = 1,
+                    MediaTypeID = 2,
                     S3UrlMedia = "S3UrlMedia1",
                     Description = "Description1",
                     PublicationDate = new DateTime()
@@ -133,6 +288,56 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                 },
                 new PortfolioContentDto
                 {
+                    UserID = 1,
+                    PublicationID = 1,
+                    MediaID = 1,
+                    MediaTypeID = 1,
+                    S3UrlMedia = "S3UrlMedia1",
+                    Description = "Description1",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 1,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 3,
+                    PublicationID = 3,
+                    MediaID = 3,
+                    MediaTypeID = 1,
+                    S3UrlMedia = "S3UrlMedia3",
+                    Description = "Description3",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 1,
+                    PublicationID = 1,
+                    MediaID = 1,
+                    MediaTypeID = 3,
+                    S3UrlMedia = "S3UrlMedia1",
+                    Description = "Description1",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 3,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
                     UserID = 3,
                     PublicationID = 3,
                     MediaID = 3,
@@ -142,12 +347,107 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                     PublicationDate = new DateTime()
                 }
             };
+            var image = new List<PortfolioContentDto>
+            {
+                new PortfolioContentDto
+                {
+                    UserID = 1,
+                    PublicationID = 1,
+                    MediaID = 1,
+                    MediaTypeID = 1,
+                    S3UrlMedia = "S3UrlMedia1",
+                    Description = "Description1",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 1,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 3,
+                    PublicationID = 3,
+                    MediaID = 3,
+                    MediaTypeID = 1,
+                    S3UrlMedia = "S3UrlMedia3",
+                    Description = "Description3",
+                    PublicationDate = new DateTime()
+                }
+            };
+            var video = new List<PortfolioContentDto>
+            {
+                new PortfolioContentDto
+                {
+                    UserID = 1,
+                    PublicationID = 1,
+                    MediaID = 1,
+                    MediaTypeID = 2,
+                    S3UrlMedia = "S3UrlMedia1",
+                    Description = "Description1",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 2,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
+                }
+            };
+            var audio = new List<PortfolioContentDto>
+            {
+                new PortfolioContentDto
+                {
+                    UserID = 1,
+                    PublicationID = 1,
+                    MediaID = 1,
+                    MediaTypeID = 3,
+                    S3UrlMedia = "S3UrlMedia1",
+                    Description = "Description1",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 3,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 3,
+                    PublicationID = 3,
+                    MediaID = 3,
+                    MediaTypeID = 3,
+                    S3UrlMedia = "S3UrlMedia3",
+                    Description = "Description3",
+                    PublicationDate = new DateTime()
+                }
+            };
+            var expectedList = new PortfolioContentListDto
+            {
+                Image = image,
+                Audio = audio,
+                Video = video
+            };
 
             var mockMediaRepository = new Mock<IMediaRepository>();
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockMapper = new Mock<IMapper>();
-            mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(expectedList);
+            mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(firstList);
             #endregion
 
             var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockMapper.Object);
@@ -159,15 +459,25 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
         [Fact(DisplayName = "Get Portfolio Content By User Id should be returns Empty List")]
         public void GetPortfolioByUserIdShouldBeReturnsEmptyList()
         {
+            #region Mocks
             var userId = 113;
-
-            var expectedList = new List<PortfolioContentDto> { };
+            var firstList = new List<PortfolioContentDto> { };
+            var image = new List<PortfolioContentDto> { };
+            var video = new List<PortfolioContentDto> { };
+            var audio = new List<PortfolioContentDto> { };
+            var expectedList = new PortfolioContentListDto
+            {
+                Image = image,
+                Audio = audio,
+                Video = video
+            };
 
             var mockMediaRepository = new Mock<IMediaRepository>();
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockMapper = new Mock<IMapper>();
-            mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(expectedList);
+            mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(firstList);
+            #endregion
 
             var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockMapper.Object);
             var result = portfolioService.GetPortfolioByUserId(userId);
@@ -179,7 +489,6 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
         public void GetPortfolioByUserIdShouldBeThrowWhenUserIdIsNull()
         {
             long? userId = null;
-
             var expectedList = new List<PortfolioContentDto> { };
 
             var mockMediaRepository = new Mock<IMediaRepository>();
@@ -319,6 +628,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
         [Fact(DisplayName = "InsertPortfolioContent should be returns throw when portfolio request is null")]
         public void InsertPortfolioContentShouldBeThrowWhenUserIdIsNull()
         {
+            #region Mocks
             var portfolioRequest = new PortfolioRequest { };
             long userId = 1;
             int mediaTypeId = 1;
@@ -334,6 +644,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             mockMediaTypeRepository.Setup(x => x.GetMediaTypeById(It.IsAny<int>())).Returns(mediaType);
             mockMediaRepository.Setup(x => x.Create(It.IsAny<PortfolioRequest>(), It.IsAny<long>(), It.IsAny<MediaType>())).Returns(media);
             mockPuclicationRepository.Setup(x => x.Create(It.IsAny<PortfolioRequest>(), It.IsAny<long>(), It.IsAny<Media>())).Returns(publication);
+            #endregion
 
             var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockMapper.Object);
 
@@ -345,12 +656,12 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
         public void UpdateDescriptionShouldBeReturnsPortfolioContentDto()
         {
             #region Mocks
+            var userId = 1;
             var portfolioDescriptionRequest = new PortfolioDescriptionRequest
             {
                 PublicationId = 1,
                 PublicationDescription = "PublicationDescription"
             };
-            var userId = 1;
             var publication = new Publication
             {
                 PublicationID = 1,
