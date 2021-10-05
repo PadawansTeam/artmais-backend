@@ -22,8 +22,8 @@ namespace ArtmaisBackend.Controllers
         {
             this._awsService = awsService;
             this._jwtToken = jwtToken;
-            _logger = logger;
-            _portfolioService = portfolioService;
+            this._logger = logger;
+            this._portfolioService = portfolioService;
         }
 
         private readonly IAwsService _awsService;
@@ -40,7 +40,7 @@ namespace ArtmaisBackend.Controllers
             try
             {
                 var user = this._jwtToken.ReadToken(this.User);
-                var uploadObjectCommand = new UploadObjectCommandFactory(user.UserID, Request.Form.Files[0], Channel.PROFILE).Create();
+                var uploadObjectCommand = new UploadObjectCommandFactory(user.UserID, this.Request.Form.Files[0], Channel.PROFILE).Create();
                 await this._awsService.UploadObjectAsync(uploadObjectCommand);
                 return this.Ok();
             }
@@ -50,8 +50,8 @@ namespace ArtmaisBackend.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"The error {ex.Message}, occurred while updating user profile picture at: {ex.StackTrace}");
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                this._logger.LogError($"The error {ex.Message}, occurred while updating user profile picture at: {ex.StackTrace}");
+                return this.StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -64,17 +64,17 @@ namespace ArtmaisBackend.Controllers
             try
             {
                 var user = this._jwtToken.ReadToken(this.User);
-                var file = Request.Form.Files[0];
+                var file = this.Request.Form.Files[0];
                 var uploadObjectCommand = new UploadObjectCommandFactory(user.UserID, file, Channel.PORTFOLIO).Create();
 
                 var awsDto = await this._awsService.UploadObjectAsync(uploadObjectCommand);
 
                 var fileExtension = MediaTypeUtil.GetMediaTypeValue(Path.GetExtension(file.FileName));
 
-                var portfolioContentDto = _portfolioService.InsertPortfolioContent(new PortfolioRequest
+                var portfolioContentDto = this._portfolioService.InsertPortfolioContent(new PortfolioRequest
                 {
                     PortfolioImageUrl = awsDto.Content,
-                    Description = Request.Form["description"]
+                    Description = this.Request.Form["description"]
                 },
                 user.UserID,
                 (int)fileExtension
@@ -82,14 +82,14 @@ namespace ArtmaisBackend.Controllers
 
                 return this.Ok(portfolioContentDto);
             }
-            catch (ArgumentNullException ex)
+            catch (InvalidOperationException ex)
             {
                 return this.UnprocessableEntity(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"The error {ex.Message}, occurred while inserting portfolio content at: {ex.StackTrace}");
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                this._logger.LogError($"The error {ex.Message}, occurred while inserting portfolio content at: {ex.StackTrace}");
+                return this.StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

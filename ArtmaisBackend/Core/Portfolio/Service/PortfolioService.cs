@@ -70,8 +70,11 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
         public PortfolioContentDto? InsertPortfolioContent(PortfolioRequest? portfolioRequest, long userId, int mediaTypeId)
         {
-            if (portfolioRequest.PortfolioImageUrl is null || portfolioRequest.Description is null)
+            if (portfolioRequest.PortfolioImageUrl is null)
                 throw new ArgumentNullException();
+
+            if (portfolioRequest.Description is null)
+                portfolioRequest.Description = string.Empty;
 
             var mediaTypeContent = this._mediaTypeRepository.GetMediaTypeById(mediaTypeId);
             if (mediaTypeContent is null)
@@ -92,7 +95,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
                 MediaID = mediaContent.MediaID,
                 MediaTypeID = mediaTypeContent.MediaTypeId,
                 S3UrlMedia = mediaContent.S3UrlMedia,
-                Description = publicationContent.Description,
+                Description = publicationContent?.Description,
                 PublicationDate = publicationContent.PublicationDate
             };
 

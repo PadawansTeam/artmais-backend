@@ -564,6 +564,67 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             result.Should().BeEquivalentTo(expectedPortfolioContentDto);
         }
 
+        [Fact(DisplayName = "Insert Portfolio Content should be returns PortfolioContentDto with description null")]
+        public void InsertPortfolioContentShouldBeReturnsPortfolioContentDtoWithNullDescription()
+        {
+            #region Mocks
+            long userId = 1;
+            int mediaTypeId = 1;
+            var mediaType = new MediaType
+            {
+                MediaTypeId = 1,
+                Description = "Description"
+            };
+            var media = new Media
+            {
+                MediaID = 1,
+                MediaTypeID = 1,
+                MediaType = mediaType,
+                UserID = 1,
+                User = new User { },
+                S3UrlMedia = "S3UrlMedia"
+            };
+            var portfolioRequest = new PortfolioRequest
+            {
+                PortfolioImageUrl = "PortfolioImageUrl",
+            };
+            var publication = new Publication
+            {
+                PublicationID = 1,
+                MediaID = 1,
+                Media = media,
+                UserID = 1,
+                User = new User { },
+                Description = "",
+                PublicationDate = new DateTime(2021, 8, 15)
+            };
+            var expectedPortfolioContentDto = new PortfolioContentDto
+            {
+                UserID = 1,
+                PublicationID = 1,
+                MediaID = 1,
+                MediaTypeID = 1,
+                S3UrlMedia = "S3UrlMedia",
+                Description = "",
+                PublicationDate = new DateTime(2021, 8, 15)
+            };
+
+            var mockMediaRepository = new Mock<IMediaRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
+            var mockPuclicationRepository = new Mock<IPublicationRepository>();
+            var mockMapper = new Mock<IMapper>();
+            mockMediaTypeRepository.Setup(x => x.GetMediaTypeById(It.IsAny<int>())).Returns(mediaType);
+            mockMediaRepository.Setup(x => x.Create(It.IsAny<PortfolioRequest>(), It.IsAny<long>(), It.IsAny<MediaType>())).Returns(media);
+            mockPuclicationRepository.Setup(x => x.Create(It.IsAny<PortfolioRequest>(), It.IsAny<long>(), It.IsAny<Media>())).Returns(publication);
+            #endregion
+
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockMapper.Object);
+            var result = portfolioService.InsertPortfolioContent(portfolioRequest, userId, mediaTypeId);
+
+            result.Should().BeEquivalentTo(expectedPortfolioContentDto);
+            result.Description.Should().BeEmpty();
+        }
+
         [Fact(DisplayName = "InsertPortfolioContent should be returns throw when portfolio request is null")]
         public void InsertPortfolioContentShouldBeThrowWhenUserIdIsNull()
         {
