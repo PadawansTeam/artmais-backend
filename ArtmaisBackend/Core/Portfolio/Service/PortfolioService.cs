@@ -2,9 +2,9 @@
 using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Core.Portfolio.Request;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
+using ArtmaisBackend.Util.File;
 using AutoMapper;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ArtmaisBackend.Core.Portfolio.Service
@@ -24,24 +24,48 @@ namespace ArtmaisBackend.Core.Portfolio.Service
         private readonly IPublicationRepository _publicationRepository;
         private readonly IMapper _mapper;
 
-        public List<PortfolioContentDto> GetLoggedUserPortfolioById(long? userId)
+        public PortfolioContentListDto GetLoggedUserPortfolioById(long? userId)
         {
             if (userId is null)
                 throw new ArgumentNullException();
 
-            var publicationContent = _publicationRepository.GetAllPublicationsByUserId(userId);
+            var publicationContent = this._publicationRepository.GetAllPublicationsByUserId(userId);
 
-            return publicationContent;
+            var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.IMAGE).ToList();
+            var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.VIDEO).ToList();
+            var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.AUDIO).ToList();
+
+            var publicationList = new PortfolioContentListDto
+            {
+                Image = imageList,
+                Video = videoList,
+                Audio = audioList
+            };
+
+
+            return publicationList;
         }
 
-        public List<PortfolioContentDto> GetPortfolioByUserId(long? userId)
+        public PortfolioContentListDto GetPortfolioByUserId(long? userId)
         {
             if (userId is null)
                 throw new ArgumentNullException();
 
-            var publicationContent = _publicationRepository.GetAllPublicationsByUserId(userId);
+            var publicationContent = this._publicationRepository.GetAllPublicationsByUserId(userId);
 
-            return publicationContent;
+            var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.IMAGE).ToList();
+            var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.VIDEO).ToList();
+            var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.AUDIO).ToList();
+
+            var publicationList = new PortfolioContentListDto
+            {
+                Image = imageList,
+                Video = videoList,
+                Audio = audioList
+            };
+
+
+            return publicationList;
         }
 
         public PortfolioContentDto? InsertPortfolioContent(PortfolioRequest? portfolioRequest, long userId, int mediaTypeId)
@@ -49,15 +73,15 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             if (portfolioRequest.PortfolioImageUrl is null || portfolioRequest.Description is null)
                 throw new ArgumentNullException();
 
-            var mediaTypeContent = _mediaTypeRepository.GetMediaTypeById(mediaTypeId);
+            var mediaTypeContent = this._mediaTypeRepository.GetMediaTypeById(mediaTypeId);
             if (mediaTypeContent is null)
                 throw new ArgumentNullException();
 
-            var mediaContent = _mediaRepository.Create(portfolioRequest, userId, mediaTypeContent);
+            var mediaContent = this._mediaRepository.Create(portfolioRequest, userId, mediaTypeContent);
             if (mediaContent is null)
                 throw new ArgumentNullException();
 
-            var publicationContent = _publicationRepository.Create(portfolioRequest, userId, mediaContent);
+            var publicationContent = this._publicationRepository.Create(portfolioRequest, userId, mediaContent);
             if (publicationContent is null)
                 throw new ArgumentNullException();
 

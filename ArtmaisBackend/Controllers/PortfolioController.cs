@@ -25,7 +25,7 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<PortfolioContentDto> GetLoggedUserInfo()
+        public ActionResult<PortfolioContentListDto> GetLoggedUserInfo()
         {
             try
             {
@@ -44,7 +44,7 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<PortfolioContentDto> GetPortfolioByUserId(int userId)
+        public ActionResult<PortfolioContentListDto> GetPortfolioByUserId(int userId)
         {
             try
             {

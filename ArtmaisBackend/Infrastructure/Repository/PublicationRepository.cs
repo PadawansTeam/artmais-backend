@@ -3,7 +3,6 @@ using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Request;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,18 +25,21 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public List<PortfolioContentDto> GetAllPublicationsByUserId(long? userId)
         {
-            return this._context.Publication
-                .Include(x => x.Media)
-                .Where(publication => publication.UserID == userId)
-                .Select(publication => new PortfolioContentDto
-                {
-                    UserID = userId,
-                    PublicationID = publication.PublicationID,
-                    MediaID = publication.MediaID,
-                    S3UrlMedia = publication.Media.S3UrlMedia,
-                    Description = publication.Description,
-                    PublicationDate = publication.PublicationDate
-                }).ToList();
+            var query = (from publication in this._context.Publication
+                         join media in this._context.Media on publication.MediaID equals media.MediaID
+                         where publication.UserID.Equals(userId)
+                         select new PortfolioContentDto
+                         {
+                             UserID = userId,
+                             PublicationID = publication.PublicationID,
+                             MediaID = publication.MediaID,
+                             MediaTypeID = media.MediaTypeID,
+                             S3UrlMedia = publication.Media.S3UrlMedia,
+                             Description = publication.Description,
+                             PublicationDate = publication.PublicationDate
+                         }).ToList();
+
+            return query;
         }
 
         public Publication Create(PortfolioRequest portfolioRequest, long userId, Media media)
