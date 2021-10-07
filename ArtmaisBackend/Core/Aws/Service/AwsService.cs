@@ -2,6 +2,8 @@
 using Amazon.S3.Model;
 using ArtmaisBackend.Core.Aws.Dto;
 using ArtmaisBackend.Core.Aws.Interface;
+using ArtmaisBackend.Core.Aws.Request;
+using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
 using System;
@@ -12,16 +14,18 @@ namespace ArtmaisBackend.Core.Aws.Service
 {
     public class AwsService : IAwsService
     {
-        public AwsService(IMapper mapper, IUserRepository userRepository, IAmazonS3 client)
+        public AwsService(IMapper mapper, IUserRepository userRepository, IAmazonS3 client, IPortfolioService portfolioService)
         {
             this._mapper = mapper;
             this._userRepository = userRepository;
             this._client = client;
+            this._portfolioService = portfolioService;
         }
 
         private readonly IUserRepository _userRepository;
         private readonly IAmazonS3 _client;
         private readonly IMapper _mapper;
+        private readonly IPortfolioService _portfolioService;
 
         public async Task<AwsDto?> UploadObjectAsync(UploadObjectCommand uploadObjectCommand)
         {
@@ -70,6 +74,34 @@ namespace ArtmaisBackend.Core.Aws.Service
             var userInfo = this._userRepository.GetUserById(userId);
             this._mapper.Map(awsDto, userInfo);
             this._userRepository.Update(userInfo);
+        }
+
+        public async Task<bool> DeletingAnObjectAsync(DeleteObjectCommand deleteObjectCommand)
+        {
+            try
+            {
+                var portfolioContent = this._portfolioService.GetPortfolioContentById(deleteObjectCommand.PortfolioId, deleteObjectCommand.UserId);
+
+                var keyName = portfolioContent.S3UrlMedia;
+
+                var deleteObjectRequest = new DeleteObjectRequest
+                {
+                    BucketName = deleteObjectCommand.BucketName,
+                    Key = keyName
+                };
+
+                var portfolioDelete = this._portfolioService.DeletePublication(portfolioContent, deleteObjectCommand.UserId);
+
+                if (!portfolioDelete)
+                    throw new InvalidOperationException();
+
+                await this._client.DeleteObjectAsync(deleteObjectRequest);
+                return true;
+            }
+            catch (AmazonS3Exception e)
+            {
+                throw new InvalidOperationException("Error to connect to AWS Service", e);
+            }
         }
     }
 }

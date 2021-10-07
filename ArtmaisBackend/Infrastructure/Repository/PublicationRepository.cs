@@ -65,5 +65,13 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
             return publication;
         }
+
+        public Publication Delete(Publication publication)
+        {
+            this._context.Publication.Remove(publication);
+            this._context.SaveChanges();
+
+            return publication;
+        }
     }
 }

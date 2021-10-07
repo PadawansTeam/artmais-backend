@@ -131,5 +131,19 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
             return portfolioContentDto;
         }
+
+        public bool DeletePublication(PortfolioContentDto? portfolioContentDto, long userId)
+        {
+            var portfolioInfo = this._publicationRepository.GetPublicationByIdAndUserId(userId, portfolioContentDto.PublicationID);
+
+            if (portfolioInfo is null)
+                throw new ArgumentNullException();
+
+            this._mapper.Map(portfolioContentDto, portfolioInfo);
+
+            this._publicationRepository.Delete(portfolioInfo);
+
+            return true;
+        }
     }
 }

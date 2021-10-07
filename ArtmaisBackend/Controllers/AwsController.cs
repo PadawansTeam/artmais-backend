@@ -1,5 +1,6 @@
 ﻿using ArtmaisBackend.Core.Aws;
 using ArtmaisBackend.Core.Aws.Interface;
+using ArtmaisBackend.Core.Aws.Request;
 using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Core.Portfolio.Request;
@@ -81,6 +82,34 @@ namespace ArtmaisBackend.Controllers
                 );
 
                 return this.Ok(portfolioContentDto);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError($"The error {ex.Message}, occurred while inserting portfolio content at: {ex.StackTrace}");
+                return this.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost("{portfolioId}"), DisableRequestSizeLimit]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> DeletePortfolioContent(int portfolioId)
+        {
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var deleteObjectCommand = new DeleteObjectCommand(user.UserID, portfolioId);
+                var awsDto = await this._awsService.DeletingAnObjectAsync(deleteObjectCommand);
+
+                if (awsDto)
+                    return this.Ok(true);
+                else
+                    return this.BadRequest(false);
             }
             catch (InvalidOperationException ex)
             {
