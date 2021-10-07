@@ -713,13 +713,13 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
-        [Fact(DisplayName = "Get Portfolio Content By Id should be returns portfolio content dto")]
-        public void GetPortfolioContentByIdShouldBeReturnsPortfolioContentDto()
+        [Fact(DisplayName = "Get Publication By Id should be returns portfolio content dto")]
+        public void GetPublicationByIdShouldBeReturnsPortfolioContentDto()
         {
             #region Mocks
             var userId = 113;
-            var portfolioId = 2;
-            var portfolioContentDto = new List<PortfolioContentDto>
+            var publicationId = 2;
+            var portfolioContent = new List<PortfolioContentDto>
             {
                new PortfolioContentDto
                 {
@@ -762,7 +762,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                     PublicationDate = new DateTime()
                 },
             };
-            var expectedContent = new PortfolioContentDto
+            var expectedPublication = new PortfolioContentDto
             {
                 UserID = 1,
                 PublicationID = 2,
@@ -776,22 +776,22 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockMapper = new Mock<IMapper>();
-            mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(userId)).Returns(portfolioContentDto);
+            mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(userId)).Returns(portfolioContent);
             #endregion
 
             var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockMapper.Object);
-            var result = portfolioService.GetPublicationById(portfolioId, userId);
+            var result = portfolioService.GetPublicationById(publicationId, userId);
 
-            result.Should().BeEquivalentTo(expectedContent);
+            result.Should().BeEquivalentTo(expectedPublication);
         }
 
-        [Fact(DisplayName = "Get Portfolio Content By Id should be returns throw when portfolio id is null")]
-        public void GetPortfolioContentByIdShouldBeThrowWhenUserIdIsNull()
+        [Fact(DisplayName = "Get Publication By Id should be returns throw when portfolio id is null")]
+        public void GetPublicationByIdShouldBeThrowWhenUserIdIsNull()
         {
             #region Mocks
             var userId = 113;
-            int? portfolioId = null;
-            var portfolioContentDto = new List<PortfolioContentDto>
+            int? publicationId = null;
+            var portfolioContent = new List<PortfolioContentDto>
             {
                new PortfolioContentDto
                 {
@@ -834,37 +834,26 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                     PublicationDate = new DateTime()
                 },
             };
-            var expectedContent = new PortfolioContentDto
-            {
-                UserID = 1,
-                PublicationID = 2,
-                MediaID = 1,
-                MediaTypeID = 2,
-                S3UrlMedia = "S3UrlMedia1",
-                Description = "Description1",
-                PublicationDate = new DateTime()
-            };
             var mockMediaRepository = new Mock<IMediaRepository>();
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockMapper = new Mock<IMapper>();
-            mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<int>())).Returns(portfolioContentDto);
+            mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<int>())).Returns(portfolioContent);
             #endregion
 
             var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockMapper.Object);
 
-            Action act = () => portfolioService.GetPublicationById(portfolioId, userId);
+            Action act = () => portfolioService.GetPublicationById(publicationId, userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
-        [Fact(DisplayName = "Get Portfolio Content By Id should be returns throw when portfolio content is null")]
-        public void GetPortfolioContentByIdShouldBeThrowWhenPortfolioContentIsNull()
+        [Fact(DisplayName = "Get Publication By Id should be returns throw when portfolio content is null")]
+        public void GetPublicationByIdShouldBeThrowWhenPortfolioContentIsNull()
         {
             #region Mocks
             var userId = 113;
-            int? portfolioId = 2;
+            int? publicationId = 2;
             var expectedList = new List<PortfolioContentDto> { };
-
             var mockMediaRepository = new Mock<IMediaRepository>();
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
@@ -874,7 +863,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
 
             var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockMapper.Object);
 
-            Action act = () => portfolioService.GetPublicationById(portfolioId, userId);
+            Action act = () => portfolioService.GetPublicationById(publicationId, userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
     }
