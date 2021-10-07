@@ -11,6 +11,8 @@ namespace ArtmaisBackend.Core.Portfolio.Interface
 
         PortfolioContentDto? InsertPortfolioContent(PortfolioRequest? portfolioRequest, long userId, int mediaTypeId);
 
+        PortfolioContentDto GetPortfolioContentById(int? portfolioId, long userId);
+
         bool UpdateDescription(PortfolioDescriptionRequest? portfolioDescriptionRequest, long userId);
     }
 }

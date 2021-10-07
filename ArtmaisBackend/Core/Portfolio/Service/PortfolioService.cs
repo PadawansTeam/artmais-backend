@@ -116,5 +116,20 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
             return true;
         }
+
+        public PortfolioContentDto GetPortfolioContentById(int? portfolioId, long userId)
+        {
+            if (portfolioId == null)
+                throw new ArgumentNullException();
+
+            var portfolio = this._publicationRepository.GetAllPublicationsByUserId(userId);
+
+            if (portfolio == null)
+                throw new ArgumentNullException();
+
+            var portfolioContentDto = portfolio.Where(p => p.PublicationID == portfolioId).FirstOrDefault();
+
+            return portfolioContentDto;
+        }
     }
 }

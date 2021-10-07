@@ -93,5 +93,23 @@ namespace ArtmaisBackend.Controllers
                 return this.UnprocessableEntity(new { message = ex.Message });
             }
         }
+
+        [HttpGet("{userId}/{portfolioId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PortfolioContentListDto> GetPortfolioContentById(int portfolioId, int userId)
+        {
+            try
+            {
+                var result = this._portfolioService.GetPortfolioContentById(portfolioId, userId);
+                return this.Ok(result);
+
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
+        }
     }
 }
