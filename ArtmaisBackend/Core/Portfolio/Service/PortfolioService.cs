@@ -117,7 +117,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             return true;
         }
 
-        public PortfolioContentDto GetPortfolioContentById(int? portfolioId, long userId)
+        public PortfolioContentDto GetPublicationById(int? portfolioId, long userId)
         {
             if (portfolioId == null)
                 throw new ArgumentNullException();

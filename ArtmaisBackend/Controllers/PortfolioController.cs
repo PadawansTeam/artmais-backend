@@ -98,11 +98,11 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<PortfolioContentListDto> GetPortfolioContentById(int portfolioId, int userId)
+        public ActionResult<PortfolioContentListDto> GetPublicationById(int portfolioId, int userId)
         {
             try
             {
-                var result = this._portfolioService.GetPortfolioContentById(portfolioId, userId);
+                var result = this._portfolioService.GetPublicationById(portfolioId, userId);
                 return this.Ok(result);
 
             }
