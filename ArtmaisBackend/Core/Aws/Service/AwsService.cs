@@ -81,7 +81,7 @@ namespace ArtmaisBackend.Core.Aws.Service
         {
             try
             {
-                var portfolioContent = this._portfolioService.GetPortfolioContentById(deleteObjectCommand.PortfolioId, deleteObjectCommand.UserId);
+                var portfolioContent = this._portfolioService.GetPublicationById(deleteObjectCommand.PortfolioId, deleteObjectCommand.UserId);
 
                 var keyName = portfolioContent.S3UrlMedia;
 
