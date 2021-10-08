@@ -3,6 +3,7 @@ using Amazon.S3.Model;
 using ArtmaisBackend.Core.Aws.Dto;
 using ArtmaisBackend.Core.Aws.Interface;
 using ArtmaisBackend.Core.Aws.Request;
+using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
@@ -90,18 +91,22 @@ namespace ArtmaisBackend.Core.Aws.Service
                     Key = keyName
                 };
 
-                var portfolioDelete = this._portfolioService.DeletePublication(portfolioContent, deleteObjectCommand.UserId);
-
-                if (!portfolioDelete)
-                    throw new InvalidOperationException();
-
                 await this._client.DeleteObjectAsync(deleteObjectRequest);
+
+                this.DeletePortfolioContent(portfolioContent, deleteObjectCommand.UserId);
+
                 return true;
             }
             catch (AmazonS3Exception e)
             {
                 throw new InvalidOperationException("Error to connect to AWS Service", e);
             }
+        }
+
+        private void DeletePortfolioContent(PortfolioContentDto portfolioContent, long userId)
+        {
+            this._portfolioService.DeletePublication(portfolioContent, userId);
+            this._portfolioService.DeleteMedia(portfolioContent, userId);
         }
     }
 }

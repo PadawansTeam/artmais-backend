@@ -94,7 +94,7 @@ namespace ArtmaisBackend.Controllers
             }
         }
 
-        [HttpPost("{portfolioId}"), DisableRequestSizeLimit]
+        [HttpDelete("{portfolioId}"), DisableRequestSizeLimit]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
