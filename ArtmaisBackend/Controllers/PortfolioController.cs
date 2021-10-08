@@ -94,15 +94,15 @@ namespace ArtmaisBackend.Controllers
             }
         }
 
-        [HttpGet("{userId}/{portfolioId}")]
+        [HttpGet("{userId}/{publicationId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<PortfolioContentListDto> GetPortfolioContentById(int portfolioId, int userId)
+        public ActionResult<PortfolioContentListDto> GetPublicationById(int publicationId, int userId)
         {
             try
             {
-                var result = this._portfolioService.GetPortfolioContentById(portfolioId, userId);
+                var result = this._portfolioService.GetPublicationById(publicationId, userId);
                 return this.Ok(result);
 
             }
