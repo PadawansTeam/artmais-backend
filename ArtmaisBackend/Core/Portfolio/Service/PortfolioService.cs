@@ -117,9 +117,9 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             return true;
         }
 
-        public PortfolioContentDto GetPortfolioContentById(int? portfolioId, long userId)
+        public PortfolioContentDto GetPublicationById(int? publicationId, long userId)
         {
-            if (portfolioId == null)
+            if (publicationId == null)
                 throw new ArgumentNullException();
 
             var portfolio = this._publicationRepository.GetAllPublicationsByUserId(userId);
@@ -127,12 +127,12 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             if (portfolio == null)
                 throw new ArgumentNullException();
 
-            var portfolioContentDto = portfolio.Where(p => p.PublicationID == portfolioId).FirstOrDefault();
+            var publication = portfolio.Where(p => p.PublicationID == publicationId).FirstOrDefault();
 
-            return portfolioContentDto;
+            return publication;
         }
 
-        public bool DeletePublication(PortfolioContentDto? portfolioContentDto, long userId)
+        public void DeletePublication(PortfolioContentDto? portfolioContentDto, long userId)
         {
             var portfolioInfo = this._publicationRepository.GetPublicationByIdAndUserId(userId, portfolioContentDto.PublicationID);
 
@@ -142,8 +142,18 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             this._mapper.Map(portfolioContentDto, portfolioInfo);
 
             this._publicationRepository.Delete(portfolioInfo);
+        }
 
-            return true;
+        public void DeleteMedia(PortfolioContentDto? portfolioContentDto, long userId)
+        {
+            var mediaInfo = this._mediaRepository.GetMediaByIdAndUserId(userId, portfolioContentDto.MediaID);
+
+            if (mediaInfo is null)
+                throw new ArgumentNullException();
+
+            this._mapper.Map(portfolioContentDto, mediaInfo);
+
+            this._mediaRepository.Delete(mediaInfo);
         }
     }
 }

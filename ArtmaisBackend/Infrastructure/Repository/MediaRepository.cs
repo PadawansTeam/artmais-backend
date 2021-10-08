@@ -15,6 +15,11 @@ namespace ArtmaisBackend.Infrastructure.Repository
         }
 
         private readonly ArtplusContext _context;
+       
+        public Media? GetMediaByIdAndUserId(long? userId, int? mediaId)
+        {
+            return this._context.Media.FirstOrDefault(publication => publication.UserID == userId && publication.MediaID == mediaId);
+        }
 
         public List<Media> GetAllMediasByUserId(long? userId)
         {
@@ -42,6 +47,12 @@ namespace ArtmaisBackend.Infrastructure.Repository
             this._context.SaveChanges();
 
             return media;
+        }
+
+        public void Delete(Media media)
+        {
+            this._context.Media.Remove(media);
+            this._context.SaveChanges();
         }
     }
 }

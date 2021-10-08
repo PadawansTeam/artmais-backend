@@ -138,7 +138,7 @@ namespace ArtmaisBackend.Tests.Core.Aws
             fileMock.Setup(_ => _.ContentType).Returns(fileContent);
             var file = fileMock.Object;
 
-            var uploadObjectCommand = new UploadObjectCommandFactory(3, file, Channel.PROFILE).Create();
+            var uploadObjectCommand = UploadObjectCommandFactory.Create(3, file, Channel.PROFILE);
             #endregion
 
             var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
@@ -174,7 +174,7 @@ namespace ArtmaisBackend.Tests.Core.Aws
             fileMock.Setup(_ => _.ContentType).Returns(fileContent);
             var file = fileMock.Object;
 
-            var uploadObjectCommand = new UploadObjectCommandFactory(3, file, Channel.PORTFOLIO).Create();
+            var uploadObjectCommand = UploadObjectCommandFactory.Create(3, file, Channel.PROFILE);
             #endregion
 
             var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);

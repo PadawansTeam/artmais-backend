@@ -11,10 +11,12 @@ namespace ArtmaisBackend.Core.Portfolio.Interface
 
         PortfolioContentDto? InsertPortfolioContent(PortfolioRequest? portfolioRequest, long userId, int mediaTypeId);
 
-        PortfolioContentDto GetPortfolioContentById(int? portfolioId, long userId);
+        PortfolioContentDto GetPublicationById(int? publicationId, long userId);
 
         bool UpdateDescription(PortfolioDescriptionRequest? portfolioDescriptionRequest, long userId);
 
-        bool DeletePublication(PortfolioContentDto? portfolioContentDto, long userId);
+        void DeletePublication(PortfolioContentDto? portfolioContentDto, long userId);
+
+        void DeleteMedia(PortfolioContentDto? portfolioContentDto, long userId);
     }
 }
