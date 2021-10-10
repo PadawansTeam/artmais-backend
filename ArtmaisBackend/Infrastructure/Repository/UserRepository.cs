@@ -2,6 +2,7 @@
 using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.OAuth.Google;
 using ArtmaisBackend.Core.Profile.Dto;
+using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignUp.Request;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Infrastructure.Data;
@@ -192,6 +193,11 @@ namespace ArtmaisBackend.Infrastructure.Repository
                            }).ToList();
 
             return results;
+        }
+
+        public bool ValidateUserData(UserJwtData userJwtData)
+        {
+            return _context.User.Any(u => u.UserID.Equals(userJwtData.UserID) && u.Username.Equals(userJwtData.UserName));
         }
     }
 }
