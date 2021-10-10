@@ -1,5 +1,6 @@
 ﻿using ArtmaisBackend.Core.Aws;
 using ArtmaisBackend.Core.Aws.Interface;
+using ArtmaisBackend.Core.Aws.Request;
 using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Core.Portfolio.Request;
@@ -40,7 +41,7 @@ namespace ArtmaisBackend.Controllers
             try
             {
                 var user = this._jwtToken.ReadToken(this.User);
-                var uploadObjectCommand = new UploadObjectCommandFactory(user.UserID, this.Request.Form.Files[0], Channel.PROFILE).Create();
+                var uploadObjectCommand = UploadObjectCommandFactory.Create(user.UserID, this.Request.Form.Files[0], Channel.PROFILE);
                 await this._awsService.UploadObjectAsync(uploadObjectCommand);
                 return this.Ok();
             }
@@ -65,7 +66,7 @@ namespace ArtmaisBackend.Controllers
             {
                 var user = this._jwtToken.ReadToken(this.User);
                 var file = this.Request.Form.Files[0];
-                var uploadObjectCommand = new UploadObjectCommandFactory(user.UserID, file, Channel.PORTFOLIO).Create();
+                var uploadObjectCommand = UploadObjectCommandFactory.Create(user.UserID, file, Channel.PORTFOLIO);
 
                 var awsDto = await this._awsService.UploadObjectAsync(uploadObjectCommand);
 
@@ -89,6 +90,34 @@ namespace ArtmaisBackend.Controllers
             catch (Exception ex)
             {
                 this._logger.LogError($"The error {ex.Message}, occurred while inserting portfolio content at: {ex.StackTrace}");
+                return this.StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete("[Action]/{contentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> DeletePortfolioContent([FromRoute] int contentId)
+        {
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var deleteObjectCommand = new DeleteObjectCommand(user.UserID, contentId);
+                var awsDto = await this._awsService.DeletingAnObjectAsync(deleteObjectCommand);
+
+                if (awsDto)
+                    return this.Ok(true);
+                else
+                    return this.BadRequest(false);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError($"The error {ex.Message}, occurred while deleting portfolio content at: {ex.StackTrace}");
                 return this.StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

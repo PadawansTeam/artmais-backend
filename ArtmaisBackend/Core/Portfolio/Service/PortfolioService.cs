@@ -131,5 +131,29 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
             return publication;
         }
+
+        public void DeletePublication(PortfolioContentDto? portfolioContentDto, long userId)
+        {
+            var portfolioInfo = this._publicationRepository.GetPublicationByIdAndUserId(userId, portfolioContentDto.PublicationID);
+
+            if (portfolioInfo is null)
+                throw new ArgumentNullException();
+
+            this._mapper.Map(portfolioContentDto, portfolioInfo);
+
+            this._publicationRepository.Delete(portfolioInfo);
+        }
+
+        public void DeleteMedia(PortfolioContentDto? portfolioContentDto, long userId)
+        {
+            var mediaInfo = this._mediaRepository.GetMediaByIdAndUserId(userId, portfolioContentDto.MediaID);
+
+            if (mediaInfo is null)
+                throw new ArgumentNullException();
+
+            this._mapper.Map(portfolioContentDto, mediaInfo);
+
+            this._mediaRepository.Delete(mediaInfo);
+        }
     }
 }

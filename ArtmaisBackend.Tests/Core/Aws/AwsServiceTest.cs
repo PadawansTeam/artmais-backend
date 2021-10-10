@@ -4,6 +4,7 @@ using ArtmaisBackend.Core.Aws;
 using ArtmaisBackend.Core.Aws.Dto;
 using ArtmaisBackend.Core.Aws.Service;
 using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
 using FluentAssertions;
@@ -30,6 +31,7 @@ namespace ArtmaisBackend.Tests.Core.Aws
             #region Mocks
             var descriptionRequest = new AwsDto("UserPicture");
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockPortfolioService = new Mock<IPortfolioService>();
             var mockMapper = new Mock<IMapper>();
             var fileMock = new Mock<IFormFile>();
             var mockS3Client = new Mock<IAmazonS3>();
@@ -75,7 +77,7 @@ namespace ArtmaisBackend.Tests.Core.Aws
             mockS3Client.Setup(x => x.PutObjectAsync(putRequest, It.IsAny<CancellationToken>())).ReturnsAsync(putResponse);
             #endregion
 
-            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object);
+            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
 
             var result = await awsService.WritingAnObjectAsync(new UploadObjectCommand
             {
@@ -91,10 +93,11 @@ namespace ArtmaisBackend.Tests.Core.Aws
         public async Task WritingAnObjectAsyncShouldBeFalse()
         {
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockPortfolioService = new Mock<IPortfolioService>();
             var mockMapper = new Mock<IMapper>();
             var mockS3Client = new Mock<IAmazonS3>();
             var fileMock = new Mock<IFormFile>();
-            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object);
+            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
             var file = fileMock.Object;
             mockS3Client.Setup(x => x.PutObjectAsync(It.IsAny<PutObjectRequest>(), It.IsAny<CancellationToken>())).ThrowsAsync(new AmazonS3Exception(string.Empty));
 
@@ -115,6 +118,7 @@ namespace ArtmaisBackend.Tests.Core.Aws
         {
             #region Mocks
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockPortfolioService = new Mock<IPortfolioService>();
             var mockMapper = new Mock<IMapper>();
             var fileMock = new Mock<IFormFile>();
             var mockS3Client = new Mock<IAmazonS3>();
@@ -134,10 +138,10 @@ namespace ArtmaisBackend.Tests.Core.Aws
             fileMock.Setup(_ => _.ContentType).Returns(fileContent);
             var file = fileMock.Object;
 
-            var uploadObjectCommand = new UploadObjectCommandFactory(3, file, Channel.PROFILE).Create();
+            var uploadObjectCommand = UploadObjectCommandFactory.Create(3, file, Channel.PROFILE);
             #endregion
 
-            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object);
+            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
 
             var result = await awsService.UploadObjectAsync(uploadObjectCommand);
 
@@ -150,6 +154,7 @@ namespace ArtmaisBackend.Tests.Core.Aws
         {
             #region Mocks
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockPortfolioService = new Mock<IPortfolioService>();
             var mockMapper = new Mock<IMapper>();
             var fileMock = new Mock<IFormFile>();
             var mockS3Client = new Mock<IAmazonS3>();
@@ -169,10 +174,10 @@ namespace ArtmaisBackend.Tests.Core.Aws
             fileMock.Setup(_ => _.ContentType).Returns(fileContent);
             var file = fileMock.Object;
 
-            var uploadObjectCommand = new UploadObjectCommandFactory(3, file, Channel.PORTFOLIO).Create();
+            var uploadObjectCommand = UploadObjectCommandFactory.Create(3, file, Channel.PROFILE);
             #endregion
 
-            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object);
+            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
 
             var result = await awsService.UploadObjectAsync(uploadObjectCommand);
 
