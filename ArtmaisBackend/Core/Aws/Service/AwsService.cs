@@ -83,12 +83,14 @@ namespace ArtmaisBackend.Core.Aws.Service
             {
                 var portfolioContent = this._portfolioService.GetPublicationById(deleteObjectCommand.PortfolioId, deleteObjectCommand.UserId);
 
-                var keyName = portfolioContent.S3UrlMedia;
+                var keyName = portfolioContent.S3UrlMedia.Contains("https") ? 
+                    portfolioContent.S3UrlMedia.Substring(40) : portfolioContent.S3UrlMedia.Substring(39);
 
                 var deleteObjectRequest = new DeleteObjectRequest
                 {
                     BucketName = deleteObjectCommand.BucketName,
-                    Key = keyName
+                    Key = keyName,
+                    ExpectedBucketOwner = "772207159218"
                 };
 
                 await this._client.DeleteObjectAsync(deleteObjectRequest);
