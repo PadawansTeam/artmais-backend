@@ -90,7 +90,6 @@ namespace ArtmaisBackend.Core.Aws.Service
                 {
                     BucketName = deleteObjectCommand.BucketName,
                     Key = keyName,
-                    ExpectedBucketOwner = "772207159218"
                 };
 
                 await this._client.DeleteObjectAsync(deleteObjectRequest);
