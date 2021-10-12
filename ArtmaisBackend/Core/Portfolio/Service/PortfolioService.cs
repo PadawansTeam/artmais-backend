@@ -163,9 +163,6 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             if (commentRequest.PublicationID is null || commentRequest.Description is null)
                 throw new ArgumentNullException();
 
-            if (commentRequest.Description is null)
-                commentRequest.Description = string.Empty;
-
             this._commentRepository.Create(commentRequest, userId);
 
             return true;
