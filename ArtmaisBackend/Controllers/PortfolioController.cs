@@ -111,5 +111,24 @@ namespace ArtmaisBackend.Controllers
                 return this.UnprocessableEntity(new { message = ex.Message });
             }
         }
+
+        [HttpPost("[Action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<PortfolioContentDto> InsertComment(CommentRequest? commentRequest)
+        {
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                var result = this._portfolioService.InsertComment(commentRequest, user.UserID);
+                return this.Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
+        }
+
     }
 }

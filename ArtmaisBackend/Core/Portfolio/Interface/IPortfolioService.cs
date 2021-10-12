@@ -18,5 +18,7 @@ namespace ArtmaisBackend.Core.Portfolio.Interface
         void DeletePublication(PortfolioContentDto? portfolioContentDto, long userId);
 
         void DeleteMedia(PortfolioContentDto? portfolioContentDto, long userId);
+
+        bool InsertComment(CommentRequest? commentRequest, long userId);
     }
 }

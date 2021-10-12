@@ -17,6 +17,7 @@ namespace ArtmaisBackend.Infrastructure.Data
         public DbSet<Media> Media { get; set; }
         public DbSet<MediaType> MediaType { get; set; }
         public DbSet<Publication> Publication { get; set; }
+        public DbSet<Comment> Comment { get; set; }
     }
 }
 

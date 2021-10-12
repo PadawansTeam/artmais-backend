@@ -15,7 +15,6 @@ namespace ArtmaisBackend.Infrastructure.Repository
         }
 
         private readonly ArtplusContext _context;
-       
         public Media? GetMediaByIdAndUserId(long? userId, int? mediaId)
         {
             return this._context.Media.FirstOrDefault(publication => publication.UserID == userId && publication.MediaID == mediaId);
