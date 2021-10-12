@@ -82,8 +82,10 @@ namespace ArtmaisBackend.Core.Aws.Service
             try
             {
                 var portfolioContent = this._portfolioService.GetPublicationById(deleteObjectCommand.PortfolioId, deleteObjectCommand.UserId);
+                if (portfolioContent is null)
+                    throw new ArgumentNullException();
 
-                var keyName = portfolioContent.S3UrlMedia.Contains("https") ? 
+                var keyName = portfolioContent.S3UrlMedia.Contains("https") ?
                     portfolioContent.S3UrlMedia.Substring(40) : portfolioContent.S3UrlMedia.Substring(39);
 
                 var deleteObjectRequest = new DeleteObjectRequest

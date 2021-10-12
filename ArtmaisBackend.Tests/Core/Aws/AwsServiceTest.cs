@@ -2,8 +2,10 @@
 using Amazon.S3.Model;
 using ArtmaisBackend.Core.Aws;
 using ArtmaisBackend.Core.Aws.Dto;
+using ArtmaisBackend.Core.Aws.Request;
 using ArtmaisBackend.Core.Aws.Service;
 using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
@@ -183,6 +185,121 @@ namespace ArtmaisBackend.Tests.Core.Aws
 
             result.Content.Should().NotBeNull();
             result.Should().NotBeNull();
+        }
+
+        [Fact(DisplayName = "DeletingAnObjectAsync should be true with https and update database")]
+        public async Task DeletingAnObjectAsyncShouldNotBeTrueWithHttps()
+        {
+            #region Mocks
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockPortfolioService = new Mock<IPortfolioService>();
+            var mockMapper = new Mock<IMapper>();
+            var fileMock = new Mock<IFormFile>();
+            var mockS3Client = new Mock<IAmazonS3>();
+            var userId = 112;
+            var publicationId = 12;
+            var deleteObjectComand = new DeleteObjectCommand(userId, publicationId);
+            var portfolioContent = new PortfolioContentDto
+            {
+                UserID = 112,
+                PublicationID = 12,
+                MediaID = 1,
+                MediaTypeID = 2,
+                S3UrlMedia = "https:///bucket-artmais.s3.amazonaws.com/portfolio-contents/3/S3UrlMedia1.jpg",
+                Description = "Description1",
+                PublicationDate = new DateTime()
+            };
+            mockPortfolioService.Setup(p => p.GetPublicationById(It.IsAny<int>(), It.IsAny<long>())).Returns(portfolioContent);
+            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
+            #endregion
+
+            var result = await awsService.DeletingAnObjectAsync(deleteObjectComand);
+
+            result.Should().BeTrue();
+        }
+
+        [Fact(DisplayName = "DeletingAnObjectAsync should be true with http and update database")]
+        public async Task DeletingAnObjectAsyncShouldNotBeTrueWithHttp()
+        {
+            #region Mocks
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockPortfolioService = new Mock<IPortfolioService>();
+            var mockMapper = new Mock<IMapper>();
+            var fileMock = new Mock<IFormFile>();
+            var mockS3Client = new Mock<IAmazonS3>();
+            var userId = 112;
+            var publicationId = 12;
+            var deleteObjectComand = new DeleteObjectCommand(userId, publicationId);
+            var portfolioContent = new PortfolioContentDto
+            {
+                UserID = 112,
+                PublicationID = 12,
+                MediaID = 1,
+                MediaTypeID = 2,
+                S3UrlMedia = "http:///bucket-artmais.s3.amazonaws.com/portfolio-contents/3/S3UrlMedia1.jpg",
+                Description = "Description1",
+                PublicationDate = new DateTime()
+            };
+            mockPortfolioService.Setup(p => p.GetPublicationById(It.IsAny<int>(), It.IsAny<long>())).Returns(portfolioContent);
+            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
+            #endregion
+
+            var result = await awsService.DeletingAnObjectAsync(deleteObjectComand);
+
+            result.Should().BeTrue();
+        }
+
+        [Fact(DisplayName = "DeletingAnObjectAsync should be throw AmazonS3Exception")]
+        public async Task DeletingAnObjectAsyncShouldBeThrowAmazonS3Exception()
+        {
+            #region Mocks
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockPortfolioService = new Mock<IPortfolioService>();
+            var mockMapper = new Mock<IMapper>();
+            var fileMock = new Mock<IFormFile>();
+            var mockS3Client = new Mock<IAmazonS3>();
+            var portfolioContent = new PortfolioContentDto
+            {
+                UserID = 112,
+                PublicationID = 12,
+                MediaID = 1,
+                MediaTypeID = 2,
+                S3UrlMedia = "http:///bucket-artmais.s3.amazonaws.com/portfolio-contents/3/S3UrlMedia1.jpg",
+                Description = "Description1",
+                PublicationDate = new DateTime()
+            };
+            mockPortfolioService.Setup(p => p.GetPublicationById(It.IsAny<int>(), It.IsAny<long>())).Returns(portfolioContent);
+            mockS3Client.Setup(x => x.DeleteObjectAsync(It.IsAny<DeleteObjectRequest>(), It.IsAny<CancellationToken>())).ThrowsAsync(new AmazonS3Exception(string.Empty));
+            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
+            #endregion
+
+            Func<Task> result = async () =>
+            {
+                await awsService.DeletingAnObjectAsync(new DeleteObjectCommand(113, 12));
+            };
+            await result.Should().ThrowAsync<InvalidOperationException>().WithMessage("Error to connect to AWS Service");
+        }
+
+        [Fact(DisplayName = "DeletingAnObjectAsync should be throw Argument Null Exception")]
+        public async Task DeletingAnObjectAsyncShouldBeThrowArgumentNullException()
+        {
+            #region Mocks
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockPortfolioService = new Mock<IPortfolioService>();
+            var mockMapper = new Mock<IMapper>();
+            var fileMock = new Mock<IFormFile>();
+            var mockS3Client = new Mock<IAmazonS3>();
+
+            mockPortfolioService.Setup(p => p.GetPublicationById(It.IsAny<int>(), It.IsAny<long>())).Throws<ArgumentNullException>();
+            mockS3Client.Setup(x => x.DeleteObjectAsync(It.IsAny<DeleteObjectRequest>(), It.IsAny<CancellationToken>())).ThrowsAsync(new AmazonS3Exception(string.Empty));
+            var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
+            #endregion
+
+            Func<Task> result = async () =>
+            {
+                await awsService.DeletingAnObjectAsync(new DeleteObjectCommand(113, 12));
+            };
+            await result.Should().ThrowAsync<ArgumentNullException>();
         }
     }
 }
