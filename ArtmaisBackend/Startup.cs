@@ -140,6 +140,7 @@ namespace ArtmaisBackend
             services.AddScoped<IMediaRepository, MediaRepository>();
             services.AddScoped<IMediaTypeRepository, MediaTypeRepository>();
             services.AddScoped<IPublicationRepository, PublicationRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
 
             //SignIn
             services.AddScoped<ISignInService, SignInService>();

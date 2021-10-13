@@ -1,5 +1,4 @@
-﻿using ArtmaisBackend.Core.Aws.Interface;
-using ArtmaisBackend.Core.Contacts.Request;
+﻿using ArtmaisBackend.Core.Contacts.Request;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
 using ArtmaisBackend.Core.Users.Request;
@@ -10,7 +9,6 @@ using ArtmaisBackend.Util;
 using AutoMapper;
 using Microsoft.Extensions.Options;
 using System;
-using System.IO;
 
 namespace ArtmaisBackend.Core.Users.Service
 {

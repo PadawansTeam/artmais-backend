@@ -11,17 +11,19 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 {
     public class PortfolioService : IPortfolioService
     {
-        public PortfolioService(IMediaRepository mediaRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, IMapper mapper)
+        public PortfolioService(IMediaRepository mediaRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, ICommentRepository commentRepository, IMapper mapper)
         {
             this._mediaRepository = mediaRepository;
             this._mediaTypeRepository = mediaTypeRepository;
             this._publicationRepository = publicationRepository;
+            this._commentRepository = commentRepository;
             this._mapper = mapper;
         }
 
         private readonly IMediaRepository _mediaRepository;
         private readonly IMediaTypeRepository _mediaTypeRepository;
         private readonly IPublicationRepository _publicationRepository;
+        private readonly ICommentRepository _commentRepository;
         private readonly IMapper _mapper;
 
         public PortfolioContentListDto GetLoggedUserPortfolioById(long? userId)
@@ -154,6 +156,16 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             this._mapper.Map(portfolioContentDto, mediaInfo);
 
             this._mediaRepository.Delete(mediaInfo);
+        }
+
+        public bool InsertComment(CommentRequest? commentRequest, long userId)
+        {
+            if (commentRequest.PublicationID is null || commentRequest.Description is null)
+                throw new ArgumentNullException();
+
+            this._commentRepository.Create(commentRequest, userId);
+
+            return true;
         }
     }
 }
