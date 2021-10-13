@@ -565,7 +565,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             mockPuclicationRepository.Setup(x => x.Create(It.IsAny<PortfolioRequest>(), It.IsAny<long>(), It.IsAny<Media>())).Returns(publication);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object,  mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
             var result = portfolioService.InsertPortfolioContent(portfolioRequest, userId, mediaTypeId);
 
             result.Should().BeEquivalentTo(expectedPortfolioContentDto);
@@ -633,7 +633,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             result.Description.Should().BeEmpty();
         }
 
-        [Fact(DisplayName = "InsertPortfolioContent should be returns throw when portfolio request is null")]
+        [Fact(DisplayName = "Insert Portfolio Content should be returns throw when portfolio request is null")]
         public void InsertPortfolioContentShouldBeThrowWhenUserIdIsNull()
         {
             #region Mocks
@@ -878,6 +878,73 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
 
             Action act = () => portfolioService.GetPublicationById(publicationId, userId);
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
+        }
+
+        [Fact(DisplayName = "Insert Comment should be returns PortfolioContentDto")]
+        public void InsertCommentShouldBeReturnsTrue()
+        {
+            #region Mocks
+            var userId = 112;
+            var commentRequest = new CommentRequest
+            {
+                PublicationID = 12,
+                Description = "commnet"
+            };
+            var mockMediaRepository = new Mock<IMediaRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
+            var mockPuclicationRepository = new Mock<IPublicationRepository>();
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockMapper = new Mock<IMapper>();
+
+            mockCommentRepository.Setup(x => x.Create(commentRequest, userId));
+            #endregion
+
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var result = portfolioService.InsertComment(commentRequest, userId);
+
+            result.Should().BeTrue();
+        }
+
+        [Fact(DisplayName = "Insert Comment should be returns throw when publication id is null")]
+        public void InsertCommentShouldBeThrowWhenPublicationIdIsNull()
+        {
+            #region Mocks
+            var commentRequest = new CommentRequest 
+            {
+                Description = "comment"
+            };
+            var mockMediaRepository = new Mock<IMediaRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
+            var mockPuclicationRepository = new Mock<IPublicationRepository>();
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockMapper = new Mock<IMapper>();
+            #endregion
+
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+
+            Action act = () => portfolioService.InsertComment(commentRequest, It.IsAny<long>());
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
+        }
+
+        [Fact(DisplayName = "Insert Comment should be returns throw when description is null")]
+        public void InsertCommentShouldBeThrowWhenDescriptionIsNull()
+        {
+            #region Mocks
+            var commentRequest = new CommentRequest
+            {
+                PublicationID = 12
+            };
+            var mockMediaRepository = new Mock<IMediaRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
+            var mockPuclicationRepository = new Mock<IPublicationRepository>();
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockMapper = new Mock<IMapper>();
+            #endregion
+
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+
+            Action act = () => portfolioService.InsertComment(commentRequest, It.IsAny<long>());
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
     }
