@@ -26,7 +26,7 @@ namespace ArtmaisBackend
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddServices(Configuration)
+            services.AddExternalServices(Configuration)
                 .AddDatabaseContext(Configuration)
                 .AddSwaggerGenService()
                 .AddSecuritiesServices(Configuration)

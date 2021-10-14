@@ -30,9 +30,9 @@ using System.Diagnostics.CodeAnalysis;
 namespace ArtmaisBackend.Infrastructure.Extensions.Services
 {
     [ExcludeFromCodeCoverage]
-    public static class ServicesExtension
+    public static class ExternalServicesExtension
     {
-        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddExternalServices(this IServiceCollection services, IConfiguration configuration)
         {
             var awsConfigRegion = configuration.GetSection("AWSConfig:Region").Value;
 
@@ -52,6 +52,7 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
             services.AddScoped<IAwsService, AwsService>();
             services.AddAWSService<IAmazonS3>(new AWSOptions { Region = RegionEndpoint.GetBySystemName(awsConfigRegion) });
             services.Configure<SocialMediaConfiguration>(configuration.GetSection("SocialMediaShareLink"));
+            services.Configure<DbServiceConfiguration>(configuration.GetSection("DbServiceConfig"));
 
             return services;
         }
