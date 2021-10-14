@@ -177,5 +177,24 @@ namespace ArtmaisBackend.Controllers
                 return this.UnprocessableEntity(new { message = ex.Message });
             }
         }
+
+        [HttpGet("[Action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<RoleDto> GetUserRole()
+        {
+            try
+            {
+                var user = _jwtToken.ReadToken(User);
+                var roleDto = new RoleDto { Role = user.Role };
+
+                return Ok(roleDto);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
     }
 }
