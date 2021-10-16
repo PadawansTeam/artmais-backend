@@ -7,7 +7,7 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
 {
     public interface ICommentRepository
     {
-        Task<List<Comment>> GetAllCommentsByPublicationId(int? publicationId);
+        Task<List<Comment?>> GetAllCommentsByPublicationId(int? publicationId);
         void Create(CommentRequest commentRequest, long userId);
     }
 }

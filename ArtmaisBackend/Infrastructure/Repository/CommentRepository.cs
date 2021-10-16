@@ -19,10 +19,19 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public async Task<List<Comment>> GetAllCommentsByPublicationId(int? publicationId)
+        public async Task<List<Comment?>> GetAllCommentsByPublicationId(int? publicationId) 
         {
-            return await _context.Comment.Where(p => p.PublicationID == publicationId).ToListAsync();
+            var listComments = await (from comments in this._context.Comment
+                         where comments.PublicationID.Equals(publicationId)
+                         select new Comment
+                         {
+                             Description = comments.Description,
+                             CommentDate = comments.CommentDate
+                         }).ToListAsync();
+
+            return listComments;
         }
+
 
         public void Create(CommentRequest commentRequest, long userId)
         {
