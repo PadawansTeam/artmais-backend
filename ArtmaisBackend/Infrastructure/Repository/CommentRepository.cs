@@ -1,4 +1,5 @@
 ﻿using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Request;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
@@ -19,19 +20,21 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public async Task<List<Comment?>> GetAllCommentsByPublicationId(int? publicationId) 
+        public async Task<List<CommentDto?>> GetAllCommentsByPublicationId(int? publicationId)
         {
             var listComments = await (from comments in this._context.Comment
-                         where comments.PublicationID.Equals(publicationId)
-                         select new Comment
-                         {
-                             Description = comments.Description,
-                             CommentDate = comments.CommentDate
-                         }).ToListAsync();
+                                      join user in this._context.User on comments.UserID equals user.UserID
+                                      where comments.PublicationID.Equals(publicationId)
+                                      select new CommentDto
+                                      {
+                                          Name = user.Name,
+                                          Username = user.Username,
+                                          Description = comments.Description,
+                                          CommentDate = comments.CommentDate
+                                      }).ToListAsync();
 
             return listComments;
         }
-
 
         public void Create(CommentRequest commentRequest, long userId)
         {

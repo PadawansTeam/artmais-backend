@@ -5,10 +5,10 @@ namespace ArtmaisBackend.Core.Portfolio.Dto
 {
     public class PublicationCommentsDto
     {
-        public List<Comment?> Comments { get; set; }
+        public List<CommentDto?> Comments { get; set; }
         public int? CommentsAmount { get; set; }
 
-        public PublicationCommentsDto(List<Comment?> comments, int? commentsAmount)
+        public PublicationCommentsDto(List<CommentDto?> comments, int? commentsAmount)
         {
             Comments = comments;
             CommentsAmount = commentsAmount;
