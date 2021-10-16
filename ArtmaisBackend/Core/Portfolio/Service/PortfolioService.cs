@@ -9,6 +9,7 @@ using AutoMapper;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Portfolio.Service
 {
@@ -171,6 +172,19 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             this._commentRepository.Create(commentRequest, userId);
 
             return true;
+        }
+
+        public async Task<PublicationCommentsDto?> GetAllCommentsByPublicationId(int? publicationId)
+        {
+            if (publicationId is null)
+                throw new ArgumentNullException();
+
+            var comments = await this._commentRepository.GetAllCommentsByPublicationId(publicationId);
+            var commentsAmount = comments.Count();
+
+            var publicationCommentsDto = new PublicationCommentsDto(comments, commentsAmount);
+
+            return publicationCommentsDto;
         }
 
         public PublicationShareLinkDto? GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId)

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace ArtmaisBackend.Tests.Core.Portfolio
@@ -927,7 +928,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
         public void InsertCommentShouldBeThrowWhenPublicationIdIsNull()
         {
             #region Mocks
-            var commentRequest = new CommentRequest 
+            var commentRequest = new CommentRequest
             {
                 Description = "comment"
             };
@@ -965,6 +966,106 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
 
             Action act = () => portfolioService.InsertComment(commentRequest, It.IsAny<long>());
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
+        }
+
+        [Fact(DisplayName = "Get All Comments By Publication Id should be returns publication comments dto")]
+        public async Task GetAllCommentsByPublicationIdShouldBeReturnsPublicationCommentsDto()
+        {
+            #region Mocks
+            var publicationId = 2;
+            var commentDto = new List<CommentDto>
+            {
+               new CommentDto
+               {
+                   Name = "Name1",
+                   Username = "UserName1",
+                   Description = "Description1",
+                   CommentDate = DateTime.Now
+               },
+               new CommentDto
+               {
+                   Name = "Name2",
+                   Username = "UserName2",
+                   Description = "Description2",
+                   CommentDate = DateTime.Now
+               },
+               new CommentDto
+               {
+                   Name = "Name3",
+                   Username = "UserName3",
+                   Description = "Description3",
+                   CommentDate = DateTime.Now
+               }
+
+            };
+            var expectResult = new PublicationCommentsDto
+            {
+                Comments = commentDto,
+                CommentsAmount = commentDto.Count
+            };
+
+            var mockMediaRepository = new Mock<IMediaRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
+            var mockPuclicationRepository = new Mock<IPublicationRepository>();
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+            var mockMapper = new Mock<IMapper>();
+            mockCommentRepository.Setup(x => x.GetAllCommentsByPublicationId(publicationId)).ReturnsAsync(commentDto);
+            #endregion
+
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
+            var result = await portfolioService.GetAllCommentsByPublicationId(publicationId);
+
+            result.Should().BeEquivalentTo(expectResult);
+        }
+
+        [Fact(DisplayName = "Get All Comments By Publication Id should be returns empty object")]
+        public async Task GetAllCommentsByPublicationIdShouldBeReturnsEmptyObject()
+        {
+            #region Mocks
+            var publicationId = 2;
+            var commentDto = new List<CommentDto> { };
+            var expectResult = new PublicationCommentsDto
+            {
+                Comments = commentDto,
+                CommentsAmount = commentDto.Count
+            };
+            var mockMediaRepository = new Mock<IMediaRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
+            var mockPuclicationRepository = new Mock<IPublicationRepository>();
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+            var mockMapper = new Mock<IMapper>();
+            mockCommentRepository.Setup(x => x.GetAllCommentsByPublicationId(publicationId)).ReturnsAsync(commentDto);
+            #endregion
+
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
+            var result = await portfolioService.GetAllCommentsByPublicationId(publicationId);
+
+            result.Should().BeEquivalentTo(expectResult);
+        }
+
+        [Fact(DisplayName = "Get All Comments By Publication Id should be returns throw when publication id is null")]
+        public async Task GetAllCommentsByPublicationIdShouldBeThrowWhenPublicationIdIsNull()
+        {
+            #region Mocks
+            int? publicationId = null;
+            var mockMediaRepository = new Mock<IMediaRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
+            var mockPuclicationRepository = new Mock<IPublicationRepository>();
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+            var mockMapper = new Mock<IMapper>();
+            mockCommentRepository.Setup(x => x.GetAllCommentsByPublicationId(It.IsAny<int>())).Throws<ArgumentNullException>();
+            #endregion
+
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
+
+            Func<Task> result = async () =>
+            {
+                await portfolioService.GetAllCommentsByPublicationId(publicationId);
+            };
+            await result.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "Get Publication Share Link By Publication Id And User Id should be returns PublicationShareLinkDto")]
