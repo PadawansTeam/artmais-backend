@@ -1,5 +1,4 @@
-﻿using ArtmaisBackend.Core.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ArtmaisBackend.Core.Portfolio.Dto
 {
