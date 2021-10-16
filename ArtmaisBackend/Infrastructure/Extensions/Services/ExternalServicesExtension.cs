@@ -7,6 +7,7 @@ using ArtmaisBackend.Core.Aws.Interface;
 using ArtmaisBackend.Core.Aws.Service;
 using ArtmaisBackend.Core.Contact.Service;
 using ArtmaisBackend.Core.Contacts.Interface;
+using ArtmaisBackend.Core.Dashboard.Services;
 using ArtmaisBackend.Core.OAuth.Google.Interface;
 using ArtmaisBackend.Core.OAuth.Google.Mediator;
 using ArtmaisBackend.Core.Portfolio.Interface;
@@ -37,6 +38,7 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
             var awsConfigRegion = configuration.GetSection("AWSConfig:Region").Value;
 
             services.AddHostedService<RecomendationService>();
+            
             services.AddScoped<ISignInService, SignInService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IInterestMediator, InterestMediator>();
@@ -50,9 +52,14 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
             services.AddScoped<IGoogleMediator, GoogleMediator>();
             services.AddScoped<IPortfolioService, PortfolioService>();
             services.AddScoped<IAwsService, AwsService>();
+            services.AddScoped<IDashboardService, DashboardService>();
+            
             services.AddAWSService<IAmazonS3>(new AWSOptions { Region = RegionEndpoint.GetBySystemName(awsConfigRegion) });
+            
             services.Configure<SocialMediaConfiguration>(configuration.GetSection("SocialMediaShareLink"));
             services.Configure<DbServiceConfiguration>(configuration.GetSection("DbServiceConfig"));
+            
+            services.AddHttpClient();
 
             return services;
         }
