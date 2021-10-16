@@ -33,7 +33,7 @@ namespace ArtmaisBackend.Controllers
             {
                 var user = _jwtTokenService.ReadToken(User);
 
-                return await _dashboardService.GetAsync(user.UserID);
+                return Ok(await _dashboardService.GetAsync(user.UserID));
             }
             catch(Exception ex)
             {
