@@ -135,8 +135,7 @@ namespace ArtmaisBackend.Controllers
             }
         }
 
-
-        [HttpPost("[Action]")]
+        [HttpGet("[Action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -157,6 +156,5 @@ namespace ArtmaisBackend.Controllers
                 return this.StatusCode(500, new { message = ex.Message });
             }
         }
-
     }
 }

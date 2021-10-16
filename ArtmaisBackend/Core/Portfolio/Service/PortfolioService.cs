@@ -169,7 +169,6 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             return true;
         }
 
-
         public async Task<PublicationCommentsDto?> GetAllCommentsByPublicationId(int? publicationId)
         {
             if (publicationId is null)
