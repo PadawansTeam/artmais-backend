@@ -2,9 +2,11 @@
 using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Request;
 using ArtmaisBackend.Core.Portfolio.Service;
+using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -203,11 +205,12 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(firstList);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
             var result = portfolioService.GetLoggedUserPortfolioById(userId);
 
             result.Should().BeEquivalentTo(expectedList);
@@ -233,11 +236,12 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(firstList);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
             var result = portfolioService.GetLoggedUserPortfolioById(userId);
 
             result.Should().BeEquivalentTo(expectedList);
@@ -254,10 +258,11 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(expectedList);
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
 
             Action act = () => portfolioService.GetLoggedUserPortfolioById(userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -451,11 +456,12 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(firstList);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
             var result = portfolioService.GetPortfolioByUserId(userId);
 
             result.Should().BeEquivalentTo(expectedList);
@@ -481,11 +487,12 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(firstList);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
             var result = portfolioService.GetPortfolioByUserId(userId);
 
             result.Should().BeEquivalentTo(expectedList);
@@ -501,10 +508,11 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<long>())).Returns(expectedList);
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
 
             Action act = () => portfolioService.GetPortfolioByUserId(userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -560,13 +568,14 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockMediaTypeRepository.Setup(x => x.GetMediaTypeById(It.IsAny<int>())).Returns(mediaType);
             mockMediaRepository.Setup(x => x.Create(It.IsAny<PortfolioRequest>(), It.IsAny<long>(), It.IsAny<MediaType>())).Returns(media);
             mockPuclicationRepository.Setup(x => x.Create(It.IsAny<PortfolioRequest>(), It.IsAny<long>(), It.IsAny<Media>())).Returns(publication);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
             var result = portfolioService.InsertPortfolioContent(portfolioRequest, userId, mediaTypeId);
 
             result.Should().BeEquivalentTo(expectedPortfolioContentDto);
@@ -621,13 +630,14 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockMediaTypeRepository.Setup(x => x.GetMediaTypeById(It.IsAny<int>())).Returns(mediaType);
             mockMediaRepository.Setup(x => x.Create(It.IsAny<PortfolioRequest>(), It.IsAny<long>(), It.IsAny<MediaType>())).Returns(media);
             mockPuclicationRepository.Setup(x => x.Create(It.IsAny<PortfolioRequest>(), It.IsAny<long>(), It.IsAny<Media>())).Returns(publication);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
             var result = portfolioService.InsertPortfolioContent(portfolioRequest, userId, mediaTypeId);
 
             result.Should().BeEquivalentTo(expectedPortfolioContentDto);
@@ -650,13 +660,14 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockMediaTypeRepository.Setup(x => x.GetMediaTypeById(It.IsAny<int>())).Returns(mediaType);
             mockMediaRepository.Setup(x => x.Create(It.IsAny<PortfolioRequest>(), It.IsAny<long>(), It.IsAny<MediaType>())).Returns(media);
             mockPuclicationRepository.Setup(x => x.Create(It.IsAny<PortfolioRequest>(), It.IsAny<long>(), It.IsAny<Media>())).Returns(publication);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
 
             Action act = () => portfolioService.InsertPortfolioContent(portfolioRequest, userId, mediaTypeId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -693,12 +704,13 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockPuclicationRepository.Setup(x => x.GetPublicationByIdAndUserId(It.IsAny<long>(), It.IsAny<int>())).Returns(publication);
             mockMapper.Setup(m => m.Map(portfolioDescriptionRequest, publication)).Returns(updatedPublication);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
             var result = portfolioService.UpdateDescription(portfolioDescriptionRequest, userId);
 
             result.Should().BeTrue();
@@ -716,10 +728,11 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockPuclicationRepository.Setup(x => x.GetPublicationByIdAndUserId(It.IsAny<long>(), It.IsAny<int>())).Returns(expectedPublication);
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
 
             Action act = () => portfolioService.UpdateDescription(portfolioDescriptionRequest, userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -788,11 +801,12 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(userId)).Returns(portfolioContent);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
             var result = portfolioService.GetPublicationById(publicationId, userId);
 
             result.Should().BeEquivalentTo(expectedPublication);
@@ -851,11 +865,12 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<int>())).Returns(portfolioContent);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
 
             Action act = () => portfolioService.GetPublicationById(publicationId, userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -872,11 +887,12 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockPuclicationRepository.Setup(x => x.GetAllPublicationsByUserId(It.IsAny<int>())).Throws<ArgumentNullException>();
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
 
             Action act = () => portfolioService.GetPublicationById(publicationId, userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -896,12 +912,13 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
 
             mockCommentRepository.Setup(x => x.Create(commentRequest, userId));
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
             var result = portfolioService.InsertComment(commentRequest, userId);
 
             result.Should().BeTrue();
@@ -919,10 +936,11 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
 
             Action act = () => portfolioService.InsertComment(commentRequest, It.IsAny<long>());
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -940,10 +958,11 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
 
             Action act = () => portfolioService.InsertComment(commentRequest, It.IsAny<long>());
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -989,11 +1008,12 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockCommentRepository.Setup(x => x.GetAllCommentsByPublicationId(publicationId)).ReturnsAsync(commentDto);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
             var result = await portfolioService.GetAllCommentsByPublicationId(publicationId);
 
             result.Should().BeEquivalentTo(expectResult);
@@ -1014,11 +1034,12 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockCommentRepository.Setup(x => x.GetAllCommentsByPublicationId(publicationId)).ReturnsAsync(commentDto);
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
             var result = await portfolioService.GetAllCommentsByPublicationId(publicationId);
 
             result.Should().BeEquivalentTo(expectResult);
@@ -1033,11 +1054,12 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPuclicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockMapper = new Mock<IMapper>();
             mockCommentRepository.Setup(x => x.GetAllCommentsByPublicationId(It.IsAny<int>())).Throws<ArgumentNullException>();
             #endregion
 
-            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockMapper.Object);
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
 
             Func<Task> result = async () =>
             {

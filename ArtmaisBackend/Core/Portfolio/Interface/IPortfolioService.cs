@@ -23,5 +23,7 @@ namespace ArtmaisBackend.Core.Portfolio.Interface
         bool InsertComment(CommentRequest? commentRequest, long userId);
 
         Task<PublicationCommentsDto?> GetAllCommentsByPublicationId(int? publicationId);
+
+        PublicationShareLinkDto? GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId);
     }
 }

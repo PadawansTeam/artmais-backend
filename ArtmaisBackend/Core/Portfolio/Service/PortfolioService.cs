@@ -1,9 +1,12 @@
 ﻿using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Core.Portfolio.Request;
+using ArtmaisBackend.Infrastructure;
+using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using ArtmaisBackend.Util.File;
 using AutoMapper;
+using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,12 +15,13 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 {
     public class PortfolioService : IPortfolioService
     {
-        public PortfolioService(IMediaRepository mediaRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, ICommentRepository commentRepository, IMapper mapper)
+        public PortfolioService(IMediaRepository mediaRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, ICommentRepository commentRepository, IOptions<SocialMediaConfiguration> options, IMapper mapper)
         {
             this._mediaRepository = mediaRepository;
             this._mediaTypeRepository = mediaTypeRepository;
             this._publicationRepository = publicationRepository;
             this._commentRepository = commentRepository;
+            this._socialMediaConfiguration = options.Value;
             this._mapper = mapper;
         }
 
@@ -25,6 +29,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
         private readonly IMediaTypeRepository _mediaTypeRepository;
         private readonly IPublicationRepository _publicationRepository;
         private readonly ICommentRepository _commentRepository;
+        private readonly SocialMediaConfiguration _socialMediaConfiguration;
         private readonly IMapper _mapper;
 
         public PortfolioContentListDto GetLoggedUserPortfolioById(long? userId)
@@ -181,5 +186,20 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
             return publicationCommentsDto;
         }
+
+        public PublicationShareLinkDto? GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId)
+        {
+            if (publicationId is null || userId is null)
+                throw new ArgumentNullException();
+
+            var publicationShareLinkDto = new PublicationShareLinkDto
+            {
+                Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{userId}/publication/{publicationId}{ShareLinkMessages.MessageShareComment}",
+                Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{userId}/publication/{publicationId}{ShareLinkMessages.MessageShareComment}",
+                Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}?text={this._socialMediaConfiguration.ArtMais}{userId}/publication/{publicationId}{ShareLinkMessages.MessageShareComment}"
+            };
+            return publicationShareLinkDto;
+        }
+
     }
 }
