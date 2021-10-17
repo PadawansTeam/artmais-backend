@@ -297,5 +297,65 @@ namespace ArtmaisBackend.Tests.Core.Publications
             Action act = () => publicationService.DeleteLike(null, It.IsAny<long>());
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
+
+        [Fact(DisplayName = "Get Is Liked Publication should be true")]
+        public void GetIsLikedPublicationShouldBeTrue()
+        {
+            #region Mocks
+            var publicationId = 122;
+            var userId = 12;
+            var expectResult = new Like
+            {
+                LikeID = 1,
+                UserID = userId,
+                PublicationID = publicationId,
+                LikeDate = DateTime.Now
+            };
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockLikeRepository = new Mock<ILikeRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+            mockLikeRepository.Setup(x => x.GetLikeByPublicationIdAndUserId(publicationId, userId)).Returns(expectResult);
+            #endregion
+
+            var publicationService = new PublicationService(mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var result = publicationService.GetIsLikedPublication(publicationId, userId);
+
+            result.Should().BeTrue();
+        }
+
+        [Fact(DisplayName = "Get Is Liked Publication should be false")]
+        public void GetIsLikedPublicationShouldBeFalse()
+        {
+            #region Mocks
+            var publicationId = 122;
+            var userId = 12;
+            Like expectResult = null;
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockLikeRepository = new Mock<ILikeRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+            mockLikeRepository.Setup(x => x.GetLikeByPublicationIdAndUserId(publicationId, userId)).Returns(expectResult);
+            #endregion
+
+            var publicationService = new PublicationService(mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var result = publicationService.GetIsLikedPublication(publicationId, userId);
+
+            result.Should().BeFalse();
+        }
+
+        [Fact(DisplayName = "Get Is Liked Publication should be returns throw when publication id is null")]
+        public void GetIsLikedPublicationShouldBeThrowWhenPublicationIdIsNull()
+        {
+            #region Mocks
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockLikeRepository = new Mock<ILikeRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+            mockLikeRepository.Setup(x => x.GetLikeByPublicationIdAndUserId(It.IsAny<int>(), It.IsAny<long>())).Throws<ArgumentNullException>();
+            #endregion
+
+            var publicationService = new PublicationService(mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+
+            Action act = () => publicationService.GetIsLikedPublication(null, It.IsAny<long>());
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
+        }
     }
 }
