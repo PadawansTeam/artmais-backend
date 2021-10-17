@@ -1,4 +1,4 @@
-﻿namespace ArtmaisBackend.Core.Portfolio.Dto
+﻿namespace ArtmaisBackend.Core.Publications.Dto
 {
     public class PublicationShareLinkDto
     {

@@ -5,7 +5,6 @@ using ArtmaisBackend.Core.SignIn.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Controllers
 {
@@ -106,67 +105,6 @@ namespace ArtmaisBackend.Controllers
                 var result = this._portfolioService.GetPublicationById(publicationId, userId);
                 return this.Ok(result);
 
-            }
-            catch (ArgumentNullException ex)
-            {
-                return this.UnprocessableEntity(new { message = ex.Message });
-            }
-        }
-
-        [HttpPost("[Action]")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult InsertComment(CommentRequest? commentRequest)
-        {
-            try
-            {
-                var user = this._jwtToken.ReadToken(this.User);
-                this._portfolioService.InsertComment(commentRequest, user.UserID);
-                return this.Ok();
-            }
-            catch (ArgumentNullException ex)
-            {
-                return this.UnprocessableEntity(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return this.StatusCode(500, new { message = ex.Message });
-            }
-        }
-
-        [HttpGet("[Action]")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<PublicationCommentsDto?>> GetAllCommentsByPublicationId(int? publicationId)
-        {
-            try
-            {
-                var user = this._jwtToken.ReadToken(this.User);
-                var comments = await this._portfolioService.GetAllCommentsByPublicationId(publicationId);
-                return this.Ok(comments);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return this.UnprocessableEntity(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return this.StatusCode(500, new { message = ex.Message });
-            }
-        }
-        [HttpGet("[Action]")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<PublicationShareLinkDto> GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId)
-        {
-            try
-            {
-                var result = this._portfolioService.GetPublicationShareLinkByPublicationIdAndUserId(userId, publicationId);
-
-                return this.Ok(result);
             }
             catch (ArgumentNullException ex)
             {

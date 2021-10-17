@@ -1,4 +1,4 @@
-﻿namespace ArtmaisBackend.Core.Portfolio.Request
+﻿namespace ArtmaisBackend.Core.Publications.Request
 {
     public class CommentRequest
     {

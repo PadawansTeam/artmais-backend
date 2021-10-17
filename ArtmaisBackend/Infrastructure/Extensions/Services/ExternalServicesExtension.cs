@@ -27,6 +27,8 @@ using ArtmaisBackend.Services.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
+using ArtmaisBackend.Core.Publications.Interface;
+using ArtmaisBackend.Core.Publications.Service;
 
 namespace ArtmaisBackend.Infrastructure.Extensions.Services
 {
@@ -53,6 +55,7 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
             services.AddScoped<IPortfolioService, PortfolioService>();
             services.AddScoped<IAwsService, AwsService>();
             services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<IPublicationService, PublicationService>();
             
             services.AddAWSService<IAmazonS3>(new AWSOptions { Region = RegionEndpoint.GetBySystemName(awsConfigRegion) });
             

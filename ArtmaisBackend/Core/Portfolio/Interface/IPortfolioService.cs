@@ -1,6 +1,5 @@
 ﻿using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Request;
-using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Portfolio.Interface
 {
@@ -12,18 +11,12 @@ namespace ArtmaisBackend.Core.Portfolio.Interface
 
         PortfolioContentDto? InsertPortfolioContent(PortfolioRequest? portfolioRequest, long userId, int mediaTypeId);
 
-        PortfolioContentDto GetPublicationById(int? publicationId, long userId);
-
         bool UpdateDescription(PortfolioDescriptionRequest? portfolioDescriptionRequest, long userId);
+
+        PortfolioContentDto GetPublicationById(int? publicationId, long userId);
 
         void DeletePublication(PortfolioContentDto? portfolioContentDto, long userId);
 
         void DeleteMedia(PortfolioContentDto? portfolioContentDto, long userId);
-
-        bool InsertComment(CommentRequest? commentRequest, long userId);
-
-        Task<PublicationCommentsDto?> GetAllCommentsByPublicationId(int? publicationId);
-
-        PublicationShareLinkDto? GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId);
     }
 }

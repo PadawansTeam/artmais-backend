@@ -1,6 +1,6 @@
 ﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Portfolio.Dto;
-using ArtmaisBackend.Core.Portfolio.Request;
+using ArtmaisBackend.Core.Publications.Dto;
+using ArtmaisBackend.Core.Publications.Request;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
