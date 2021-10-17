@@ -4,7 +4,6 @@ using ArtmaisBackend.Core.Publications.Request;
 using ArtmaisBackend.Infrastructure;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
-using AutoMapper;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
@@ -67,7 +66,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             if (publicationId is null)
                 throw new ArgumentNullException();
 
-            await this._likeRepository.Create(publicationId, userId);
+            await _likeRepository.Create(publicationId, userId);
 
             return true;
         }
@@ -82,9 +81,23 @@ namespace ArtmaisBackend.Core.Publications.Service
             if (likeInfo is null)
                 throw new ArgumentNullException();
 
-            this._likeRepository.Delete(likeInfo);
+            _likeRepository.Delete(likeInfo);
 
             return true;
         }
+
+        public bool GetIsLikedPublication(int? publicationId, long userId)
+        {
+            if (publicationId is null)
+                throw new ArgumentNullException();
+
+            var isLiked = _likeRepository.GetLikeByPublicationIdAndUserId(publicationId, userId);
+
+            if (isLiked is null)
+                return false;
+
+            return true;
+        }
+
     }
 }
