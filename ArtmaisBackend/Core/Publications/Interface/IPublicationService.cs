@@ -15,7 +15,5 @@ namespace ArtmaisBackend.Core.Publications.Interface
         Task<bool> InsertLike(int? publicationId, long userId);
 
         bool DeleteLike(int? publicationId, long userId);
-
-        bool GetIsLikedPublication(int? publicationId, long userId);
     }
 }

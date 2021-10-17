@@ -127,27 +127,5 @@ namespace ArtmaisBackend.Controllers
                 return this.StatusCode(500, new { message = ex.Message });
             }
         }
-
-        [HttpGet("[Action]")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult GetIsLikedPublication(int publicationId)
-        {
-            try
-            {
-                var user = this._jwtToken.ReadToken(this.User);
-                var isLiked = this._publicationService.GetIsLikedPublication(publicationId, user.UserID);
-                return this.Ok(isLiked);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return this.UnprocessableEntity(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return this.StatusCode(500, new { message = ex.Message });
-            }
-        }
     }
 }

@@ -86,18 +86,5 @@ namespace ArtmaisBackend.Core.Publications.Service
 
             return true;
         }
-
-        public bool GetIsLikedPublication(int? publicationId, long userId)
-        {
-            if (publicationId is null)
-                throw new ArgumentNullException();
-
-            var isLiked = _likeRepository.GetLikeByPublicationIdAndUserId(publicationId, userId);
-
-            if (isLiked is null)
-               return false;
-
-            return true;
-        }
     }
 }
