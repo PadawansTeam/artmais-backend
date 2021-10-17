@@ -869,6 +869,5 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             Action act = () => portfolioService.GetPublicationById(publicationId, userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
-
     }
 }

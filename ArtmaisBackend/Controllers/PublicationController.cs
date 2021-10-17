@@ -83,5 +83,49 @@ namespace ArtmaisBackend.Controllers
                 return this.UnprocessableEntity(new { message = ex.Message });
             }
         }
+
+        [HttpPost("[Action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult InsertLike(int publicationId)
+        {
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                this._publicationService.InsertLike(publicationId, user.UserID);
+                return this.Ok();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("[Action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult DeleteLike(int publicationId)
+        {
+            try
+            {
+                var user = this._jwtToken.ReadToken(this.User);
+                this._publicationService.DeleteLike(publicationId, user.UserID);
+                return this.Ok();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return this.UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(500, new { message = ex.Message });
+            }
+        }
     }
 }
