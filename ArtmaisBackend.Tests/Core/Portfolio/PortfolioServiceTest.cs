@@ -1067,5 +1067,68 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             };
             await result.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
+
+        [Fact(DisplayName = "Get Publication Share Link By Publication Id And User Id should be returns PublicationShareLinkDto")]
+        public void GetPublicationShareLinkByPublicationIdAndUserIdShouldBeReturnsShareLinkDto()
+        {
+            var mockMediaRepository = new Mock<IMediaRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
+            var mockPuclicationRepository = new Mock<IPublicationRepository>();
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+            var mockMapper = new Mock<IMapper>();
+
+            mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration
+            {
+                Facebook = "https://www.facebook.com/sharer/sharer.php?u=",
+                Twitter = "https://twitter.com/intent/tweet?text=",
+                Whatsapp = "https://wa.me/",
+                ArtMais = "https://artmais-frontend.herokuapp.com/artista/"
+            }
+            );
+
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
+            var result = portfolioService.GetPublicationShareLinkByPublicationIdAndUserId(3, 12);
+
+            result.Twitter.Should().BeEquivalentTo("https://twitter.com/intent/tweet?text=https://artmais-frontend.herokuapp.com/artista/3/publication/12%20Olhá%20só%20que%20publicação%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
+            result.Facebook.Should().BeEquivalentTo("https://www.facebook.com/sharer/sharer.php?u=https://artmais-frontend.herokuapp.com/artista/3/publication/12%20Olhá%20só%20que%20publicação%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
+            result.Whatsapp.Should().BeEquivalentTo("https://wa.me/?text=https://artmais-frontend.herokuapp.com/artista/3/publication/12%20Olhá%20só%20que%20publicação%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
+        }
+
+        [Fact(DisplayName = "Get Publication Share Link By Publication Id And User Id should be null when user id is null")]
+        public void GetPublicationShareLinkByPublicationIdAndUserIdShouldBeReturnsNullWhenUserIdIsNull()
+        {
+            var mockMediaRepository = new Mock<IMediaRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
+            var mockPuclicationRepository = new Mock<IPublicationRepository>();
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+            var mockMapper = new Mock<IMapper>();
+
+            mockOptions.Setup(x => x.Value).Returns(It.IsAny<SocialMediaConfiguration>());
+
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
+
+            Action act = () => portfolioService.GetPublicationShareLinkByPublicationIdAndUserId(null, It.IsAny<int>());
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
+        }
+
+        [Fact(DisplayName = "Get Publication Share Link By Publication Id And User Id should be null when publication id is null")]
+        public void GetPublicationShareLinkByPublicationIdAndUserIdShouldBeReturnsNullWhenPublicationIdIsNull()
+        {
+            var mockMediaRepository = new Mock<IMediaRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
+            var mockPuclicationRepository = new Mock<IPublicationRepository>();
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+            var mockMapper = new Mock<IMapper>();
+
+            mockOptions.Setup(x => x.Value).Returns(It.IsAny<SocialMediaConfiguration>());
+
+            var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockCommentRepository.Object, mockOptions.Object, mockMapper.Object);
+
+            Action act = () => portfolioService.GetPublicationShareLinkByPublicationIdAndUserId(It.IsAny<long>(), null);
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
+        }
     }
 }
