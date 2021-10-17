@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ArtmaisBackend.Core.Portfolio.Dto
+namespace ArtmaisBackend.Core.Publications.Dto
 {
     public class PublicationCommentsDto
     {

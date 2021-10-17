@@ -1,5 +1,5 @@
-﻿using ArtmaisBackend.Core.Portfolio.Dto;
-using ArtmaisBackend.Core.Portfolio.Request;
+﻿using ArtmaisBackend.Core.Publications.Dto;
+using ArtmaisBackend.Core.Publications.Request;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

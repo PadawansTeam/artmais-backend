@@ -1,7 +1,6 @@
 ﻿using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Core.Portfolio.Request;
-using ArtmaisBackend.Infrastructure;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using ArtmaisBackend.Util.File;
@@ -9,27 +8,22 @@ using AutoMapper;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Portfolio.Service
 {
     public class PortfolioService : IPortfolioService
     {
-        public PortfolioService(IMediaRepository mediaRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, ICommentRepository commentRepository, IOptions<SocialMediaConfiguration> options, IMapper mapper)
+        public PortfolioService(IMediaRepository mediaRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, IMapper mapper)
         {
             this._mediaRepository = mediaRepository;
             this._mediaTypeRepository = mediaTypeRepository;
             this._publicationRepository = publicationRepository;
-            this._commentRepository = commentRepository;
-            this._socialMediaConfiguration = options.Value;
             this._mapper = mapper;
         }
 
         private readonly IMediaRepository _mediaRepository;
         private readonly IMediaTypeRepository _mediaTypeRepository;
         private readonly IPublicationRepository _publicationRepository;
-        private readonly ICommentRepository _commentRepository;
-        private readonly SocialMediaConfiguration _socialMediaConfiguration;
         private readonly IMapper _mapper;
 
         public PortfolioContentListDto GetLoggedUserPortfolioById(long? userId)
@@ -124,7 +118,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
             return true;
         }
-
+        
         public PortfolioContentDto GetPublicationById(int? publicationId, long userId)
         {
             if (publicationId == null)
@@ -142,63 +136,26 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
         public void DeletePublication(PortfolioContentDto? portfolioContentDto, long userId)
         {
-            var portfolioInfo = this._publicationRepository.GetPublicationByIdAndUserId(userId, portfolioContentDto.PublicationID);
+            var portfolioInfo = _publicationRepository.GetPublicationByIdAndUserId(userId, portfolioContentDto.PublicationID);
 
             if (portfolioInfo is null)
                 throw new ArgumentNullException();
 
-            this._mapper.Map(portfolioContentDto, portfolioInfo);
+            _mapper.Map(portfolioContentDto, portfolioInfo);
 
-            this._publicationRepository.Delete(portfolioInfo);
+            _publicationRepository.Delete(portfolioInfo);
         }
 
         public void DeleteMedia(PortfolioContentDto? portfolioContentDto, long userId)
         {
-            var mediaInfo = this._mediaRepository.GetMediaByIdAndUserId(userId, portfolioContentDto.MediaID);
+            var mediaInfo = _mediaRepository.GetMediaByIdAndUserId(userId, portfolioContentDto.MediaID);
 
             if (mediaInfo is null)
                 throw new ArgumentNullException();
 
-            this._mapper.Map(portfolioContentDto, mediaInfo);
+            _mapper.Map(portfolioContentDto, mediaInfo);
 
-            this._mediaRepository.Delete(mediaInfo);
-        }
-
-        public bool InsertComment(CommentRequest? commentRequest, long userId)
-        {
-            if (commentRequest.PublicationID is null || commentRequest.Description is null)
-                throw new ArgumentNullException();
-
-            this._commentRepository.Create(commentRequest, userId);
-
-            return true;
-        }
-
-        public async Task<PublicationCommentsDto?> GetAllCommentsByPublicationId(int? publicationId)
-        {
-            if (publicationId is null)
-                throw new ArgumentNullException();
-
-            var comments = await this._commentRepository.GetAllCommentsByPublicationId(publicationId);
-            var commentsAmount = comments.Count();
-
-            var publicationCommentsDto = new PublicationCommentsDto(comments, commentsAmount);
-
-            return publicationCommentsDto;
-        }
-
-        public PublicationShareLinkDto? GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId)
-        {
-            if (publicationId is null || userId is null)
-                throw new ArgumentNullException();
-
-            var publicationShareLinkDto = new PublicationShareLinkDto
-            {
-                Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{userId}/publication/{publicationId}{ShareLinkMessages.MessageShareComment}",
-                Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{userId}/publication/{publicationId}{ShareLinkMessages.MessageShareComment}",
-                Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}?text={this._socialMediaConfiguration.ArtMais}{userId}/publication/{publicationId}{ShareLinkMessages.MessageShareComment}"
-            };
-            return publicationShareLinkDto;
+            _mediaRepository.Delete(mediaInfo);
         }
 
     }
