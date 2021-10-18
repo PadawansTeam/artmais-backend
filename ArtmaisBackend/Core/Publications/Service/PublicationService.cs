@@ -99,5 +99,14 @@ namespace ArtmaisBackend.Core.Publications.Service
             return true;
         }
 
+        public async Task<int?> GetAllLikesByPublicationId(int? publicationId)
+        {
+            if (publicationId is null)
+                throw new ArgumentNullException();
+
+            var likesAmount = await _likeRepository.GetAllLikesByPublicationId(publicationId);
+
+            return likesAmount;
+        }
     }
 }

@@ -17,5 +17,7 @@ namespace ArtmaisBackend.Core.Publications.Interface
         bool DeleteLike(int? publicationId, long userId);
 
         bool GetIsLikedPublication(int? publicationId, long userId);
+
+        Task<int?> GetAllLikesByPublicationId(int? publicationId);
     }
 }
