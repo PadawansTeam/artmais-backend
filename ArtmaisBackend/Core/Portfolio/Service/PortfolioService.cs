@@ -119,7 +119,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             return true;
         }
         
-        public PortfolioContentDto GetPublicationById(int? publicationId, long userId)
+        public PortfolioContentDto GetPublicationByIdToDelete(int? publicationId, long userId)
         {
             if (publicationId == null)
                 throw new ArgumentNullException();

@@ -1,4 +1,5 @@
-﻿using ArtmaisBackend.Core.Publications.Dto;
+﻿using ArtmaisBackend.Core.Portfolio.Dto;
+using ArtmaisBackend.Core.Publications.Dto;
 using ArtmaisBackend.Core.Publications.Request;
 using System.Threading.Tasks;
 
@@ -19,5 +20,7 @@ namespace ArtmaisBackend.Core.Publications.Interface
         bool GetIsLikedPublication(int? publicationId, long userId);
 
         Task<int?> GetAllLikesByPublicationId(int? publicationId);
+
+        Task<PublicationDto> GetPublicationById(int? publicationId, long? userId);
     }
 }

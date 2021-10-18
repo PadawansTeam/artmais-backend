@@ -209,7 +209,7 @@ namespace ArtmaisBackend.Tests.Core.Aws
                 Description = "Description1",
                 PublicationDate = new DateTime()
             };
-            mockPortfolioService.Setup(p => p.GetPublicationById(It.IsAny<int>(), It.IsAny<long>())).Returns(portfolioContent);
+            mockPortfolioService.Setup(p => p.GetPublicationByIdToDelete(It.IsAny<int>(), It.IsAny<long>())).Returns(portfolioContent);
             var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
             #endregion
 
@@ -240,7 +240,7 @@ namespace ArtmaisBackend.Tests.Core.Aws
                 Description = "Description1",
                 PublicationDate = new DateTime()
             };
-            mockPortfolioService.Setup(p => p.GetPublicationById(It.IsAny<int>(), It.IsAny<long>())).Returns(portfolioContent);
+            mockPortfolioService.Setup(p => p.GetPublicationByIdToDelete(It.IsAny<int>(), It.IsAny<long>())).Returns(portfolioContent);
             var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
             #endregion
 
@@ -268,7 +268,7 @@ namespace ArtmaisBackend.Tests.Core.Aws
                 Description = "Description1",
                 PublicationDate = new DateTime()
             };
-            mockPortfolioService.Setup(p => p.GetPublicationById(It.IsAny<int>(), It.IsAny<long>())).Returns(portfolioContent);
+            mockPortfolioService.Setup(p => p.GetPublicationByIdToDelete(It.IsAny<int>(), It.IsAny<long>())).Returns(portfolioContent);
             mockS3Client.Setup(x => x.DeleteObjectAsync(It.IsAny<DeleteObjectRequest>(), It.IsAny<CancellationToken>())).ThrowsAsync(new AmazonS3Exception(string.Empty));
             var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
             #endregion
@@ -290,7 +290,7 @@ namespace ArtmaisBackend.Tests.Core.Aws
             var fileMock = new Mock<IFormFile>();
             var mockS3Client = new Mock<IAmazonS3>();
 
-            mockPortfolioService.Setup(p => p.GetPublicationById(It.IsAny<int>(), It.IsAny<long>())).Throws<ArgumentNullException>();
+            mockPortfolioService.Setup(p => p.GetPublicationByIdToDelete(It.IsAny<int>(), It.IsAny<long>())).Throws<ArgumentNullException>();
             mockS3Client.Setup(x => x.DeleteObjectAsync(It.IsAny<DeleteObjectRequest>(), It.IsAny<CancellationToken>())).ThrowsAsync(new AmazonS3Exception(string.Empty));
             var awsService = new AwsService(mockMapper.Object, mockUserRepository.Object, mockS3Client.Object, mockPortfolioService.Object);
             #endregion
