@@ -224,5 +224,78 @@ namespace ArtmaisBackend.Tests.Core.Publications
             Action act = () => publicationService.GetPublicationShareLinkByPublicationIdAndUserId(It.IsAny<long>(), null);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
+
+        [Fact(DisplayName = "Insert Like should be true")]
+        public async Task InsertLikeShouldBeReturnsTrue()
+        {
+            #region Mocks
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockLikeRepository = new Mock<ILikeRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+
+            mockLikeRepository.Setup(x => x.Create(It.IsAny<int>(), It.IsAny<long>()));
+            #endregion
+
+            var publicationService = new PublicationService(mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var result = await publicationService.InsertLike(It.IsAny<int>(), It.IsAny<long>());
+
+            result.Should().BeTrue();
+        }
+
+        [Fact(DisplayName = "Insert Like should be returns throw when publication id is null")]
+        public async Task InsertLikeShouldBeThrowWhenPublicationIdIsNull()
+        {
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockLikeRepository = new Mock<ILikeRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+
+            var publicationService = new PublicationService(mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+
+            Func<Task> result = async () =>
+            {
+                await publicationService.InsertLike(null, It.IsAny<long>());
+            };
+            await result.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null.");
+        }
+
+        [Fact(DisplayName = "Delete Like should be true")]
+        public void DeleteLikeShouldBeReturnsTrue()
+        {
+            #region Mocks
+            var userId = 10;
+            var publicationId = 122;
+            var expectedLike = new Like
+            {
+                LikeID = 1,
+                UserID = userId,
+                PublicationID = publicationId,
+                LikeDate = DateTime.Now
+            };
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockLikeRepository = new Mock<ILikeRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+
+            mockLikeRepository.Setup(x => x.GetLikeByPublicationIdAndUserId(publicationId, userId)).Returns(expectedLike);
+            mockLikeRepository.Setup(x => x.Delete(expectedLike));
+            #endregion
+
+            var publicationService = new PublicationService(mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var result = publicationService.DeleteLike(publicationId, userId);
+
+            result.Should().BeTrue();
+        }
+
+        [Fact(DisplayName = "Delete Like should be returns throw when publication id is null")]
+        public void DeleteLikeShouldBeThrowWhenPublicationIdIsNull()
+        {
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockLikeRepository = new Mock<ILikeRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+
+            var publicationService = new PublicationService(mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+
+            Action act = () => publicationService.DeleteLike(null, It.IsAny<long>());
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
+        }
     }
 }
