@@ -781,7 +781,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             #endregion
 
             var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockMapper.Object);
-            var result = portfolioService.GetPublicationById(publicationId, userId);
+            var result = portfolioService.GetPublicationByIdToDelete(publicationId, userId);
 
             result.Should().BeEquivalentTo(expectedPublication);
         }
@@ -845,7 +845,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
 
             var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockMapper.Object);
 
-            Action act = () => portfolioService.GetPublicationById(publicationId, userId);
+            Action act = () => portfolioService.GetPublicationByIdToDelete(publicationId, userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
@@ -866,7 +866,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
 
             var portfolioService = new PortfolioService(mockMediaRepository.Object, mockMediaTypeRepository.Object, mockPuclicationRepository.Object, mockMapper.Object);
 
-            Action act = () => portfolioService.GetPublicationById(publicationId, userId);
+            Action act = () => portfolioService.GetPublicationByIdToDelete(publicationId, userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
     }

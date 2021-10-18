@@ -1,4 +1,5 @@
-﻿using ArtmaisBackend.Core.Publications.Dto;
+﻿using ArtmaisBackend.Core.Portfolio.Dto;
+using ArtmaisBackend.Core.Publications.Dto;
 using ArtmaisBackend.Core.Publications.Interface;
 using ArtmaisBackend.Core.Publications.Request;
 using ArtmaisBackend.Core.SignIn.Interface;
@@ -66,24 +67,6 @@ namespace ArtmaisBackend.Controllers
             }
         }
 
-        [HttpGet("[Action]")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<PublicationShareLinkDto> GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId)
-        {
-            try
-            {
-                var result = _publicationService.GetPublicationShareLinkByPublicationIdAndUserId(userId, publicationId);
-
-                return Ok(result);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return UnprocessableEntity(new { message = ex.Message });
-            }
-        }
-
         [HttpPost("[Action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -132,13 +115,12 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult GetIsLikedPublication(int publicationId)
+        public async Task<ActionResult<PublicationDto>> GetPublicationById(int? publicationId, long? userId)
         {
             try
             {
-                var user = _jwtToken.ReadToken(User);
-                var isLiked = _publicationService.GetIsLikedPublication(publicationId, user.UserID);
-                return Ok(isLiked);
+                var publicationDto = await _publicationService.GetPublicationById(publicationId, userId);
+                return Ok(publicationDto);
             }
             catch (ArgumentNullException ex)
             {
