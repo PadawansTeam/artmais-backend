@@ -81,7 +81,7 @@ namespace ArtmaisBackend.Core.Aws.Service
         {
             try
             {
-                var portfolioContent = this._portfolioService.GetPublicationById(deleteObjectCommand.PortfolioId, deleteObjectCommand.UserId);
+                var portfolioContent = this._portfolioService.GetPublicationByIdToDelete(deleteObjectCommand.PortfolioId, deleteObjectCommand.UserId);
                 if (portfolioContent is null)
                     throw new ArgumentNullException();
 

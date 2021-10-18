@@ -1,4 +1,5 @@
-﻿using ArtmaisBackend.Core.Publications.Dto;
+﻿using ArtmaisBackend.Core.Portfolio.Dto;
+using ArtmaisBackend.Core.Publications.Dto;
 using ArtmaisBackend.Core.Publications.Interface;
 using ArtmaisBackend.Core.Publications.Request;
 using ArtmaisBackend.Core.SignIn.Interface;
@@ -15,8 +16,8 @@ namespace ArtmaisBackend.Controllers
     {
         public PublicationController(IPublicationService publicationService, IJwtTokenService jwtToken)
         {
-            this._publicationService = publicationService;
-            this._jwtToken = jwtToken;
+            _publicationService = publicationService;
+            _jwtToken = jwtToken;
         }
 
         private readonly IPublicationService _publicationService;
@@ -30,17 +31,17 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
-                this._publicationService.InsertComment(commentRequest, user.UserID);
-                return this.Ok();
+                var user = _jwtToken.ReadToken(User);
+                _publicationService.InsertComment(commentRequest, user.UserID);
+                return Ok();
             }
             catch (ArgumentNullException ex)
             {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return UnprocessableEntity(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                return this.StatusCode(500, new { message = ex.Message });
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
@@ -52,35 +53,17 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
-                var comments = await this._publicationService.GetAllCommentsByPublicationId(publicationId);
-                return this.Ok(comments);
+                var user = _jwtToken.ReadToken(User);
+                var comments = await _publicationService.GetAllCommentsByPublicationId(publicationId);
+                return Ok(comments);
             }
             catch (ArgumentNullException ex)
             {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return UnprocessableEntity(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                return this.StatusCode(500, new { message = ex.Message });
-            }
-        }
-
-        [HttpGet("[Action]")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<PublicationShareLinkDto> GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId)
-        {
-            try
-            {
-                var result = this._publicationService.GetPublicationShareLinkByPublicationIdAndUserId(userId, publicationId);
-
-                return this.Ok(result);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
@@ -92,17 +75,17 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
-                this._publicationService.InsertLike(publicationId, user.UserID);
-                return this.Ok();
+                var user = _jwtToken.ReadToken(User);
+                _publicationService.InsertLike(publicationId, user.UserID);
+                return Ok();
             }
             catch (ArgumentNullException ex)
             {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return UnprocessableEntity(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                return this.StatusCode(500, new { message = ex.Message });
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
@@ -114,17 +97,38 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
-                this._publicationService.DeleteLike(publicationId, user.UserID);
-                return this.Ok();
+                var user = _jwtToken.ReadToken(User);
+                _publicationService.DeleteLike(publicationId, user.UserID);
+                return Ok();
             }
             catch (ArgumentNullException ex)
             {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return UnprocessableEntity(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                return this.StatusCode(500, new { message = ex.Message });
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("[Action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<PublicationDto>> GetPublicationById(int? publicationId, long? userId)
+        {
+            try
+            {
+                var publicationDto = await _publicationService.GetPublicationById(publicationId, userId);
+                return Ok(publicationDto);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
             }
         }
     }

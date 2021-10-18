@@ -14,8 +14,8 @@ namespace ArtmaisBackend.Controllers
     {
         public PortfolioController(IPortfolioService portfolioService, IJwtTokenService jwtToken)
         {
-            this._portfolioService = portfolioService;
-            this._jwtToken = jwtToken;
+            _portfolioService = portfolioService;
+            _jwtToken = jwtToken;
         }
 
         private readonly IPortfolioService _portfolioService;
@@ -29,14 +29,14 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
-                var result = this._portfolioService.GetLoggedUserPortfolioById(user.UserID);
+                var user = _jwtToken.ReadToken(User);
+                var result = _portfolioService.GetLoggedUserPortfolioById(user.UserID);
 
-                return this.Ok(result);
+                return Ok(result);
             }
             catch (ArgumentNullException ex)
             {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return UnprocessableEntity(new { message = ex.Message });
             }
         }
 
@@ -48,13 +48,13 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var result = this._portfolioService.GetPortfolioByUserId(userId);
-                return this.Ok(result);
+                var result = _portfolioService.GetPortfolioByUserId(userId);
+                return Ok(result);
 
             }
             catch (ArgumentNullException ex)
             {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return UnprocessableEntity(new { message = ex.Message });
             }
         }
 
@@ -66,13 +66,13 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
-                var result = this._portfolioService.InsertPortfolioContent(portfolioRequest, user.UserID, 1);
-                return this.Ok(result);
+                var user = _jwtToken.ReadToken(User);
+                var result = _portfolioService.InsertPortfolioContent(portfolioRequest, user.UserID, 1);
+                return Ok(result);
             }
             catch (ArgumentNullException ex)
             {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return UnprocessableEntity(new { message = ex.Message });
             }
         }
 
@@ -84,31 +84,13 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
-                var result = this._portfolioService.UpdateDescription(portfolioDescriptionRequest, user.UserID);
-                return this.Ok(result);
+                var user = _jwtToken.ReadToken(User);
+                var result = _portfolioService.UpdateDescription(portfolioDescriptionRequest, user.UserID);
+                return Ok(result);
             }
             catch (ArgumentNullException ex)
             {
-                return this.UnprocessableEntity(new { message = ex.Message });
-            }
-        }
-
-        [HttpGet("{userId}/{publicationId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<PortfolioContentListDto> GetPublicationById(int publicationId, int userId)
-        {
-            try
-            {
-                var result = this._portfolioService.GetPublicationById(publicationId, userId);
-                return this.Ok(result);
-
-            }
-            catch (ArgumentNullException ex)
-            {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return UnprocessableEntity(new { message = ex.Message });
             }
         }
     }

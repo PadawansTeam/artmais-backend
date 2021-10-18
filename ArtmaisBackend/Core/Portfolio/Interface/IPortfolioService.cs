@@ -13,7 +13,7 @@ namespace ArtmaisBackend.Core.Portfolio.Interface
 
         bool UpdateDescription(PortfolioDescriptionRequest? portfolioDescriptionRequest, long userId);
 
-        PortfolioContentDto GetPublicationById(int? publicationId, long userId);
+        PortfolioContentDto GetPublicationByIdToDelete(int? publicationId, long userId);
 
         void DeletePublication(PortfolioContentDto? portfolioContentDto, long userId);
 

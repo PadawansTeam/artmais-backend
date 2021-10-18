@@ -16,11 +16,11 @@ namespace ArtmaisBackend.Core.Users.Service
     {
         public UserService(IAddressRepository addressRepository, IContactRepository contactRepository, IOptions<SocialMediaConfiguration> options, IUserRepository userRepository, IMapper mapper)
         {
-            this._addressRepository = addressRepository;
-            this._contactRepository = contactRepository;
-            this._socialMediaConfiguration = options.Value;
-            this._userRepository = userRepository;
-            this._mapper = mapper;
+            _addressRepository = addressRepository;
+            _contactRepository = contactRepository;
+            _socialMediaConfiguration = options.Value;
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         private readonly IAddressRepository _addressRepository;
@@ -31,33 +31,33 @@ namespace ArtmaisBackend.Core.Users.Service
 
         public ShareLinkDto? GetShareLinkByLoggedUser(long? userId)
         {
-            var user = this._userRepository.GetUserById(userId);
+            var user = _userRepository.GetUserById(userId);
             if (user is null)
                 throw new ArgumentNullException();
 
             var shareLinkDto = new ShareLinkDto
             {
-                Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareProfile}",
-                Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareProfile}",
-                Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}?text={this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareProfile}"
+                Facebook = $"{_socialMediaConfiguration.Facebook}{_socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareProfile}",
+                Twitter = $"{_socialMediaConfiguration.Twitter}{_socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareProfile}",
+                Whatsapp = $"{_socialMediaConfiguration.Whatsapp}?text={_socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareProfile}"
             };
             return shareLinkDto;
         }
 
         public ShareLinkDto? GetShareLinkByUserId(long? userId)
         {
-            var user = this._userRepository.GetUserById(userId);
+            var user = _userRepository.GetUserById(userId);
             if (user is null)
                 throw new ArgumentNullException();
 
-            var contact = this._contactRepository.GetContactByUser(user.UserID);
+            var contact = _contactRepository.GetContactByUser(user.UserID);
 
             var shareLinkDto = new ShareLinkDto
             {
-                Facebook = $"{this._socialMediaConfiguration.Facebook}{this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareLink}",
-                Twitter = $"{this._socialMediaConfiguration.Twitter}{this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareLink}",
-                Whatsapp = $"{this._socialMediaConfiguration.Whatsapp}?text={this._socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareLink}",
-                WhatsappContact = $"{this._socialMediaConfiguration.Whatsapp}?phone={contact?.MainPhone}&text={ShareLinkMessages.MessageComunication}"
+                Facebook = $"{_socialMediaConfiguration.Facebook}{_socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareLink}",
+                Twitter = $"{_socialMediaConfiguration.Twitter}{_socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareLink}",
+                Whatsapp = $"{_socialMediaConfiguration.Whatsapp}?text={_socialMediaConfiguration.ArtMais}{user.UserID}{ShareLinkMessages.MessageShareLink}",
+                WhatsappContact = $"{_socialMediaConfiguration.Whatsapp}?phone={contact?.MainPhone}&text={ShareLinkMessages.MessageComunication}"
             };
 
             return shareLinkDto;
@@ -65,11 +65,11 @@ namespace ArtmaisBackend.Core.Users.Service
 
         public ShareProfileBaseDto? GetShareProfile(long? userId)
         {
-            var user = this._userRepository.GetUserById(userId);
+            var user = _userRepository.GetUserById(userId);
             if (user is null)
                 throw new ArgumentNullException();
 
-            var contact = this._contactRepository.GetContactByUser(user.UserID);
+            var contact = _contactRepository.GetContactByUser(user.UserID);
 
             if (contact is null)
             {
@@ -79,9 +79,9 @@ namespace ArtmaisBackend.Core.Users.Service
             {
                 var shareProfileDto = new ShareProfileBaseDto
                 {
-                    Facebook = $"{this._socialMediaConfiguration.FacebookProfile }{contact?.Facebook}",
-                    Twitter = $"{this._socialMediaConfiguration.TwitterProfile }{contact?.Twitter}",
-                    Instagram = $"{this._socialMediaConfiguration.InstagramProfile }{contact?.Instagram}",
+                    Facebook = $"{_socialMediaConfiguration.FacebookProfile }{contact?.Facebook}",
+                    Twitter = $"{_socialMediaConfiguration.TwitterProfile }{contact?.Twitter}",
+                    Instagram = $"{_socialMediaConfiguration.InstagramProfile }{contact?.Instagram}",
                 };
 
                 return shareProfileDto;
@@ -90,15 +90,15 @@ namespace ArtmaisBackend.Core.Users.Service
 
         public UserDto? GetLoggedUserInfoById(long? userId)
         {
-            var user = this._userRepository.GetUserById(userId);
+            var user = _userRepository.GetUserById(userId);
             if (user is null)
                 throw new ArgumentNullException();
 
-            var userCategory = this._userRepository.GetSubcategoryByUserId(user.UserID);
-            var contact = this._contactRepository.GetContactByUser(user.UserID);
-            var address = this._addressRepository.GetAddressByUser(user.UserID);
-            var contactProfile = this.GetShareProfile(user.UserID);
-            var contactShareLink = this.GetShareLinkByLoggedUser(user.UserID);
+            var userCategory = _userRepository.GetSubcategoryByUserId(user.UserID);
+            var contact = _contactRepository.GetContactByUser(user.UserID);
+            var address = _addressRepository.GetAddressByUser(user.UserID);
+            var contactProfile = GetShareProfile(user.UserID);
+            var contactShareLink = GetShareLinkByLoggedUser(user.UserID);
 
             var userDto = new UserDto()
             {
@@ -136,15 +136,15 @@ namespace ArtmaisBackend.Core.Users.Service
 
         public UserDto? GetUserInfoById(long? userId)
         {
-            var user = this._userRepository.GetUserById(userId);
+            var user = _userRepository.GetUserById(userId);
             if (user is null)
                 throw new ArgumentNullException();
 
-            var userCategory = this._userRepository.GetSubcategoryByUserId(user.UserID);
-            var contact = this._contactRepository.GetContactByUser(user.UserID);
-            var address = this._addressRepository.GetAddressByUser(user.UserID);
-            var contactProfile = this.GetShareProfile(user.UserID);
-            var contactShareLink = this.GetShareLinkByUserId(user.UserID);
+            var userCategory = _userRepository.GetSubcategoryByUserId(user.UserID);
+            var contact = _contactRepository.GetContactByUser(user.UserID);
+            var address = _addressRepository.GetAddressByUser(user.UserID);
+            var contactProfile = GetShareProfile(user.UserID);
+            var contactShareLink = GetShareLinkByUserId(user.UserID);
 
             var userDto = new UserDto()
             {
@@ -183,16 +183,16 @@ namespace ArtmaisBackend.Core.Users.Service
             if (userRequest is null)
                 throw new ArgumentNullException();
 
-            var userInfo = this._userRepository.GetUserById(userId);
-            userInfo = this._mapper.Map(userRequest, userInfo);
-            var user = this._userRepository.Update(userInfo);
+            var userInfo = _userRepository.GetUserById(userId);
+            userInfo = _mapper.Map(userRequest, userInfo);
+            var user = _userRepository.Update(userInfo);
 
-            var userContactInfo = this._contactRepository.GetContactByUser(user.UserID);
+            var userContactInfo = _contactRepository.GetContactByUser(user.UserID);
 
             if (userContactInfo is null)
             {
-                var contactRequest = this._mapper.Map<ContactRequest>(userRequest);
-                var newContact = this._contactRepository.Create(contactRequest, user.UserID);
+                var contactRequest = _mapper.Map<ContactRequest>(userRequest);
+                var newContact = _contactRepository.Create(contactRequest, user.UserID);
                 if (newContact is null)
                     throw new ArgumentNullException();
 
@@ -206,8 +206,8 @@ namespace ArtmaisBackend.Core.Users.Service
             }
             else
             {
-                userContactInfo = this._mapper.Map(userRequest, userContactInfo);
-                this._contactRepository.Update(userContactInfo);
+                userContactInfo = _mapper.Map(userRequest, userContactInfo);
+                _contactRepository.Update(userContactInfo);
 
                 var userDto = new UserProfileInfoDto
                 {
@@ -227,7 +227,7 @@ namespace ArtmaisBackend.Core.Users.Service
             if (!(passwordRequest.Password.Equals(passwordRequest.NewPassword)))
                 throw new ArgumentException();
 
-            var userInfo = this._userRepository.GetUserById(userId);
+            var userInfo = _userRepository.GetUserById(userId);
             if (userInfo is null)
                 throw new ArgumentNullException();
 
@@ -239,8 +239,8 @@ namespace ArtmaisBackend.Core.Users.Service
 
             passwordRequest.Password = PasswordUtil.Encrypt(passwordRequest.Password);
 
-            this._mapper.Map(passwordRequest, userInfo);
-            this._userRepository.Update(userInfo);
+            _mapper.Map(passwordRequest, userInfo);
+            _userRepository.Update(userInfo);
 
             return true;
         }
@@ -250,10 +250,10 @@ namespace ArtmaisBackend.Core.Users.Service
             if (userDescriptionRequest is null)
                 throw new ArgumentNullException();
 
-            var userInfo = this._userRepository.GetUserById(userId);
+            var userInfo = _userRepository.GetUserById(userId);
 
-            this._mapper.Map(userDescriptionRequest, userInfo);
-            this._userRepository.Update(userInfo);
+            _mapper.Map(userDescriptionRequest, userInfo);
+            _userRepository.Update(userInfo);
 
             return true;
         }
