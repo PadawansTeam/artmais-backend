@@ -6,7 +6,6 @@ using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
@@ -14,20 +13,20 @@ namespace ArtmaisBackend.Infrastructure.Repository
     {
         public PublicationRepository(ArtplusContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         private readonly ArtplusContext _context;
 
         public Publication? GetPublicationByIdAndUserId(long? userId, int? publicationId)
         {
-            return this._context.Publication.FirstOrDefault(publication => publication.UserID == userId && publication.PublicationID == publicationId);
+            return _context.Publication.FirstOrDefault(publication => publication.UserID == userId && publication.PublicationID == publicationId);
         }
 
         public List<PortfolioContentDto> GetAllPublicationsByUserId(long? userId)
         {
-            var query = (from publication in this._context.Publication
-                         join media in this._context.Media on publication.MediaID equals media.MediaID
+            var query = (from publication in _context.Publication
+                         join media in _context.Media on publication.MediaID equals media.MediaID
                          where publication.UserID.Equals(userId)
                          select new PortfolioContentDto
                          {
@@ -53,24 +52,24 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 PublicationDate = DateTime.Now
             };
 
-            this._context.Publication.Add(publicationContent);
-            this._context.SaveChanges();
+            _context.Publication.Add(publicationContent);
+            _context.SaveChanges();
 
             return publicationContent;
         }
 
         public Publication Update(Publication publication)
         {
-            this._context.Publication.Update(publication);
-            this._context.SaveChanges();
+            _context.Publication.Update(publication);
+            _context.SaveChanges();
 
             return publication;
         }
 
         public void Delete(Publication publication)
         {
-            this._context.Publication.Remove(publication);
-            this._context.SaveChanges();
+            _context.Publication.Remove(publication);
+            _context.SaveChanges();
         }
     }
 }

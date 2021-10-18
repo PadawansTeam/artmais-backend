@@ -14,12 +14,14 @@ namespace ArtmaisBackend.Core.Publications.Service
 {
     public class PublicationService : IPublicationService
     {
-        public PublicationService(ICommentRepository commentRepository, IOptions<SocialMediaConfiguration> options)
+        public PublicationService(ICommentRepository commentRepository, ILikeRepository likeRepository, IOptions<SocialMediaConfiguration> options)
         {
             _commentRepository = commentRepository;
+            _likeRepository = likeRepository;
             _socialMediaConfiguration = options.Value;
         }
 
+        private readonly ILikeRepository _likeRepository;
         private readonly ICommentRepository _commentRepository;
         private readonly SocialMediaConfiguration _socialMediaConfiguration;
 
@@ -58,6 +60,31 @@ namespace ArtmaisBackend.Core.Publications.Service
                 Whatsapp = $"{_socialMediaConfiguration.Whatsapp}?text={_socialMediaConfiguration.ArtMais}{userId}/publicacao/{publicationId}{ShareLinkMessages.MessageShareComment}"
             };
             return publicationShareLinkDto;
+        }
+
+        public async Task<bool> InsertLike(int? publicationId, long userId)
+        {
+            if (publicationId is null)
+                throw new ArgumentNullException();
+
+            await this._likeRepository.Create(publicationId, userId);
+
+            return true;
+        }
+
+        public bool DeleteLike(int? publicationId, long userId)
+        {
+            if (publicationId is null)
+                throw new ArgumentNullException();
+
+            var likeInfo = _likeRepository.GetLikeByPublicationIdAndUserId(publicationId, userId);
+
+            if (likeInfo is null)
+                throw new ArgumentNullException();
+
+            this._likeRepository.Delete(likeInfo);
+
+            return true;
         }
     }
 }
