@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ArtmaisBackend.Core.Publications.Dto;
+using System;
+using System.Collections.Generic;
 
 namespace ArtmaisBackend.Core.Portfolio.Dto
 {
@@ -19,6 +21,7 @@ namespace ArtmaisBackend.Core.Portfolio.Dto
         public string? S3UrlMedia { get; set; }
         public string? Description { get; set; }
         public DateTime? PublicationDate { get; set; }
+        public List<CommentDto?> Comments { get; set; }
         public int? CommentsAmount { get; set; }
         public int? LikesAmount { get; set; }
         public bool IsLiked { get; set; }

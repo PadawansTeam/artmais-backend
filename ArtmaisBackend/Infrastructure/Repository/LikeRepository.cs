@@ -38,7 +38,11 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public Like? GetLikeByPublicationIdAndUserId(int? publicationId, long userId)
         {
-            return this._context.Like.FirstOrDefault(like => like.UserID == userId && like.PublicationID == publicationId);
+            return _context.Like.FirstOrDefault(like => like.UserID == userId && like.PublicationID == publicationId);
+        }
+        public async Task<int> GetAllLikesByPublicationId(int? publicationId)
+        {
+            return await _context.Like.Where(like => like.PublicationID == publicationId).CountAsync();
         }
     }
 }

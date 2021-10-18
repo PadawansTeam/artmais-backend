@@ -10,5 +10,7 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
         void Delete(Like like);
 
         Like? GetLikeByPublicationIdAndUserId(int? publicationId, long userId);
+
+        Task<int> GetAllLikesByPublicationId(int? publicationId);
     }
 }
