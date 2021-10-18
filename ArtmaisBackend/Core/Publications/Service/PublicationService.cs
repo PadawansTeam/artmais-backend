@@ -42,7 +42,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             return true;
         }
 
-        public async Task<PublicationCommentsDto?> GetAllCommentsByPublicationId(int? publicationId)
+        private async Task<PublicationCommentsDto?> GetAllCommentsByPublicationId(int? publicationId)
         {
             if (publicationId is null)
                 throw new ArgumentNullException();
@@ -55,7 +55,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             return publicationCommentsDto;
         }
 
-        public PublicationShareLinkDto? GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId)
+        private PublicationShareLinkDto? GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId)
         {
             if (publicationId is null || userId is null)
                 throw new ArgumentNullException();
@@ -94,7 +94,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             return true;
         }
 
-        public bool GetIsLikedPublication(int? publicationId, long userId)
+        private bool GetIsLikedPublication(int? publicationId, long userId)
         {
             if (publicationId is null)
                 throw new ArgumentNullException();
@@ -105,6 +105,16 @@ namespace ArtmaisBackend.Core.Publications.Service
                 return false;
 
             return true;
+        }
+
+        private async Task<int?> GetAllLikesByPublicationId(int? publicationId)
+        {
+            if (publicationId is null)
+                throw new ArgumentNullException();
+
+            var likesAmount = await _likeRepository.GetAllLikesByPublicationId(publicationId);
+
+            return likesAmount;
         }
 
         public async Task<PublicationDto> GetPublicationById(int? publicationId, long? userId)
@@ -128,8 +138,9 @@ namespace ArtmaisBackend.Core.Publications.Service
             var userCategory = _userRepository.GetSubcategoryByUserId(user.UserID);
             var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(user.UserID, publication.PublicationID);
             var isLiked = GetIsLikedPublication(publication.PublicationID, user.UserID);
-            var commentsAmount = await GetAllCommentsByPublicationId(publication.PublicationID);
+            var comments = await GetAllCommentsByPublicationId(publication.PublicationID);
             var contactProfile = _userService.GetShareProfile(user.UserID);
+            var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID);
 
             var publicationDto = new PublicationDto
             {
@@ -148,20 +159,13 @@ namespace ArtmaisBackend.Core.Publications.Service
                 S3UrlMedia = publication?.S3UrlMedia,
                 Description = publication?.Description,
                 PublicationDate = publication?.PublicationDate,
-                CommentsAmount = commentsAmount.CommentsAmount,
+                Comments = comments?.Comments,
+                CommentsAmount = comments?.CommentsAmount,
+                LikesAmount = likesAmount,
                 IsLiked = isLiked
             };
 
             return publicationDto;
-        }
-        public async Task<int?> GetAllLikesByPublicationId(int? publicationId)
-        {
-            if (publicationId is null)
-                throw new ArgumentNullException();
-
-            var likesAmount = await _likeRepository.GetAllLikesByPublicationId(publicationId);
-
-            return likesAmount;
         }
     }
 }

@@ -45,28 +45,6 @@ namespace ArtmaisBackend.Controllers
             }
         }
 
-        [HttpGet("[Action]")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<PublicationCommentsDto?>> GetAllCommentsByPublicationId(int? publicationId)
-        {
-            try
-            {
-                var user = _jwtToken.ReadToken(User);
-                var comments = await _publicationService.GetAllCommentsByPublicationId(publicationId);
-                return Ok(comments);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return UnprocessableEntity(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
-        }
-
         [HttpPost("[Action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -121,27 +99,6 @@ namespace ArtmaisBackend.Controllers
             {
                 var publicationDto = await _publicationService.GetPublicationById(publicationId, userId);
                 return Ok(publicationDto);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return UnprocessableEntity(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
-        }
-
-        [HttpGet("[Action]")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<int?>> GetAllLikesByPublicationId(int publicationId)
-        {
-            try
-            {
-                var likesAmount = await _publicationService.GetAllLikesByPublicationId(publicationId);
-                return Ok(likesAmount);
             }
             catch (ArgumentNullException ex)
             {
