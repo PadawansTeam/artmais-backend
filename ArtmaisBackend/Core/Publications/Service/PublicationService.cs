@@ -1,6 +1,8 @@
-﻿using ArtmaisBackend.Core.Publications.Dto;
+﻿using ArtmaisBackend.Core.Portfolio.Dto;
+using ArtmaisBackend.Core.Publications.Dto;
 using ArtmaisBackend.Core.Publications.Interface;
 using ArtmaisBackend.Core.Publications.Request;
+using ArtmaisBackend.Core.Users.Interface;
 using ArtmaisBackend.Infrastructure;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
@@ -13,13 +15,19 @@ namespace ArtmaisBackend.Core.Publications.Service
 {
     public class PublicationService : IPublicationService
     {
-        public PublicationService(ICommentRepository commentRepository, ILikeRepository likeRepository, IOptions<SocialMediaConfiguration> options)
+        public PublicationService(IUserService userService, IUserRepository userRepository, IPublicationRepository publicationRepository, ICommentRepository commentRepository, ILikeRepository likeRepository, IOptions<SocialMediaConfiguration> options)
         {
+            _userService = userService;
+            _userRepository = userRepository;
+            _publicationRepository = publicationRepository;
             _commentRepository = commentRepository;
             _likeRepository = likeRepository;
             _socialMediaConfiguration = options.Value;
         }
 
+        private readonly IUserService _userService;
+        private readonly IUserRepository _userRepository;
+        private readonly IPublicationRepository _publicationRepository;
         private readonly ILikeRepository _likeRepository;
         private readonly ICommentRepository _commentRepository;
         private readonly SocialMediaConfiguration _socialMediaConfiguration;
@@ -34,7 +42,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             return true;
         }
 
-        public async Task<PublicationCommentsDto?> GetAllCommentsByPublicationId(int? publicationId)
+        private async Task<PublicationCommentsDto?> GetAllCommentsByPublicationId(int? publicationId)
         {
             if (publicationId is null)
                 throw new ArgumentNullException();
@@ -47,7 +55,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             return publicationCommentsDto;
         }
 
-        public PublicationShareLinkDto? GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId)
+        private PublicationShareLinkDto? GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId)
         {
             if (publicationId is null || userId is null)
                 throw new ArgumentNullException();
@@ -86,7 +94,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             return true;
         }
 
-        public bool GetIsLikedPublication(int? publicationId, long userId)
+        private bool GetIsLikedPublication(int? publicationId, long userId)
         {
             if (publicationId is null)
                 throw new ArgumentNullException();
@@ -99,7 +107,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             return true;
         }
 
-        public async Task<int?> GetAllLikesByPublicationId(int? publicationId)
+        private async Task<int?> GetAllLikesByPublicationId(int? publicationId)
         {
             if (publicationId is null)
                 throw new ArgumentNullException();
@@ -107,6 +115,57 @@ namespace ArtmaisBackend.Core.Publications.Service
             var likesAmount = await _likeRepository.GetAllLikesByPublicationId(publicationId);
 
             return likesAmount;
+        }
+
+        public async Task<PublicationDto> GetPublicationById(int? publicationId, long? userId)
+        {
+            if (publicationId is null || userId is null)
+                throw new ArgumentNullException();
+
+            var user = _userRepository.GetUserById(userId);
+            if (user is null)
+                throw new ArgumentNullException();
+
+
+            var portfolio = _publicationRepository.GetAllPublicationsByUserId(userId);
+            if (portfolio is null)
+                throw new ArgumentNullException();
+
+            var publication = portfolio.Where(p => p.PublicationID == publicationId).FirstOrDefault();
+            if (publication is null)
+                throw new ArgumentNullException();
+
+            var userCategory = _userRepository.GetSubcategoryByUserId(user.UserID);
+            var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(user.UserID, publication.PublicationID);
+            var isLiked = GetIsLikedPublication(publication.PublicationID, user.UserID);
+            var comments = await GetAllCommentsByPublicationId(publication.PublicationID);
+            var contactProfile = _userService.GetShareProfile(user.UserID);
+            var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID);
+
+            var publicationDto = new PublicationDto
+            {
+                Name = user?.Name,
+                Username = user?.Username,
+                UserPicture = user?.UserPicture,
+                BackgroundPicture = user?.BackgroundPicture,
+                Category = userCategory?.Category,
+                Subcategory = userCategory?.Subcategory,
+                UserFacebook = contactProfile?.Facebook,
+                UserInstagram = contactProfile?.Instagram,
+                UserTwitter = contactProfile?.Twitter,
+                PublicationFacebook = publicationShareLink?.Facebook,
+                PublicationTwitter = publicationShareLink?.Twitter,
+                PublicationWhatsapp = publicationShareLink?.Whatsapp,
+                S3UrlMedia = publication?.S3UrlMedia,
+                Description = publication?.Description,
+                PublicationDate = publication?.PublicationDate,
+                Comments = comments?.Comments,
+                CommentsAmount = comments?.CommentsAmount,
+                LikesAmount = likesAmount,
+                IsLiked = isLiked
+            };
+
+            return publicationDto;
         }
     }
 }
