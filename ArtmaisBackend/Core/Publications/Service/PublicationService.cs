@@ -126,7 +126,6 @@ namespace ArtmaisBackend.Core.Publications.Service
             if (user is null)
                 throw new ArgumentNullException();
 
-
             var portfolio = _publicationRepository.GetAllPublicationsByUserId(userId);
             if (portfolio is null)
                 throw new ArgumentNullException();
