@@ -60,7 +60,7 @@ namespace ArtmaisBackend.Core.Aws.Service
 
                 await this._client.PutObjectAsync(putRequest);
 
-                var urlAws = string.Format("http://{0}.s3.amazonaws.com/{1}", uploadObjectCommand.BucketName, keyName);
+                var urlAws = string.Format("https://{0}.s3.amazonaws.com/{1}", uploadObjectCommand.BucketName, keyName);
 
                 return new AwsDto(urlAws);
             }
