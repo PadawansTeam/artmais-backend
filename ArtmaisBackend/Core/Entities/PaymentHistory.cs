@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ArtmaisBackend.Core.Entities
@@ -11,15 +12,18 @@ namespace ArtmaisBackend.Core.Entities
         public int PaymentProductID { get; set; }
 
         [Column("idpagamento")]
-        public int PaymentID { get; set; }
+        public int? PaymentID { get; set; }
 
         [ForeignKey("PaymentID")]
         public Payment? Payment { get; set; }
 
-        [Column("estadopagamento")]
-        public int Status { get; set; }
+        [Column("idestadopagamento")]
+        public int? PaymentStatusID { get; set; }
+
+        [ForeignKey("PaymentID")]
+        public PaymentStatus? PaymentStatus { get; set; }
 
         [Column("datahoraatualizacao")]
-        public int PayDay { get; set; }
+        public DateTime? PayDay { get; set; }
     }
 }

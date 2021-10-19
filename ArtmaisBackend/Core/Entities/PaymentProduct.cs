@@ -11,13 +11,13 @@ namespace ArtmaisBackend.Core.Entities
         public int PaymentProductID { get; set; }
 
         [Column("idproduto")]
-        public int ProductID { get; set; }
+        public int? ProductID { get; set; }
 
         [ForeignKey("ProductID")]
         public Product? Product { get; set; }
 
         [Column("idpagamento")]
-        public int PaymentID { get; set; }
+        public int? PaymentID { get; set; }
 
         [ForeignKey("PaymentID")]
         public Payment? Payment { get; set; }

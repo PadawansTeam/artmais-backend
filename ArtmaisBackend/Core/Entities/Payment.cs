@@ -16,7 +16,10 @@ namespace ArtmaisBackend.Core.Entities
         [ForeignKey("UserID")]
         public User? User { get; set; }
 
-        [Column("tipopagamento")]
-        public string? Type { get; set; }
+        [Column("idtipopagamento")]
+        public int? PaymentTypeID { get; set; }
+
+        [ForeignKey("PaymentTypeID")]
+        public PaymentType? PaymentType { get; set; }
     }
 }
