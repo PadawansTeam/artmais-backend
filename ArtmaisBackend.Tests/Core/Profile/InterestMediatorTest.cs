@@ -62,7 +62,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
 
             var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
             var interestRepositoryMock = new Mock<IInterestRepository>();
-            interestRepositoryMock.Setup(r => r.DeleteAllAndCreateAll(request, 1)).Returns(message);
+            interestRepositoryMock.Setup(r => r.DeleteAllAndCreateAllAsync(request, 1)).Returns(message);
             var jwtTokenMock = new Mock<IJwtTokenService>();
             jwtTokenMock.Setup(j => j.ReadToken(null)).Returns(userJwtData);
 
