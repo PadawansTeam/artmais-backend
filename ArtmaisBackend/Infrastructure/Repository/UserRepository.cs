@@ -7,6 +7,7 @@ using ArtmaisBackend.Core.SignUp.Request;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,12 +98,29 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public IEnumerable<RecomendationDto> GetUsersByInterest(long userId)
         {
+            var recomendationResults = (from user in this._context.User
+                                        join recomendation in this._context.Recomendation on user.SubcategoryID equals recomendation.SubcategoryID
+                                        join subcategory in this._context.Subcategory on recomendation.SubcategoryID equals subcategory.SubcategoryID
+                                        join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
+                                        where
+                                        recomendation.Interest.UserID.Equals(userId)
+                                        && !user.UserID.Equals(userId)
+                                        && subcategory.OtherSubcategory.Equals(false)
+                                        select new RecomendationDto
+                                        {
+                                            UserId = user.UserID,
+                                            Username = user.Username,
+                                            UserPicture = user.UserPicture,
+                                            BackgroundPicture = user.BackgroundPicture,
+                                            Category = category.UserCategory,
+                                            Subcategory = subcategory.UserSubcategory
+                                        }).Distinct();
+
             var results = (from user in this._context.User
                            join interest in this._context.Interest on user.SubcategoryID equals interest.SubcategoryID
-                           join recomendation in this._context.Recomendation on interest.InterestID equals recomendation.InterestID 
-                           join subcategory in this._context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID 
+                           join subcategory in this._context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID
                            join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
-                           where 
+                           where
                            interest.UserID.Equals(userId)
                            && !user.UserID.Equals(userId)
                            && subcategory.OtherSubcategory.Equals(false)
@@ -114,7 +132,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                                BackgroundPicture = user.BackgroundPicture,
                                Category = category.UserCategory,
                                Subcategory = subcategory.UserSubcategory
-                           }).Distinct();
+                           }).Concat(recomendationResults);
 
             return results;
         }
