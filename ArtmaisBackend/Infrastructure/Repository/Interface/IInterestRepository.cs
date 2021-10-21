@@ -1,9 +1,12 @@
-﻿using ArtmaisBackend.Core.Profile;
+﻿using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.Profile;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Infrastructure.Repository.Interface
 {
     public interface IInterestRepository
     {
-        dynamic DeleteAllAndCreateAll(InterestRequest interestRequest, long userId);
+        Task<IEnumerable<Interest>> DeleteAllAndCreateAllAsync(InterestRequest interestRequest, long userId);
     }
 }

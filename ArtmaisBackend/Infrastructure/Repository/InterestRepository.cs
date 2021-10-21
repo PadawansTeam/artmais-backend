@@ -2,7 +2,10 @@
 using ArtmaisBackend.Core.Profile;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
@@ -10,37 +13,38 @@ namespace ArtmaisBackend.Infrastructure.Repository
     {
         public InterestRepository(ArtplusContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         private readonly ArtplusContext _context;
 
-        public dynamic DeleteAllAndCreateAll(InterestRequest interestRequest, long userId)
+        public async Task<IEnumerable<Interest>> DeleteAllAndCreateAllAsync(InterestRequest interestRequest, long userId)
         {
-            using (var transaction = this._context.Database.BeginTransaction())
+            var interests = new List<Interest>();
+
+            using var transaction = _context.Database.BeginTransaction();
+
+            try
             {
-                try
-                {
-                    this.DeleteAll(userId);
+                DeleteAll(userId);
 
-                    foreach (var subcategoryId in interestRequest.SubcategoryID)
-                    {
-                        this.Create(subcategoryId, userId);
-                    }
-
-                    transaction.Commit();
-                    this._context.SaveChanges();
-                    return new { message = "Os interesses foram salvos com sucesso." };
-                }
-                catch
+                foreach (var subcategoryId in interestRequest.SubcategoryID)
                 {
-                    transaction.Rollback();
-                    return new { message = "Erro ao salvar interesses." };
+                    interests.Add(await Create(subcategoryId, userId));
                 }
+
+                transaction.Commit();
+                _context.SaveChanges();
+                return interests;
+            }
+            catch(Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception(ex.Message);
             }
         }
 
-        private void Create(int subcategoryId, long userId)
+        private async Task<Interest> Create(int subcategoryId, long userId)
         {
             var interest = new Interest
             {
@@ -48,14 +52,16 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 SubcategoryID = subcategoryId,
                 UserSelected = true
             };
-            this._context.Interest.Add(interest);
+
+            await _context.Interest.AddAsync(interest);
+
+            return interest;
         }
 
         private void DeleteAll(long userId)
         {
-            this._context.Interest.RemoveRange(this._context.Interest
+            _context.Interest.RemoveRange(_context.Interest
                 .Where(i => i.UserID.Equals(userId) && i.UserSelected));
         }
-
     }
 }

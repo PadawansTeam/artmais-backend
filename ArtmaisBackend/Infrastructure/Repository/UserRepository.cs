@@ -99,9 +99,11 @@ namespace ArtmaisBackend.Infrastructure.Repository
         {
             var results = (from user in this._context.User
                            join interest in this._context.Interest on user.SubcategoryID equals interest.SubcategoryID
-                           join subcategory in this._context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID
+                           join recomendation in this._context.Recomendation on interest.InterestID equals recomendation.InterestID 
+                           join subcategory in this._context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID 
                            join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
-                           where interest.UserID.Equals(userId)
+                           where 
+                           interest.UserID.Equals(userId)
                            && !user.UserID.Equals(userId)
                            && subcategory.OtherSubcategory.Equals(false)
                            select new RecomendationDto
@@ -112,7 +114,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                                BackgroundPicture = user.BackgroundPicture,
                                Category = category.UserCategory,
                                Subcategory = subcategory.UserSubcategory
-                           }).ToList();
+                           }).Distinct();
 
             return results;
         }
