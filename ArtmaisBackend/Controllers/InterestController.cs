@@ -3,6 +3,7 @@ using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.Profile.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Controllers
 {
@@ -37,11 +38,11 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<dynamic> Create(InterestRequest interestRequest)
+        public async Task<ActionResult<dynamic>> Create(InterestRequest interestRequest)
         {
             try
             {
-                return Ok(_interestMediator.Create(interestRequest, User));
+                return Ok(await _interestMediator.Create(interestRequest, User));
             }
             catch
             {
