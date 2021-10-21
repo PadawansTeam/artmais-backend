@@ -29,6 +29,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
 using ArtmaisBackend.Core.Publications.Interface;
 using ArtmaisBackend.Core.Publications.Service;
+using ArtmaisBackend.Core.Recomendation.Services;
 
 namespace ArtmaisBackend.Infrastructure.Extensions.Services
 {
@@ -39,8 +40,6 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
         {
             var awsConfigRegion = configuration.GetSection("AWSConfig:Region").Value;
 
-            services.AddHostedService<RecomendationService>();
-            
             services.AddScoped<ISignInService, SignInService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IInterestMediator, InterestMediator>();
@@ -56,6 +55,7 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
             services.AddScoped<IAwsService, AwsService>();
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<IPublicationService, PublicationService>();
+            services.AddScoped<IRecomendationService, Core.Recomendation.Services.RecomendationService>();
             
             services.AddAWSService<IAmazonS3>(new AWSOptions { Region = RegionEndpoint.GetBySystemName(awsConfigRegion) });
             
