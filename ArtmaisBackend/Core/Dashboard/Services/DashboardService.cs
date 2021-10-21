@@ -14,7 +14,7 @@ namespace ArtmaisBackend.Core.Dashboard.Services
         private readonly HttpClient _client;
         private readonly DbServiceConfiguration _dbServiceConfiguration;
 
-        public DashboardService(IHttpClientFactory clientFactory, ILogger<DashboardService> logger, IOptions<DbServiceConfiguration> options)
+        public DashboardService(IHttpClientFactory clientFactory, IOptions<DbServiceConfiguration> options)
         {
             _client = clientFactory.CreateClient() ?? throw new ArgumentNullException(nameof(clientFactory));
             _dbServiceConfiguration = options.Value ?? throw new ArgumentNullException(nameof(options));
