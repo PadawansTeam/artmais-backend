@@ -17,6 +17,7 @@
 		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.1" />
 		<PackageReference Include="AWSSDK.S3" Version="3.7.2.5" />
 		<PackageReference Include="Google.Apis.Auth" Version="1.52.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
 		<PackageReference Include="Microsoft.ML" Version="1.6.0" />
 		<PackageReference Include="Microsoft.ML.Recommender" Version="0.18.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
