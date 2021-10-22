@@ -7,6 +7,6 @@ namespace ArtmaisBackend.Core.Profile.Interface
     public interface IInterestMediator
     {
         InterestDto Index(ClaimsPrincipal userClaims);
-        Task<dynamic> Create(InterestRequest interestRequest, ClaimsPrincipal userClaims);
+        Task<MessageDto> Create(InterestRequest interestRequest, ClaimsPrincipal userClaims);
     }
 }
