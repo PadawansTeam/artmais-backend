@@ -32,6 +32,8 @@ namespace ArtmaisBackend
                 .AddSecuritiesServices(Configuration)
                 .AddAutoMapper(typeof(Startup).Assembly)
                 .AddControllers()
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new DateTimeConverter()));
         }
 

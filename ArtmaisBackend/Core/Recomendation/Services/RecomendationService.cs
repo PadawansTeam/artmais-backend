@@ -1,34 +1,31 @@
-﻿using ArtmaisBackend.Core.Dashboard.Responses;
+﻿using ArtmaisBackend.Core.Recomendation.Responses;
 using ArtmaisBackend.Infrastructure.Options;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace ArtmaisBackend.Core.Dashboard.Services
+namespace ArtmaisBackend.Core.Recomendation.Services
 {
-    public class DashboardService : IDashboardService
+    public class RecomendationService : IRecomendationService
     {
         private readonly HttpClient _client;
         private readonly DbServiceConfiguration _dbServiceConfiguration;
 
-        public DashboardService(IHttpClientFactory clientFactory, IOptions<DbServiceConfiguration> options)
+        public RecomendationService(IHttpClientFactory clientFactory, IOptions<DbServiceConfiguration> options)
         {
             _client = clientFactory.CreateClient() ?? throw new ArgumentNullException(nameof(clientFactory));
             _dbServiceConfiguration = options.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public async Task<DashboardResponse> GetAsync(long userId)
+        public async Task<RecomendationResponse> GetAsync(int subcategory)
         {
-            var response = await _client.GetAsync($"{_dbServiceConfiguration.Url}dashboard/{userId}");
+            var response = await _client.GetAsync($"{_dbServiceConfiguration.Url}recomendation/{subcategory}");
 
             var body = await response.Content.ReadAsStringAsync();
 
-            var dashboardResponse = JsonConvert.DeserializeObject<DashboardResponse>(body);
-
-            return dashboardResponse;
+            return JsonConvert.DeserializeObject<RecomendationResponse>(body);
         }
     }
 }
