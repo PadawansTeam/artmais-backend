@@ -9,6 +9,7 @@ namespace ArtmaisBackend.Core.Dashboard.Responses
         public IEnumerable<GrowthData> VisitsGrowth { get; set; }
         public IEnumerable<PredictionData> CommentsPrediction { get; set; }
         public IEnumerable<PredictionData> LikesPrediction { get; set; }
+        public IEnumerable<PredictionData> VisitsPrediction { get; set; }
         public int AverageUsersAge { get; set; }
         public int SumComments { get; set; }
         public int SumLikes { get; set; }
