@@ -143,6 +143,7 @@ namespace ArtmaisBackend.Core.Publications.Service
 
             var publicationDto = new PublicationDto
             {
+                UserId = user?.UserID,
                 Name = user?.Name,
                 Username = user?.Username,
                 UserPicture = user?.UserPicture,
