@@ -237,6 +237,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             };
             var expectedResult = new PublicationDto
             {
+                UserId = user.UserID,
                 BackgroundPicture = "BackgrounPicture",
                 Category = "Category",
                 CommentsAmount = 2,
