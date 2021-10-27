@@ -228,11 +228,11 @@ namespace ArtmaisBackend.Tests.Core.Publications
             {
                 new CommentDto
                 {
-                Description = "description1"
+                    Description = "description1"
                 },
                 new CommentDto
                 {
-                Description = "description2"
+                    Description = "description2"
                 }
             };
             var expectedResult = new PublicationDto

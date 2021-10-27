@@ -15,20 +15,21 @@ namespace ArtmaisBackend.Infrastructure.Repository
     {
         public CommentRepository(ArtplusContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         private readonly ArtplusContext _context;
 
         public async Task<List<CommentDto?>> GetAllCommentsByPublicationId(int? publicationId)
         {
-            var listComments = await (from comments in this._context.Comment
-                                      join user in this._context.User on comments.UserID equals user.UserID
+            var listComments = await (from comments in _context.Comment
+                                      join user in _context.User on comments.UserID equals user.UserID
                                       where comments.PublicationID.Equals(publicationId)
                                       select new CommentDto
                                       {
                                           Name = user.Name,
                                           Username = user.Username,
+                                          UserPicture = user.UserPicture,
                                           Description = comments.Description,
                                           CommentDate = comments.CommentDate
                                       }).ToListAsync();
@@ -46,8 +47,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 CommentDate = DateTime.Now
             };
 
-            this._context.Comment.Add(commentContent);
-            this._context.SaveChanges();
+            _context.Comment.Add(commentContent);
+            _context.SaveChanges();
         }
     }
 }
