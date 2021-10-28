@@ -100,7 +100,9 @@ namespace ArtmaisBackend.Tests.Core.Publications
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockLikeRepository = new Mock<ILikeRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
-
+            Like like = null;
+            
+            mockLikeRepository.Setup(x => x.GetLikeByPublicationIdAndUserId(It.IsAny<int>(), It.IsAny<long>())).Returns(like);
             mockLikeRepository.Setup(x => x.Create(It.IsAny<int>(), It.IsAny<long>()));
             #endregion
 
@@ -108,6 +110,33 @@ namespace ArtmaisBackend.Tests.Core.Publications
             var result = await publicationService.InsertLike(It.IsAny<int>(), It.IsAny<long>());
 
             result.Should().BeTrue();
+        }
+
+        [Fact(DisplayName = "Insert Like should be false")]
+        public async Task InsertLikeShouldBeReturnsFalse()
+        {
+            #region Mocks
+            var mockUserService = new Mock<IUserService>();
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockPublicationRepository = new Mock<IPublicationRepository>();
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockLikeRepository = new Mock<ILikeRepository>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+            var like = new Like 
+            { 
+                PublicationID = 1,
+                LikeID = 1,
+                LikeDate = DateTime.Now
+            };
+
+            mockLikeRepository.Setup(x => x.GetLikeByPublicationIdAndUserId(It.IsAny<int>(), It.IsAny<long>())).Returns(like);
+            mockLikeRepository.Setup(x => x.Create(It.IsAny<int>(), It.IsAny<long>()));
+            #endregion
+
+            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var result = await publicationService.InsertLike(It.IsAny<int>(), It.IsAny<long>());
+
+            result.Should().BeFalse();
         }
 
         [Fact(DisplayName = "Insert Like should be returns throw when publication id is null")]
