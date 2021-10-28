@@ -32,6 +32,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             };
             var mockUserService = new Mock<IUserService>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPublicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockLikeRepository = new Mock<ILikeRepository>();
@@ -40,7 +41,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             mockCommentRepository.Setup(x => x.Create(commentRequest, userId));
             #endregion
 
-            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
             var result = publicationService.InsertComment(commentRequest, userId);
 
             result.Should().BeTrue();
@@ -56,6 +57,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             };
             var mockUserService = new Mock<IUserService>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPublicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockLikeRepository = new Mock<ILikeRepository>();
@@ -63,7 +65,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
 
             #endregion
 
-            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
 
             Action act = () => publicationService.InsertComment(commentRequest, It.IsAny<long>());
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -79,13 +81,14 @@ namespace ArtmaisBackend.Tests.Core.Publications
             };
             var mockUserService = new Mock<IUserService>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPublicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockLikeRepository = new Mock<ILikeRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             #endregion
 
-            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
 
             Action act = () => publicationService.InsertComment(commentRequest, It.IsAny<long>());
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -97,6 +100,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             #region Mocks
             var mockUserService = new Mock<IUserService>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPublicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockLikeRepository = new Mock<ILikeRepository>();
@@ -107,7 +111,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             mockLikeRepository.Setup(x => x.Create(It.IsAny<int>(), It.IsAny<long>()));
             #endregion
 
-            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
             var result = await publicationService.InsertLike(It.IsAny<int>(), It.IsAny<long>());
 
             result.Should().BeTrue();
@@ -119,6 +123,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             #region Mocks
             var mockUserService = new Mock<IUserService>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPublicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockLikeRepository = new Mock<ILikeRepository>();
@@ -134,7 +139,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             mockLikeRepository.Setup(x => x.Create(It.IsAny<int>(), It.IsAny<long>()));
             #endregion
 
-            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
             var result = await publicationService.InsertLike(It.IsAny<int>(), It.IsAny<long>());
 
             result.Should().BeFalse();
@@ -145,12 +150,13 @@ namespace ArtmaisBackend.Tests.Core.Publications
         {
             var mockUserService = new Mock<IUserService>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPublicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockLikeRepository = new Mock<ILikeRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
 
-            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
 
             Func<Task> result = async () =>
             {
@@ -174,6 +180,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             };
             var mockUserService = new Mock<IUserService>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPublicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockLikeRepository = new Mock<ILikeRepository>();
@@ -183,7 +190,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             mockLikeRepository.Setup(x => x.Delete(expectedLike));
             #endregion
 
-            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
             var result = publicationService.DeleteLike(publicationId, userId);
 
             result.Should().BeTrue();
@@ -194,12 +201,13 @@ namespace ArtmaisBackend.Tests.Core.Publications
         {
             var mockUserService = new Mock<IUserService>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPublicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockLikeRepository = new Mock<ILikeRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
 
-            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
 
             Action act = () => publicationService.DeleteLike(null, It.IsAny<long>());
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -211,6 +219,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             #region Mocks
             var mockUserService = new Mock<IUserService>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPublicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockLikeRepository = new Mock<ILikeRepository>();
@@ -238,6 +247,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
                     PublicationID = 123,
                     Description = "Description",
                     S3UrlMedia = "S3UrlMedia",
+                    MediaTypeID = 1,
                     PublicationDate = new DateTime(2021, 12, 10)
                 },
                 new PortfolioContentDto
@@ -271,6 +281,10 @@ namespace ArtmaisBackend.Tests.Core.Publications
                     Description = "description2"
                 }
             };
+            var mediaType = new MediaType
+            {
+                Description = "Imagem",
+            };
             var expectedResult = new PublicationDto
             {
                 UserId = user.UserID,
@@ -292,12 +306,14 @@ namespace ArtmaisBackend.Tests.Core.Publications
                 Username = "Username",
                 UserPicture = "UserPicture",
                 UserTwitter = "Twitter",
+                MediaType = "Imagem",
                 Comments = comment
             };
             mockUserRepository.Setup(m => m.GetUserById(userId)).Returns(user);
             mockPublicationRepository.Setup(m => m.GetAllPublicationsByUserId(userId)).Returns(portfolio);
             mockUserRepository.Setup(m => m.GetSubcategoryByUserId(userId)).Returns(userCategory);
             mockUserService.Setup(m => m.GetShareProfile(userId)).Returns(shareProfile);
+            mockMediaTypeRepository.Setup(m => m.GetMediaTypeById(portfolio[0].MediaTypeID)).Returns(mediaType);
             mockOptions.Setup(m => m.Value).Returns(new SocialMediaConfiguration
             {
                 Facebook = "https://www.facebook.com/sharer/sharer.php?u=",
@@ -308,7 +324,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             mockCommentRepository.Setup(m => m.GetAllCommentsByPublicationId(publicationId)).ReturnsAsync(comment);
             #endregion
 
-            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
 
             var result = await publicationService.GetPublicationById(publicationId, userId, userJwtData);
 
@@ -329,6 +345,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
 
             var mockUserService = new Mock<IUserService>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
             var mockPublicationRepository = new Mock<IPublicationRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockLikeRepository = new Mock<ILikeRepository>();
@@ -336,7 +353,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object); ;
+            var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object); ;
 
             Func<Task> result = async () =>
             {
