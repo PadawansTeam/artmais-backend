@@ -3,6 +3,7 @@ using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Publications.Dto;
 using ArtmaisBackend.Core.Publications.Request;
 using ArtmaisBackend.Core.Publications.Service;
+using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Interface;
 using ArtmaisBackend.Infrastructure.Options;
@@ -216,6 +217,12 @@ namespace ArtmaisBackend.Tests.Core.Publications
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var userId = 1;
             var publicationId = 123;
+            var userJwtData = new UserJwtData
+            {
+                Role = "Artist",
+                UserID = 1,
+                UserName = "test"
+            };
             var user = new User
             {
                 UserID = 1,
@@ -303,7 +310,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
 
             var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
 
-            var result = await publicationService.GetPublicationById(publicationId, userId);
+            var result = await publicationService.GetPublicationById(publicationId, userId, userJwtData);
 
             result.Should().BeEquivalentTo(expectedResult);
         }
@@ -311,6 +318,12 @@ namespace ArtmaisBackend.Tests.Core.Publications
         [Fact(DisplayName = "Get Publication By Id should be throw when publication id or user id is null")]
         public async Task GetPublicationByIdShouldBeThrow()
         {
+            var userJwtData = new UserJwtData
+            {
+                Role = "Artist",
+                UserID = 1,
+                UserName = "test"
+            };
             int? publicationId = null;
             long userId = 1;
 
@@ -327,7 +340,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
 
             Func<Task> result = async () =>
             {
-                await publicationService.GetPublicationById(publicationId, userId);
+                await publicationService.GetPublicationById(publicationId, userId, userJwtData);
             };
             await result.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
