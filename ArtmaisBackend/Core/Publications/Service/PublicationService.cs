@@ -2,6 +2,7 @@
 using ArtmaisBackend.Core.Publications.Dto;
 using ArtmaisBackend.Core.Publications.Interface;
 using ArtmaisBackend.Core.Publications.Request;
+using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.Users.Interface;
 using ArtmaisBackend.Infrastructure;
 using ArtmaisBackend.Infrastructure.Options;
@@ -117,16 +118,16 @@ namespace ArtmaisBackend.Core.Publications.Service
             return likesAmount;
         }
 
-        public async Task<PublicationDto> GetPublicationById(int? publicationId, long? userId)
+        public async Task<PublicationDto> GetPublicationById(int? publicationId, long? publicationOwnerUserId, UserJwtData visitorUser)
         {
-            if (publicationId is null || userId is null)
+            if (publicationId is null || publicationOwnerUserId is null)
                 throw new ArgumentNullException();
 
-            var user = _userRepository.GetUserById(userId);
-            if (user is null)
+            var publicationOwnerUser = _userRepository.GetUserById(publicationOwnerUserId);
+            if (publicationOwnerUser is null)
                 throw new ArgumentNullException();
 
-            var portfolio = _publicationRepository.GetAllPublicationsByUserId(userId);
+            var portfolio = _publicationRepository.GetAllPublicationsByUserId(publicationOwnerUserId);
             if (portfolio is null)
                 throw new ArgumentNullException();
 
@@ -134,19 +135,19 @@ namespace ArtmaisBackend.Core.Publications.Service
             if (publication is null)
                 throw new ArgumentNullException();
 
-            var userCategory = _userRepository.GetSubcategoryByUserId(user.UserID);
-            var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(user.UserID, publication.PublicationID);
-            var isLiked = GetIsLikedPublication(publication.PublicationID, user.UserID);
+            var userCategory = _userRepository.GetSubcategoryByUserId(publicationOwnerUser.UserID);
+            var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(publicationOwnerUser.UserID, publication.PublicationID);
+            var isLiked = GetIsLikedPublication(publication.PublicationID, visitorUser.UserID);
             var comments = await GetAllCommentsByPublicationId(publication.PublicationID);
-            var contactProfile = _userService.GetShareProfile(user.UserID);
+            var contactProfile = _userService.GetShareProfile(publicationOwnerUser.UserID);
             var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID);
 
             var publicationDto = new PublicationDto
             {
-                Name = user?.Name,
-                Username = user?.Username,
-                UserPicture = user?.UserPicture,
-                BackgroundPicture = user?.BackgroundPicture,
+                Name = publicationOwnerUser?.Name,
+                Username = publicationOwnerUser?.Username,
+                UserPicture = publicationOwnerUser?.UserPicture,
+                BackgroundPicture = publicationOwnerUser?.BackgroundPicture,
                 Category = userCategory?.Category,
                 Subcategory = userCategory?.Subcategory,
                 UserFacebook = contactProfile?.Facebook,
