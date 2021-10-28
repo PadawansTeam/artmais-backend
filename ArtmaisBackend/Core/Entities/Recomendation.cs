@@ -13,13 +13,13 @@ namespace ArtmaisBackend.Core.Entities
         [Column("idsubcategoria")]
         public int SubcategoryID { get; set; }
 
-        [Column("SubcategoryID")]
+        [ForeignKey("SubcategoryID")]
         public Subcategory Subcategory { get; set; }
 
         [Column("idinteresse")]
         public int InterestID { get; set; }
 
-        [Column("InterestID")]
+        [ForeignKey("InterestID")]
         public Interest Interest { get; set; }
     }
 }
