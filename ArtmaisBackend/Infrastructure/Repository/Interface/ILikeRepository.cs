@@ -1,4 +1,5 @@
 ﻿using ArtmaisBackend.Core.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Infrastructure.Repository.Interface
@@ -11,6 +12,8 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
 
         Like? GetLikeByPublicationIdAndUserId(int? publicationId, long userId);
 
-        Task<int> GetAllLikesByPublicationId(int? publicationId);
+        Task<int> GetAllLikesAmountByPublicationId(int? publicationId);
+
+        Task<List<Like>> GetAllLikesByPublicationId(int? publicationId);
     }
 }

@@ -321,7 +321,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
                 Whatsapp = "https://wa.me/",
                 ArtMais = "https://artmais-frontend.herokuapp.com/artista/"
             });
-            mockCommentRepository.Setup(m => m.GetAllCommentsByPublicationId(publicationId)).ReturnsAsync(comment);
+            mockCommentRepository.Setup(m => m.GetAllCommentsDtoByPublicationId(publicationId)).ReturnsAsync(comment);
             #endregion
 
             var publicationService = new PublicationService(mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);

@@ -1,29 +1,32 @@
 ﻿using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Core.Portfolio.Request;
-using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using ArtmaisBackend.Util.File;
 using AutoMapper;
-using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Portfolio.Service
 {
     public class PortfolioService : IPortfolioService
     {
-        public PortfolioService(IMediaRepository mediaRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, IMapper mapper)
+        public PortfolioService(IMediaRepository mediaRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, ILikeRepository likeRepository, ICommentRepository commentRepository, IMapper mapper)
         {
-            this._mediaRepository = mediaRepository;
-            this._mediaTypeRepository = mediaTypeRepository;
-            this._publicationRepository = publicationRepository;
-            this._mapper = mapper;
+            _mediaRepository = mediaRepository;
+            _mediaTypeRepository = mediaTypeRepository;
+            _publicationRepository = publicationRepository;
+            _likeRepository = likeRepository;
+            _commentRepository = commentRepository;
+            _mapper = mapper;
         }
 
         private readonly IMediaRepository _mediaRepository;
         private readonly IMediaTypeRepository _mediaTypeRepository;
         private readonly IPublicationRepository _publicationRepository;
+        private readonly ILikeRepository _likeRepository;
+        private readonly ICommentRepository _commentRepository;
         private readonly IMapper _mapper;
 
         public PortfolioContentListDto GetLoggedUserPortfolioById(long? userId)
@@ -31,7 +34,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             if (userId is null)
                 throw new ArgumentNullException();
 
-            var publicationContent = this._publicationRepository.GetAllPublicationsByUserId(userId);
+            var publicationContent = _publicationRepository.GetAllPublicationsByUserId(userId);
 
             var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.IMAGE).ToList();
             var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.VIDEO).ToList();
@@ -53,7 +56,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             if (userId is null)
                 throw new ArgumentNullException();
 
-            var publicationContent = this._publicationRepository.GetAllPublicationsByUserId(userId);
+            var publicationContent = _publicationRepository.GetAllPublicationsByUserId(userId);
 
             var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.IMAGE).ToList();
             var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.VIDEO).ToList();
@@ -78,15 +81,15 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             if (portfolioRequest.Description is null)
                 portfolioRequest.Description = string.Empty;
 
-            var mediaTypeContent = this._mediaTypeRepository.GetMediaTypeById(mediaTypeId);
+            var mediaTypeContent = _mediaTypeRepository.GetMediaTypeById(mediaTypeId);
             if (mediaTypeContent is null)
                 throw new ArgumentNullException();
 
-            var mediaContent = this._mediaRepository.Create(portfolioRequest, userId, mediaTypeContent);
+            var mediaContent = _mediaRepository.Create(portfolioRequest, userId, mediaTypeContent);
             if (mediaContent is null)
                 throw new ArgumentNullException();
 
-            var publicationContent = this._publicationRepository.Create(portfolioRequest, userId, mediaContent);
+            var publicationContent = _publicationRepository.Create(portfolioRequest, userId, mediaContent);
             if (publicationContent is null)
                 throw new ArgumentNullException();
 
@@ -109,22 +112,22 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             if (portfolioDescriptionRequest.PublicationId is null || portfolioDescriptionRequest.PublicationDescription is null)
                 throw new ArgumentNullException();
 
-            var portfolioInfo = this._publicationRepository.GetPublicationByIdAndUserId(userId, portfolioDescriptionRequest.PublicationId);
+            var portfolioInfo = _publicationRepository.GetPublicationByIdAndUserId(userId, portfolioDescriptionRequest.PublicationId);
             if (portfolioInfo is null)
                 throw new ArgumentNullException();
 
-            this._mapper.Map(portfolioDescriptionRequest, portfolioInfo);
-            this._publicationRepository.Update(portfolioInfo);
+            _mapper.Map(portfolioDescriptionRequest, portfolioInfo);
+            _publicationRepository.Update(portfolioInfo);
 
             return true;
         }
-        
+
         public PortfolioContentDto GetPublicationByIdToDelete(int? publicationId, long userId)
         {
             if (publicationId == null)
                 throw new ArgumentNullException();
 
-            var portfolio = this._publicationRepository.GetAllPublicationsByUserId(userId);
+            var portfolio = _publicationRepository.GetAllPublicationsByUserId(userId);
 
             if (portfolio == null)
                 throw new ArgumentNullException();
@@ -132,6 +135,33 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             var publication = portfolio.Where(p => p.PublicationID == publicationId).FirstOrDefault();
 
             return publication;
+        }
+
+        public async Task DeleteAllLikes(PortfolioContentDto? portfolioContentDto)
+        {
+            var likesInfo = await _likeRepository.GetAllLikesByPublicationId(portfolioContentDto.MediaID);
+
+            if (likesInfo is null)
+                throw new ArgumentNullException();
+
+            foreach (var likeInfo in likesInfo)
+            {
+                _mapper.Map(portfolioContentDto, likeInfo);
+                _likeRepository.Delete(likeInfo);
+            }
+        }
+        public async Task DeleteAllComments(PortfolioContentDto? portfolioContentDto)
+        {
+            var commentsInfo = await _commentRepository.GetAllCommentsByPublicationId(portfolioContentDto.MediaID);
+
+            if (commentsInfo is null)
+                throw new ArgumentNullException();
+
+            foreach (var commentInfo in commentsInfo)
+            {
+                _mapper.Map(portfolioContentDto, commentsInfo);
+                _commentRepository.Delete(commentInfo);
+            }
         }
 
         public void DeletePublication(PortfolioContentDto? portfolioContentDto, long userId)
