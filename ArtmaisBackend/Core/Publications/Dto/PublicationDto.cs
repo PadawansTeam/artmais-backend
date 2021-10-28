@@ -6,6 +6,7 @@ namespace ArtmaisBackend.Core.Portfolio.Dto
 {
     public class PublicationDto
     {
+        public long? UserId { get; set; }
         public string? Name { get; set; }
         public string? Username { get; set; }
         public string? UserPicture { get; set; }

@@ -75,8 +75,12 @@ namespace ArtmaisBackend.Core.Publications.Service
             if (publicationId is null)
                 throw new ArgumentNullException();
 
-            await _likeRepository.Create(publicationId, userId);
+            var likeInfo = _likeRepository.GetLikeByPublicationIdAndUserId(publicationId, userId);
 
+            if (likeInfo != null)
+                return false;
+
+            await _likeRepository.Create(publicationId, userId);
             return true;
         }
 
@@ -144,6 +148,7 @@ namespace ArtmaisBackend.Core.Publications.Service
 
             var publicationDto = new PublicationDto
             {
+                UserId = publicationOwnerUser?.UserID,
                 Name = publicationOwnerUser?.Name,
                 Username = publicationOwnerUser?.Username,
                 UserPicture = publicationOwnerUser?.UserPicture,

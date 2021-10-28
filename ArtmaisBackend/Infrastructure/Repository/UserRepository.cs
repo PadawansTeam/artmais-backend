@@ -1,5 +1,4 @@
-﻿using ArtmaisBackend.Core.Aws.Dto;
-using ArtmaisBackend.Core.Entities;
+﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.OAuth.Google;
 using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.SignIn;
@@ -18,7 +17,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
     {
         public UserRepository(ArtplusContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         private readonly ArtplusContext _context;
@@ -41,8 +40,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 UserTypeId = userTypeId
             };
 
-            this._context.User.Add(user);
-            this._context.SaveChanges();
+            _context.User.Add(user);
+            _context.SaveChanges();
 
             _context.Entry(user).Reference(u => u.UserType).Load();
 
@@ -66,8 +65,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 UserTypeId = userTypeId
             };
 
-            this._context.User.Add(user);
-            this._context.SaveChanges();
+            _context.User.Add(user);
+            _context.SaveChanges();
 
             _context.Entry(user).Reference(u => u.UserType).Load();
 
@@ -76,7 +75,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public User GetUserByEmail(string email)
         {
-            var query = from user in this._context.User
+            var query = from user in _context.User
                         where user.Email.Equals(email)
                         select new User
                         {
@@ -98,53 +97,55 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public IEnumerable<RecomendationDto> GetUsersByInterest(long userId)
         {
-            var recomendationResults = (from user in this._context.User
-                                        join recomendation in this._context.Recomendation on user.SubcategoryID equals recomendation.SubcategoryID
-                                        join subcategory in this._context.Subcategory on recomendation.SubcategoryID equals subcategory.SubcategoryID
-                                        join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
-                                        where
-                                        recomendation.Interest.UserID.Equals(userId)
-                                        && !user.UserID.Equals(userId)
-                                        && subcategory.OtherSubcategory.Equals(false)
-                                        select new RecomendationDto
-                                        {
-                                            UserId = user.UserID,
-                                            Username = user.Username,
-                                            UserPicture = user.UserPicture,
-                                            BackgroundPicture = user.BackgroundPicture,
-                                            Category = category.UserCategory,
-                                            Subcategory = subcategory.UserSubcategory
-                                        }).Distinct();
+            var recomendationQuery =
+                (from user in _context.User
+                 join recomendation in _context.Recomendation on user.SubcategoryID equals recomendation.SubcategoryID
+                 join subcategory in _context.Subcategory on recomendation.SubcategoryID equals subcategory.SubcategoryID
+                 join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+                 where
+                 recomendation.Interest.UserID.Equals(userId)
+                 && !user.UserID.Equals(userId)
+                 && subcategory.OtherSubcategory.Equals(false)
+                 select new RecomendationDto
+                 {
+                     UserId = user.UserID,
+                     Username = user.Username,
+                     UserPicture = user.UserPicture,
+                     BackgroundPicture = user.BackgroundPicture,
+                     Category = category.UserCategory,
+                     Subcategory = subcategory.UserSubcategory
+                 }).Distinct();
 
-            var results = (from user in this._context.User
-                           join interest in this._context.Interest on user.SubcategoryID equals interest.SubcategoryID
-                           join subcategory in this._context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID
-                           join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
-                           where
-                           interest.UserID.Equals(userId)
-                           && !user.UserID.Equals(userId)
-                           && subcategory.OtherSubcategory.Equals(false)
-                           select new RecomendationDto
-                           {
-                               UserId = user.UserID,
-                               Username = user.Username,
-                               UserPicture = user.UserPicture,
-                               BackgroundPicture = user.BackgroundPicture,
-                               Category = category.UserCategory,
-                               Subcategory = subcategory.UserSubcategory
-                           }).Concat(recomendationResults);
+            var interestQuery =
+                (from user in _context.User
+                 join interest in _context.Interest on user.SubcategoryID equals interest.SubcategoryID
+                 join subcategory in _context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID
+                 join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+                 where
+                 interest.UserID.Equals(userId)
+                 && !user.UserID.Equals(userId)
+                 && subcategory.OtherSubcategory.Equals(false)
+                 select new RecomendationDto
+                 {
+                     UserId = user.UserID,
+                     Username = user.Username,
+                     UserPicture = user.UserPicture,
+                     BackgroundPicture = user.BackgroundPicture,
+                     Category = category.UserCategory,
+                     Subcategory = subcategory.UserSubcategory
+                 });
 
-            return results;
+            return recomendationQuery.Union(interestQuery);
         }
 
         public User GetUserByUsername(string username)
         {
-            return this._context.User.FirstOrDefault(user => user.Username == username);
+            return _context.User.FirstOrDefault(user => user.Username == username);
         }
 
         public User GetUserById(long? id)
         {
-            var user = this._context.User.FirstOrDefault(user => user.UserID == id);
+            var user = _context.User.FirstOrDefault(user => user.UserID == id);
 
             _context.Entry(user).Reference(u => u.UserType).Load();
 
@@ -153,17 +154,17 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public User Update(User user)
         {
-            this._context.User.Update(user);
-            this._context.SaveChanges();
+            _context.User.Update(user);
+            _context.SaveChanges();
 
             return user;
         }
 
         public UserCategoryDto GetSubcategoryByUserId(long userId)
         {
-            var query = from user in this._context.User
-                        join subcategory in this._context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
-                        join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
+            var query = from user in _context.User
+                        join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
+                        join category in _context.Category on subcategory.CategoryID equals category.CategoryID
                         where user.UserID.Equals(userId)
                         select new UserCategoryDto
                         {
@@ -176,9 +177,9 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public IEnumerable<RecomendationDto> GetUsers()
         {
-            var results = (from user in this._context.User
-                           join subcategory in this._context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
-                           join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
+            var results = (from user in _context.User
+                           join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
+                           join category in _context.Category on subcategory.CategoryID equals category.CategoryID
                            select new RecomendationDto
                            {
                                UserId = user.UserID,
@@ -194,9 +195,9 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public IEnumerable<RecomendationDto> GetUsersByUsernameOrNameOrSubcategoryOrCategory(string searchValue)
         {
-            var results = (from user in this._context.User
-                           join subcategory in this._context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
-                           join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
+            var results = (from user in _context.User
+                           join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
+                           join category in _context.Category on subcategory.CategoryID equals category.CategoryID
                            where user.Username.ToUpper().Contains(searchValue.ToUpper())
                            || user.Name.ToUpper().Contains(searchValue.ToUpper())
                            || subcategory.UserSubcategory.ToUpper().Contains(searchValue.ToUpper())
