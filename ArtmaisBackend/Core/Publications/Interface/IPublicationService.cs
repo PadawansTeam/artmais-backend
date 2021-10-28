@@ -1,5 +1,6 @@
 ﻿using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Publications.Request;
+using ArtmaisBackend.Core.SignIn;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Publications.Interface
@@ -12,6 +13,6 @@ namespace ArtmaisBackend.Core.Publications.Interface
 
         bool DeleteLike(int? publicationId, long userId);
 
-        Task<PublicationDto> GetPublicationById(int? publicationId, long? userId);
+        Task<PublicationDto> GetPublicationById(int? publicationId, long? publicationOwnerUserId, UserJwtData visitorUser);
     }
 }
