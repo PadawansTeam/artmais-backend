@@ -89,15 +89,16 @@ namespace ArtmaisBackend.Controllers
             }
         }
 
-        [HttpGet("[Action]")]
+        [HttpGet("[Action]/{publicationId}/{publicationOwnerUserId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<PublicationDto>> GetPublicationById(int? publicationId, long? userId)
+        public async Task<ActionResult<PublicationDto>> GetPublicationById(int? publicationId, long? publicationOwnerUserId)
         {
             try
             {
-                var publicationDto = await _publicationService.GetPublicationById(publicationId, userId);
+                var visitorUser = _jwtToken.ReadToken(User);
+                var publicationDto = await _publicationService.GetPublicationById(publicationId, publicationOwnerUserId, visitorUser);
                 return Ok(publicationDto);
             }
             catch (ArgumentNullException ex)
