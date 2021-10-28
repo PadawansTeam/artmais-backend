@@ -98,43 +98,88 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public IEnumerable<RecomendationDto> GetUsersByInterest(long userId)
         {
-            var recomendationResults = (from user in this._context.User
-                                        join recomendation in this._context.Recomendation on user.SubcategoryID equals recomendation.SubcategoryID
-                                        join subcategory in this._context.Subcategory on recomendation.SubcategoryID equals subcategory.SubcategoryID
-                                        join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
-                                        where
-                                        recomendation.Interest.UserID.Equals(userId)
-                                        && !user.UserID.Equals(userId)
-                                        && subcategory.OtherSubcategory.Equals(false)
-                                        select new RecomendationDto
-                                        {
-                                            UserId = user.UserID,
-                                            Username = user.Username,
-                                            UserPicture = user.UserPicture,
-                                            BackgroundPicture = user.BackgroundPicture,
-                                            Category = category.UserCategory,
-                                            Subcategory = subcategory.UserSubcategory
-                                        }).Distinct();
+            //unique query
+            var recomendationQuery = 
+                (from user in this._context.User
+                join recomendation in this._context.Recomendation on user.SubcategoryID equals recomendation.SubcategoryID
+                join subcategory in this._context.Subcategory on recomendation.SubcategoryID equals subcategory.SubcategoryID
+                join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
+                where
+                recomendation.Interest.UserID.Equals(userId)
+                && !user.UserID.Equals(userId)
+                && subcategory.OtherSubcategory.Equals(false)
+                select new RecomendationDto
+                {
+                    UserId = user.UserID,
+                    Username = user.Username,
+                    UserPicture = user.UserPicture,
+                    BackgroundPicture = user.BackgroundPicture,
+                    Category = category.UserCategory,
+                    Subcategory = subcategory.UserSubcategory
+                }).Distinct()
+                  .Union(
+                    (from user in this._context.User
+                    join interest in this._context.Interest on user.SubcategoryID equals interest.SubcategoryID
+                    join subcategory in this._context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID
+                    join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
+                    where
+                    interest.UserID.Equals(userId)
+                    && !user.UserID.Equals(userId)
+                    && subcategory.OtherSubcategory.Equals(false)
+                    select new RecomendationDto
+                    {
+                        UserId = user.UserID,
+                        Username = user.Username,
+                        UserPicture = user.UserPicture,
+                        BackgroundPicture = user.BackgroundPicture,
+                        Category = category.UserCategory,
+                        Subcategory = subcategory.UserSubcategory
+                    }));
 
-            var results = (from user in this._context.User
-                           join interest in this._context.Interest on user.SubcategoryID equals interest.SubcategoryID
-                           join subcategory in this._context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID
-                           join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
-                           where
-                           interest.UserID.Equals(userId)
-                           && !user.UserID.Equals(userId)
-                           && subcategory.OtherSubcategory.Equals(false)
-                           select new RecomendationDto
-                           {
-                               UserId = user.UserID,
-                               Username = user.Username,
-                               UserPicture = user.UserPicture,
-                               BackgroundPicture = user.BackgroundPicture,
-                               Category = category.UserCategory,
-                               Subcategory = subcategory.UserSubcategory
-                           }).Concat(recomendationResults);
 
-            return results;
+            //with two querys
+            var recomendationResultsQuery =
+                    (from user in this._context.User
+                     join recomendation in this._context.Recomendation on user.SubcategoryID equals recomendation.SubcategoryID
+                     join subcategory in this._context.Subcategory on recomendation.SubcategoryID equals subcategory.SubcategoryID
+                     join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
+                     where
+                                 recomendation.Interest.UserID.Equals(userId)
+                                 && !user.UserID.Equals(userId)
+                                 && subcategory.OtherSubcategory.Equals(false)
+                     select new RecomendationDto
+                     {
+                         UserId = user.UserID,
+                         Username = user.Username,
+                         UserPicture = user.UserPicture,
+                         BackgroundPicture = user.BackgroundPicture,
+                         Category = category.UserCategory,
+                         Subcategory = subcategory.UserSubcategory
+                     }).Distinct();
+
+            var interestResultsQuery = 
+                    (from user in this._context.User
+                    join interest in this._context.Interest on user.SubcategoryID equals interest.SubcategoryID
+                    join subcategory in this._context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID
+                    join category in this._context.Category on subcategory.CategoryID equals category.CategoryID
+                    where
+                    interest.UserID.Equals(userId)
+                    && !user.UserID.Equals(userId)
+                    && subcategory.OtherSubcategory.Equals(false)
+                    select new RecomendationDto
+                    {
+                        UserId = user.UserID,
+                        Username = user.Username,
+                        UserPicture = user.UserPicture,
+                        BackgroundPicture = user.BackgroundPicture,
+                        Category = category.UserCategory,
+                        Subcategory = subcategory.UserSubcategory
+                    });
+
+            recomendationResultsQuery.Union(interestResultsQuery);
+
+
+            return recomendationResultsQuery;
         }
 
         public User GetUserByUsername(string username)
