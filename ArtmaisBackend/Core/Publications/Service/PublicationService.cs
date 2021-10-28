@@ -16,10 +16,11 @@ namespace ArtmaisBackend.Core.Publications.Service
 {
     public class PublicationService : IPublicationService
     {
-        public PublicationService(IUserService userService, IUserRepository userRepository, IPublicationRepository publicationRepository, ICommentRepository commentRepository, ILikeRepository likeRepository, IOptions<SocialMediaConfiguration> options)
+        public PublicationService(IUserService userService, IUserRepository userRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, ICommentRepository commentRepository, ILikeRepository likeRepository, IOptions<SocialMediaConfiguration> options)
         {
             _userService = userService;
             _userRepository = userRepository;
+            _mediaTypeRepository = mediaTypeRepository;
             _publicationRepository = publicationRepository;
             _commentRepository = commentRepository;
             _likeRepository = likeRepository;
@@ -28,6 +29,7 @@ namespace ArtmaisBackend.Core.Publications.Service
 
         private readonly IUserService _userService;
         private readonly IUserRepository _userRepository;
+        private readonly IMediaTypeRepository _mediaTypeRepository;
         private readonly IPublicationRepository _publicationRepository;
         private readonly ILikeRepository _likeRepository;
         private readonly ICommentRepository _commentRepository;
@@ -145,6 +147,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             var comments = await GetAllCommentsByPublicationId(publication.PublicationID);
             var contactProfile = _userService.GetShareProfile(publicationOwnerUser.UserID);
             var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID);
+            var mediaType = _mediaTypeRepository.GetMediaTypeById (publication.MediaTypeID);
 
             var publicationDto = new PublicationDto
             {
@@ -164,7 +167,8 @@ namespace ArtmaisBackend.Core.Publications.Service
                 S3UrlMedia = publication?.S3UrlMedia,
                 Description = publication?.Description,
                 PublicationDate = publication?.PublicationDate,
-                Comments = comments?.Comments,
+                MediaType = mediaType?.Description,
+                Comments = comments.Comments,
                 CommentsAmount = comments?.CommentsAmount,
                 LikesAmount = likesAmount,
                 IsLiked = isLiked
