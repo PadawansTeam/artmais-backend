@@ -159,7 +159,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
             foreach (var commentInfo in commentsInfo)
             {
-                _mapper.Map(portfolioContentDto, commentsInfo);
+                _mapper.Map(portfolioContentDto, commentInfo);
                 _commentRepository.Delete(commentInfo);
             }
         }
