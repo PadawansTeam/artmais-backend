@@ -29,6 +29,8 @@ namespace ArtmaisBackend.Infrastructure.Profiles
                 .ForMember(dest => dest.PublicationID, opt => opt.MapFrom(src => src.PublicationId));
             this.CreateMap<PortfolioContentDto, Publication>();
             this.CreateMap<PortfolioContentDto, Media>();
+            this.CreateMap<PortfolioContentDto, Like>();
+            this.CreateMap<PortfolioContentDto, Comment>();
             this.CreateMap<UserRequest, ContactRequest>();
             this.CreateMap<Contact, ContactRequest>();
             this.CreateMap<ContactRequest, Contact>();

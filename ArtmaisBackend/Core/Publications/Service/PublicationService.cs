@@ -50,7 +50,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             if (publicationId is null)
                 throw new ArgumentNullException();
 
-            var comments = await _commentRepository.GetAllCommentsByPublicationId(publicationId);
+            var comments = await _commentRepository.GetAllCommentsDtoByPublicationId(publicationId);
             var commentsAmount = comments.Count();
 
             var publicationCommentsDto = new PublicationCommentsDto(comments, commentsAmount);
@@ -119,7 +119,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             if (publicationId is null)
                 throw new ArgumentNullException();
 
-            var likesAmount = await _likeRepository.GetAllLikesByPublicationId(publicationId);
+            var likesAmount = await _likeRepository.GetAllLikesAmountByPublicationId(publicationId);
 
             return likesAmount;
         }
