@@ -3,6 +3,7 @@ using ArtmaisBackend.Core.Profile.Mediator;
 using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
+using FluentAssertions;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
@@ -19,6 +20,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
                 new RecomendationDto
                 {
                     Username = "Joao",
+                    Name = "Name",
                     UserPicture = "",
                     BackgroundPicture = "",
                     Category = "Tatuador(a)",
@@ -27,6 +29,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
                 new RecomendationDto
                 {
                     Username = "Gabriela",
+                    Name = "OtherName",
                     UserPicture = "",
                     BackgroundPicture = "",
                     Category = "Tatuador(a)",
@@ -48,7 +51,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
             var recomendationMediator = new RecomendationMediator(userRepositoryMock.Object, jwtTokenMock.Object);
             var result = recomendationMediator.Index(null);
 
-            Assert.IsAssignableFrom<IEnumerable<RecomendationDto>>(result);
+            result.Should().BeAssignableTo<IEnumerable<RecomendationDto>>();
         }
     }
 }
