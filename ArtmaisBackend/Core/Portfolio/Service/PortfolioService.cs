@@ -78,9 +78,6 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             if (portfolioRequest.PortfolioImageUrl is null)
                 throw new ArgumentNullException();
 
-            if (portfolioRequest.Description is null)
-                portfolioRequest.Description = string.Empty;
-
             var mediaTypeContent = _mediaTypeRepository.GetMediaTypeById(mediaTypeId);
             if (mediaTypeContent is null)
                 throw new ArgumentNullException();
