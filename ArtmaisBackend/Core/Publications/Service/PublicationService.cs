@@ -141,7 +141,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             if (publication is null)
                 throw new ArgumentNullException();
 
-            if (String.IsNullOrEmpty(publication.Description))
+            if (String.IsNullOrEmpty(publication.Description) || publication.Description == "null")
                 publication.Description = "";
 
             var userCategory = _userRepository.GetSubcategoryByUserId(publicationOwnerUser.UserID);
