@@ -109,6 +109,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                  select new RecomendationDto
                  {
                      UserId = user.UserID,
+                     Name = user.Name,
                      Username = user.Username,
                      UserPicture = user.UserPicture,
                      BackgroundPicture = user.BackgroundPicture,
@@ -128,6 +129,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                  select new RecomendationDto
                  {
                      UserId = user.UserID,
+                     Name = user.Name,
                      Username = user.Username,
                      UserPicture = user.UserPicture,
                      BackgroundPicture = user.BackgroundPicture,
@@ -183,6 +185,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                            select new RecomendationDto
                            {
                                UserId = user.UserID,
+                               Name = user.Name,
                                Username = user.Username,
                                UserPicture = user.UserPicture,
                                BackgroundPicture = user.BackgroundPicture,
@@ -206,6 +209,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                            select new RecomendationDto
                            {
                                UserId = user.UserID,
+                               Name = user.Name,
                                Username = user.Username,
                                UserPicture = user.UserPicture,
                                BackgroundPicture = user.BackgroundPicture,
