@@ -141,6 +141,9 @@ namespace ArtmaisBackend.Core.Publications.Service
             if (publication is null)
                 throw new ArgumentNullException();
 
+            if (String.IsNullOrEmpty(publication.Description))
+                publication.Description = "";
+
             var userCategory = _userRepository.GetSubcategoryByUserId(publicationOwnerUser.UserID);
             var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(publicationOwnerUser.UserID, publication.PublicationID);
             var isLiked = GetIsLikedPublication(publication.PublicationID, visitorUser.UserID);
