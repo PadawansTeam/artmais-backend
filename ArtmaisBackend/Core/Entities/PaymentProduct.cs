@@ -7,7 +7,7 @@ namespace ArtmaisBackend.Core.Entities
     public class PaymentProduct
     {
         [Key]
-        [Column("idproduto")]
+        [Column("idpagamentoproduto")]
         public int PaymentProductID { get; set; }
 
         [Column("idproduto")]
