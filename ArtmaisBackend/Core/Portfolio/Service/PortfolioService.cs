@@ -33,9 +33,9 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
             var publicationContent = this._publicationRepository.GetAllPublicationsByUserId(userId);
 
-            var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.IMAGE).ToList();
-            var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.VIDEO).ToList();
-            var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.AUDIO).ToList();
+            var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.IMAGE).ToList();
+            var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.VIDEO).ToList();
+            var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.AUDIO).ToList();
 
             var publicationList = new PortfolioContentListDto
             {
@@ -55,9 +55,9 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
             var publicationContent = this._publicationRepository.GetAllPublicationsByUserId(userId);
 
-            var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.IMAGE).ToList();
-            var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.VIDEO).ToList();
-            var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.AUDIO).ToList();
+            var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.IMAGE).ToList();
+            var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.VIDEO).ToList();
+            var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.AUDIO).ToList();
 
             var publicationList = new PortfolioContentListDto
             {

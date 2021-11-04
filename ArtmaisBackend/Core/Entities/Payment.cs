@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ArtmaisBackend.Core.Entities
@@ -21,5 +22,11 @@ namespace ArtmaisBackend.Core.Entities
 
         [ForeignKey("PaymentTypeID")]
         public PaymentType? PaymentType { get; set; }
+
+        [Column("datahoracriacao")]
+        public DateTime CreateDate { get; set; }
+
+        [Column("datahoraatualizacao")]
+        public DateTime LastUpdateDate { get; set; }
     }
 }

@@ -8,8 +8,8 @@ namespace ArtmaisBackend.Core.Entities
     public class PaymentHistory
     {
         [Key]
-        [Column("idproduto")]
-        public int PaymentProductID { get; set; }
+        [Column("idhistoricopagamento")]
+        public int PaymentHistoryID { get; set; }
 
         [Column("idpagamento")]
         public int? PaymentID { get; set; }
@@ -23,7 +23,7 @@ namespace ArtmaisBackend.Core.Entities
         [ForeignKey("PaymentID")]
         public PaymentStatus? PaymentStatus { get; set; }
 
-        [Column("datahoraatualizacao")]
-        public DateTime? PayDay { get; set; }
+        [Column("datahoracriacao")]
+        public DateTime? CreateDate { get; set; }
     }
 }
