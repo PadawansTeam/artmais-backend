@@ -22,7 +22,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             var paymentHistory = new PaymentHistory
             {
                 PaymentID = paymentId,
-                CreateDate = DateTime.Now,
+                CreateDate = DateTime.UtcNow,
                 PaymentStatusID = paymentStatusId,
             };
 

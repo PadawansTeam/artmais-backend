@@ -19,7 +19,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public async Task<Payment?> Create(long userId, int paymentTypeEnum)
         {
-            var date = DateTime.Now;
+            var date = DateTime.UtcNow;
             var payment = new Payment
             {
                 UserID = userId,

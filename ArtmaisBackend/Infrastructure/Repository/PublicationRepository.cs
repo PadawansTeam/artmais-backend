@@ -49,7 +49,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 UserID = userId,
                 MediaID = media.MediaID,
                 Description = portfolioRequest.Description,
-                PublicationDate = DateTime.Now
+                PublicationDate = DateTime.UtcNow
             };
 
             _context.Publication.Add(publicationContent);
