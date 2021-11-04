@@ -1,15 +1,12 @@
-﻿using ArtmaisBackend.Core.Payment.Interface;
+﻿using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.Payment.Enum;
+using ArtmaisBackend.Core.Payment.Enums;
+using ArtmaisBackend.Core.Payment.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
-using MercadoPago.Client;
-using MercadoPago.Client.Payment;
-using MercadoPago.Config;
-using MercadoPago.Http;
-using System.Net;
-using System.Net.Http;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Payment.Enums;
 
 namespace ArtmaisBackend.Core.Payment.Service
 {
@@ -43,48 +40,85 @@ namespace ArtmaisBackend.Core.Payment.Service
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        //public async Task InsertMercadoPagoRequest()
-        //{
-
-        //    MercadoPagoConfig.AccessToken = "TEST-4734890284706792-101621-772162e631cd84775da9d50f2e0acb43-278907011";
-
-        //    var request = new PaymentCreateRequest
-        //    {
-        //        TransactionAmount = 10,
-        //        Token = "CARD_TOKEN",
-        //        Description = "Payment description",
-        //        Installments = 1,
-        //        PaymentMethodId = "visa",
-        //        Payer = new PaymentPayerRequest
-        //        {
-        //            Email = "test.payer@email.com",
-        //        }
-        //    };
-
-        //    var client = new PaymentClient();
-        //    var requestOptions = new RequestOptions();
-        //    requestOptions.AccessToken = "YOUR_ACCESS_TOKEN";
-
-        //    Payment payment = await client.CreateAsync(request, requestOptions);
-
-        //    var handler = new HttpClientHandler
-        //    {
-        //        Proxy = new WebProxy(proxyUrl),
-        //        UseProxy = true,
-        //    };
-        //    var httpClient = new HttpClient(handler);
-        //    MercadoPagoConfig.HttpClient = new DefaultHttpClient(httpClient);
-        //}
-
-
-        public async Task<bool> InsertPayment(long userId, PaymentStatusEnum PaymentStatusEnum)
+        public async Task<bool> InsertPayment(long userId, PaymentStatusEnum paymentStatusEnum)
         {
-            var payment = await _paymentRepository.Create(userId, (int)PaymentStatusEnum);
+            var payment = await _paymentRepository.Create(userId, (int)paymentStatusEnum);
 
             if (payment is null)
                 return false;
 
             return true;
+        }
+
+        public async Task<bool> UpdatePayment(Entities.Payment paymentRequest)
+        {
+            paymentRequest.LastUpdateDate = DateTime.UtcNow;
+            var payment = await _paymentRepository.Update(paymentRequest);
+
+            if (payment is null)
+                return false;
+
+            return true;
+        }
+
+        public async Task<Entities.Payment?> GetPaymentByUserId(long userId)
+        {
+            return await _paymentRepository.GetPaymentByUserId(userId);
+        }
+
+        public async Task<Entities.Payment?> GetPaymentByIdAndUserId(int paymentId, long userId)
+        {
+            return await _paymentRepository.GetPaymentByIdAndUserId(paymentId, userId);
+        }
+
+        public async Task<bool> InsertPaymentHistory(int paymentId, PaymentStatusEnum paymentStatusEnum)
+        {
+            var paymentHistory = await _paymentHistoryRepository.Create(paymentId, (int)paymentStatusEnum);
+
+            if (paymentHistory is null)
+                return false;
+
+            return true;
+        }
+
+        public async Task<PaymentHistory?> GetPaymentHistoryByPaymentId(int paymentId)
+        {
+            return await _paymentHistoryRepository.GetPaymentHistoryByPaymentId(paymentId);
+        }
+
+        public async Task<bool> InsertPaymentProduct(int productId, int paymentId)
+        {
+            var paymentProduct = await _paymentProductRepository.Create(productId, paymentId);
+
+            if (paymentProduct is null)
+                return false;
+
+            return true;
+        }
+
+        public async Task<PaymentProduct?> GetPaymentProductByPaymentId(int paymentId)
+        {
+            return await _paymentProductRepository.GetPaymentProductByPaymentId(paymentId);
+        }
+
+        public async Task<Product?> GetSignature()
+        {
+            return await _productRepository.GetSignature();
+        }
+
+        public async Task<List<Product>> GetProductsByUserId(long userId)
+        {
+            return await _productRepository.GetProductsByUserId(userId);
+        }
+
+        public async Task<PaymentStatus?> GetPaymentStatus(PaymentStatusEnum paymentStatusEnum)
+        {
+            return await _paymentStatusRepository.GetPaymentStatusById((int)paymentStatusEnum);
+        }
+
+        public async Task<PaymentType?> GetPaymentType(PaymentTypeEnum paymentTypeEnum)
+        {
+            return await _paymentTypeRepository.GetPaymentTypeById((int)paymentTypeEnum);
         }
     }
 }
