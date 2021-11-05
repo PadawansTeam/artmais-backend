@@ -93,12 +93,12 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<PublicationDto>> GetPublicationById(int? publicationId, long? publicationOwnerUserId)
+        public async Task<ActionResult<PublicationDto>> GetPublicationByIdAndLoggedUser(int? publicationId, long? publicationOwnerUserId)
         {
             try
             {
                 var visitorUser = _jwtToken.ReadToken(User);
-                var publicationDto = await _publicationService.GetPublicationById(publicationId, publicationOwnerUserId, visitorUser);
+                var publicationDto = await _publicationService.GetPublicationByIdAndLoggedUser(publicationId, publicationOwnerUserId, visitorUser);
                 return Ok(publicationDto);
             }
             catch (ArgumentNullException ex)
@@ -110,5 +110,27 @@ namespace ArtmaisBackend.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        [HttpGet("[Action]/{publicationId}/{publicationOwnerUserId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<PublicationDto>> GetPublicationById(int? publicationId, long? publicationOwnerUserId)
+        {
+            try
+            {
+                var publicationDto = await _publicationService.GetPublicationById(publicationId, publicationOwnerUserId);
+                return Ok(publicationDto);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
     }
 }

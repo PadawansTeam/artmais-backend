@@ -13,6 +13,8 @@ namespace ArtmaisBackend.Core.Publications.Interface
 
         bool DeleteLike(int? publicationId, long userId);
 
-        Task<PublicationDto> GetPublicationById(int? publicationId, long? publicationOwnerUserId, UserJwtData visitorUser);
+        Task<PublicationDto> GetPublicationByIdAndLoggedUser(int? publicationId, long? publicationOwnerUserId, UserJwtData visitorUser);
+
+        Task<PublicationDto> GetPublicationById(int? publicationId, long? publicationOwnerUserId);
     }
 }

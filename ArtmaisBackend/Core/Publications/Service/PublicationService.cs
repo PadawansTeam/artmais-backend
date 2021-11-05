@@ -124,7 +124,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             return likesAmount;
         }
 
-        public async Task<PublicationDto> GetPublicationById(int? publicationId, long? publicationOwnerUserId, UserJwtData visitorUser)
+        public async Task<PublicationDto> GetPublicationByIdAndLoggedUser(int? publicationId, long? publicationOwnerUserId, UserJwtData visitorUser)
         {
             if (publicationId is null || publicationOwnerUserId is null)
                 throw new ArgumentNullException();
@@ -175,6 +175,59 @@ namespace ArtmaisBackend.Core.Publications.Service
                 CommentsAmount = comments?.CommentsAmount,
                 LikesAmount = likesAmount,
                 IsLiked = isLiked
+            };
+
+            return publicationDto;
+        }
+        public async Task<PublicationDto> GetPublicationById(int? publicationId, long? publicationOwnerUserId)
+        {
+            if (publicationId is null || publicationOwnerUserId is null)
+                throw new ArgumentNullException();
+
+            var publicationOwnerUser = _userRepository.GetUserById(publicationOwnerUserId);
+            if (publicationOwnerUser is null)
+                throw new ArgumentNullException();
+
+            var portfolio = _publicationRepository.GetAllPublicationsByUserId(publicationOwnerUserId);
+            if (portfolio is null)
+                throw new ArgumentNullException();
+
+            var publication = portfolio.Where(p => p.PublicationID == publicationId).FirstOrDefault();
+            if (publication is null)
+                throw new ArgumentNullException();
+
+            if (String.IsNullOrEmpty(publication.Description) || publication.Description == "null")
+                publication.Description = "";
+
+            var userCategory = _userRepository.GetSubcategoryByUserId(publicationOwnerUser.UserID);
+            var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(publicationOwnerUser.UserID, publication.PublicationID);
+            var comments = await GetAllCommentsByPublicationId(publication.PublicationID);
+            var contactProfile = _userService.GetShareProfile(publicationOwnerUser.UserID);
+            var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID);
+            var mediaType = _mediaTypeRepository.GetMediaTypeById(publication.MediaTypeID);
+
+            var publicationDto = new PublicationDto
+            {
+                UserId = publicationOwnerUser?.UserID,
+                Name = publicationOwnerUser?.Name,
+                Username = publicationOwnerUser?.Username,
+                UserPicture = publicationOwnerUser?.UserPicture,
+                BackgroundPicture = publicationOwnerUser?.BackgroundPicture,
+                Category = userCategory?.Category,
+                Subcategory = userCategory?.Subcategory,
+                UserFacebook = contactProfile?.Facebook,
+                UserInstagram = contactProfile?.Instagram,
+                UserTwitter = contactProfile?.Twitter,
+                PublicationFacebook = publicationShareLink?.Facebook,
+                PublicationTwitter = publicationShareLink?.Twitter,
+                PublicationWhatsapp = publicationShareLink?.Whatsapp,
+                S3UrlMedia = publication?.S3UrlMedia,
+                Description = publication?.Description,
+                PublicationDate = publication?.PublicationDate,
+                MediaType = mediaType?.Description,
+                Comments = comments.Comments,
+                CommentsAmount = comments?.CommentsAmount,
+                LikesAmount = likesAmount
             };
 
             return publicationDto;
