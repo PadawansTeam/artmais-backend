@@ -19,10 +19,10 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Securities
             context.Response.OnStarting(state =>
             {
                 var httpContext = (HttpContext)state;
-                httpContext.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
+                httpContext.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
                 httpContext.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-                httpContext.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
-                httpContext.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
+                httpContext.Response.Headers.Add("X-Frame-Options", "DENY");
+                httpContext.Response.Headers.Add("Referrer-Policy", "no-referrer");
                 return Task.CompletedTask;
             }, context);
 
