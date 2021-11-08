@@ -37,6 +37,7 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Securities
                     {
                         builder
                         .AllowAnyMethod()
+                        .AllowAnyHeader()
                         .AllowAnyOrigin();
                     });
             });
