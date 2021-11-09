@@ -20,6 +20,7 @@ namespace ArtmaisBackend.Infrastructure.Data
         public DbSet<Comment> Comment { get; set; }
         public DbSet<Like> Like { get; set; }
         public DbSet<Recomendation> Recomendation { get; set; }
+        public DbSet<Signature> Signature { get; set; }
     }
 }
 
