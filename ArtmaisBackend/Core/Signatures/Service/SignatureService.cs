@@ -19,6 +19,20 @@ namespace ArtmaisBackend.Core.Signatures.Service
             await _signatureRepository.Create(userId);
         }
 
+        public async Task UpdateSignature(long userId)
+        {
+            var signature = await _signatureRepository.GetSignatureByUserId(userId);
+
+            if (signature is null)
+                throw new ArgumentNullException();
+
+            var date = DateTime.UtcNow;
+            signature.StartDate = date;
+            signature.EndDate = date.AddYears(1);
+
+            await _signatureRepository.Update(signature);
+        }
+
         public async Task<bool> GetSignatureByUserId(long userId)
         {
             var signature = await _signatureRepository.GetSignatureByUserId(userId);

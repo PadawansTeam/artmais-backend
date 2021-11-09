@@ -31,6 +31,14 @@ namespace ArtmaisBackend.Infrastructure.Repository
             _context.SaveChanges();
         }
 
+        public async Task<Signature> Update(Signature signature)
+        {
+            this._context.Signature.Update(signature);
+            await this._context.SaveChangesAsync();
+
+            return signature;
+        }
+
         public async Task<Signature> GetSignatureByUserId(long userId)
         {
             return await _context.Signature.FirstOrDefaultAsync(signature => signature.UserID == userId);

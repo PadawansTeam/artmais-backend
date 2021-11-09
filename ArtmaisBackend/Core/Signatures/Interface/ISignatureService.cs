@@ -6,6 +6,8 @@ namespace ArtmaisBackend.Core.Signatures.Interface
     {
         Task CreateSignature(long userId);
 
+        Task UpdateSignature(long userId);
+
         Task<bool> GetSignatureByUserId(long userId);
     }
 }

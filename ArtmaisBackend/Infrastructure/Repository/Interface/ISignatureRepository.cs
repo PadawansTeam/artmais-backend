@@ -7,6 +7,8 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
     {
         Task Create(long userId);
 
+        Task<Signature> Update(Signature signature);
+
         Task<Signature> GetSignatureByUserId(long userId);
     }
 }
