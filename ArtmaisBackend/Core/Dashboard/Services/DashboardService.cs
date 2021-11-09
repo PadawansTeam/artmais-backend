@@ -13,26 +13,20 @@ namespace ArtmaisBackend.Core.Dashboard.Services
     {
         private readonly HttpClient _client;
         private readonly DbServiceConfiguration _dbServiceConfiguration;
-        private readonly ISignatureService _signatureService;
 
-        public DashboardService(IHttpClientFactory clientFactory, IOptions<DbServiceConfiguration> options, ISignatureService signatureService)
+        public DashboardService(IHttpClientFactory clientFactory, IOptions<DbServiceConfiguration> options)
         {
             _client = clientFactory.CreateClient() ?? throw new ArgumentNullException(nameof(clientFactory));
             _dbServiceConfiguration = options.Value ?? throw new ArgumentNullException(nameof(options));
-            this._signatureService = signatureService;
         }
 
         public async Task<DashboardResponse> GetAsync(long userId)
         {
-            var isPremium = await _signatureService.GetSignatureByUserId(userId);
-
             var response = await _client.GetAsync($"{_dbServiceConfiguration.Url}dashboard/{userId}");
 
             var body = await response.Content.ReadAsStringAsync();
 
             var dashboardResponse = JsonConvert.DeserializeObject<DashboardResponse>(body);
-
-            dashboardResponse.IsPremium = isPremium; 
 
             return dashboardResponse;
         }

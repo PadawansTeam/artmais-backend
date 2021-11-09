@@ -1,6 +1,7 @@
 ﻿using ArtmaisBackend.Controllers;
 using ArtmaisBackend.Core.Dashboard.Responses;
 using ArtmaisBackend.Core.Dashboard.Services;
+using ArtmaisBackend.Core.Signatures.Interface;
 using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Interface;
 using FluentAssertions;
@@ -32,9 +33,11 @@ namespace ArtmaisBackend.Tests.Controllers
             var loggerMock = new Mock<ILogger<DashboardController>>();
 
             var jwtTokenServiceMock = new Mock<IJwtTokenService>();
+            var signatureServiceMock = new Mock<ISignatureService>();
             jwtTokenServiceMock.Setup(j => j.ReadToken(It.IsAny<ClaimsPrincipal>())).Returns(user);
+            signatureServiceMock.Setup(s => s.GetSignatureByUserId(It.IsAny<long>())).ReturnsAsync(true);
 
-            var controller = new DashboardController(dashboardServiceMock.Object, loggerMock.Object, jwtTokenServiceMock.Object);
+            var controller = new DashboardController(dashboardServiceMock.Object, loggerMock.Object, jwtTokenServiceMock.Object, signatureServiceMock.Object);
 
             var result = await controller.GetAsync();
 
@@ -57,9 +60,12 @@ namespace ArtmaisBackend.Tests.Controllers
             var loggerMock = new Mock<ILogger<DashboardController>>();
 
             var jwtTokenServiceMock = new Mock<IJwtTokenService>();
+            var signatureServiceMock = new Mock<ISignatureService>();
             jwtTokenServiceMock.Setup(j => j.ReadToken(It.IsAny<ClaimsPrincipal>())).Returns(user);
+            signatureServiceMock.Setup(s => s.GetSignatureByUserId(It.IsAny<long>())).ReturnsAsync(true);
 
-            var controller = new DashboardController(dashboardServiceMock.Object, loggerMock.Object, jwtTokenServiceMock.Object);
+
+            var controller = new DashboardController(dashboardServiceMock.Object, loggerMock.Object, jwtTokenServiceMock.Object, signatureServiceMock.Object);
 
             var result = await controller.GetAsync();
 
