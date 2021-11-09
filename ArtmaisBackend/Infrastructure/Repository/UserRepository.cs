@@ -97,6 +97,28 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public IEnumerable<RecomendationDto> GetUsersByInterest(long userId)
         {
+            var userSignature =
+                (from signature in _context.Signature
+                 join user in _context.User on signature.UserID equals user.UserID
+                 join interest in _context.Interest on user.SubcategoryID equals interest.SubcategoryID
+                 join subcategory in _context.Subcategory on interest.SubcategoryID equals subcategory.SubcategoryID
+                 join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+                 where
+                 interest.UserID.Equals(userId)
+                 && !user.UserID.Equals(userId)
+                 && subcategory.OtherSubcategory.Equals(false)
+                 select new RecomendationDto
+                 {
+                     UserId = user.UserID,
+                     Name = user.Name,
+                     Username = user.Username,
+                     UserPicture = user.UserPicture,
+                     BackgroundPicture = user.BackgroundPicture,
+                     Category = category.UserCategory,
+                     Subcategory = subcategory.UserSubcategory,
+                     IsPremium = true
+                 }).ToList(); 
+
             var recomendationQuery =
                 (from user in _context.User
                  join recomendation in _context.Recomendation on user.SubcategoryID equals recomendation.SubcategoryID
@@ -114,7 +136,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
                      UserPicture = user.UserPicture,
                      BackgroundPicture = user.BackgroundPicture,
                      Category = category.UserCategory,
-                     Subcategory = subcategory.UserSubcategory
+                     Subcategory = subcategory.UserSubcategory,
+                     IsPremium = false
                  }).Distinct();
 
             var interestQuery =
@@ -134,10 +157,11 @@ namespace ArtmaisBackend.Infrastructure.Repository
                      UserPicture = user.UserPicture,
                      BackgroundPicture = user.BackgroundPicture,
                      Category = category.UserCategory,
-                     Subcategory = subcategory.UserSubcategory
+                     Subcategory = subcategory.UserSubcategory,
+                     IsPremium = false
                  });
 
-            return recomendationQuery.Union(interestQuery);
+            return userSignature.Union(recomendationQuery).Union(interestQuery).OrderBy(x => x.IsPremium == false).GroupBy(x => x.UserId).Select(y => y.First());
         }
 
         public User GetUserByUsername(string username)
@@ -164,80 +188,102 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public UserCategoryDto GetSubcategoryByUserId(long userId)
         {
-            var query = from user in _context.User
-                        join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
-                        join category in _context.Category on subcategory.CategoryID equals category.CategoryID
-                        where user.UserID.Equals(userId)
-                        select new UserCategoryDto
-                        {
-                            Category = category.UserCategory,
-                            Subcategory = subcategory.UserSubcategory
-                        };
+            var query =
+                from user in _context.User
+                join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
+                join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+                where user.UserID.Equals(userId)
+                select new UserCategoryDto
+                {
+                    Category = category.UserCategory,
+                    Subcategory = subcategory.UserSubcategory
+                };
 
             return query.FirstOrDefault();
         }
 
         public IEnumerable<RecomendationDto> GetUsers()
         {
-            var results = (from user in _context.User
-                           join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
-                           join category in _context.Category on subcategory.CategoryID equals category.CategoryID
-                           select new RecomendationDto
-                           {
-                               UserId = user.UserID,
-                               Name = user.Name,
-                               Username = user.Username,
-                               UserPicture = user.UserPicture,
-                               BackgroundPicture = user.BackgroundPicture,
-                               Category = category.UserCategory,
-                               Subcategory = subcategory.UserSubcategory
-                           }).ToList();
+            var recommandation =
+                (from user in _context.User
+                 join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
+                 join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+                 select new RecomendationDto
+                 {
+                     UserId = user.UserID,
+                     Name = user.Name,
+                     Username = user.Username,
+                     UserPicture = user.UserPicture,
+                     BackgroundPicture = user.BackgroundPicture,
+                     Category = category.UserCategory,
+                     Subcategory = subcategory.UserSubcategory,
+                     IsPremium = false
+                 }).ToList();
 
-            return results;
+            var userSignature =
+                (from signature in _context.Signature
+                 join user in _context.User on signature.UserID equals user.UserID
+                 join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
+                 join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+                 select new RecomendationDto
+                 {
+                     UserId = user.UserID,
+                     Name = user.Name,
+                     Username = user.Username,
+                     UserPicture = user.UserPicture,
+                     BackgroundPicture = user.BackgroundPicture,
+                     Category = category.UserCategory,
+                     Subcategory = subcategory.UserSubcategory,
+                     IsPremium = true
+                 }).ToList();
+
+            return recommandation.Union(userSignature).OrderBy(x => x.IsPremium == false).GroupBy(x => x.UserId).Select(y => y.First());
         }
 
         public IEnumerable<RecomendationDto> GetUsersByUsernameOrNameOrSubcategoryOrCategory(string searchValue)
         {
-            var recommandationSearch = (from user in _context.User
-                                        join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
-                                        join category in _context.Category on subcategory.CategoryID equals category.CategoryID
-                                        where user.Username.ToUpper().Contains(searchValue.ToUpper())
-                                        || user.Name.ToUpper().Contains(searchValue.ToUpper())
-                                        || subcategory.UserSubcategory.ToUpper().Contains(searchValue.ToUpper())
-                                        || category.UserCategory.ToUpper().Contains(searchValue.ToUpper())
-                                        || user.Description.ToUpper().Contains(searchValue.ToUpper())
-                                        select new RecomendationDto
-                                        {
-                                            UserId = user.UserID,
-                                            Name = user.Name,
-                                            Username = user.Username,
-                                            UserPicture = user.UserPicture,
-                                            BackgroundPicture = user.BackgroundPicture,
-                                            Category = category.UserCategory,
-                                            Subcategory = subcategory.UserSubcategory,
-                                            IsPremium = false
-                                        }).ToList();
+            var recommandationSearch =
+                (from user in _context.User
+                 join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
+                 join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+                 where user.Username.ToUpper().Contains(searchValue.ToUpper())
+                 || user.Name.ToUpper().Contains(searchValue.ToUpper())
+                 || subcategory.UserSubcategory.ToUpper().Contains(searchValue.ToUpper())
+                 || category.UserCategory.ToUpper().Contains(searchValue.ToUpper())
+                 || user.Description.ToUpper().Contains(searchValue.ToUpper())
+                 select new RecomendationDto
+                 {
+                     UserId = user.UserID,
+                     Name = user.Name,
+                     Username = user.Username,
+                     UserPicture = user.UserPicture,
+                     BackgroundPicture = user.BackgroundPicture,
+                     Category = category.UserCategory,
+                     Subcategory = subcategory.UserSubcategory,
+                     IsPremium = false
+                 }).ToList();
 
-            var userSignature = (from signature in _context.Signature
-                                 join user in _context.User on signature.UserID equals user.UserID
-                                 join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
-                                 join category in _context.Category on subcategory.CategoryID equals category.CategoryID
-                                 where user.Username.ToUpper().Contains(searchValue.ToUpper())
-                                 || user.Name.ToUpper().Contains(searchValue.ToUpper())
-                                 || subcategory.UserSubcategory.ToUpper().Contains(searchValue.ToUpper())
-                                 || category.UserCategory.ToUpper().Contains(searchValue.ToUpper())
-                                 || user.Description.ToUpper().Contains(searchValue.ToUpper())
-                                 select new RecomendationDto
-                                 {
-                                     UserId = user.UserID,
-                                     Name = user.Name,
-                                     Username = user.Username,
-                                     UserPicture = user.UserPicture,
-                                     BackgroundPicture = user.BackgroundPicture,
-                                     Category = category.UserCategory,
-                                     Subcategory = subcategory.UserSubcategory,
-                                     IsPremium = true
-                                 }).ToList();
+            var userSignature =
+                (from signature in _context.Signature
+                 join user in _context.User on signature.UserID equals user.UserID
+                 join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
+                 join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+                 where user.Username.ToUpper().Contains(searchValue.ToUpper())
+                 || user.Name.ToUpper().Contains(searchValue.ToUpper())
+                 || subcategory.UserSubcategory.ToUpper().Contains(searchValue.ToUpper())
+                 || category.UserCategory.ToUpper().Contains(searchValue.ToUpper())
+                 || user.Description.ToUpper().Contains(searchValue.ToUpper())
+                 select new RecomendationDto
+                 {
+                     UserId = user.UserID,
+                     Name = user.Name,
+                     Username = user.Username,
+                     UserPicture = user.UserPicture,
+                     BackgroundPicture = user.BackgroundPicture,
+                     Category = category.UserCategory,
+                     Subcategory = subcategory.UserSubcategory,
+                     IsPremium = true
+                 }).ToList();
 
             return recommandationSearch.Union(userSignature).OrderBy(x => x.IsPremium == false).GroupBy(x => x.UserId).Select(y => y.First());
         }
