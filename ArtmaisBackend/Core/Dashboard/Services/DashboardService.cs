@@ -1,6 +1,6 @@
 ﻿using ArtmaisBackend.Core.Dashboard.Responses;
+using ArtmaisBackend.Core.Signatures.Interface;
 using ArtmaisBackend.Infrastructure.Options;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;

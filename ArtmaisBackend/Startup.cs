@@ -44,6 +44,7 @@ namespace ArtmaisBackend
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ArtmaisBackend v1"));
 
             app.UseHttpsRedirection();
+            app.UseMiddleware(typeof(CustomResponseHeaderMiddleware));
             app.UseCors("AllowAny");
             app.UseRouting();
 

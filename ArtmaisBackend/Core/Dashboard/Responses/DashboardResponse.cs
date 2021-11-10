@@ -14,5 +14,6 @@ namespace ArtmaisBackend.Core.Dashboard.Responses
         public int SumComments { get; set; }
         public int SumLikes { get; set; }
         public int SumVisits { get; set; }
+        public bool IsPremium { get; set; }
     }
 }
