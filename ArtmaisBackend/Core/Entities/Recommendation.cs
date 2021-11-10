@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ArtmaisBackend.Core.Entities
 {
     [Table("recomendacao")]
-    public class Recomendation
+    public class Recommendation
     {
         [Key]
         [Column("idrecomendacao")]

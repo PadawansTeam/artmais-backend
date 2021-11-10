@@ -7,9 +7,9 @@ using System.Security.Claims;
 
 namespace ArtmaisBackend.Core.Profile.Mediator
 {
-    public class RecomendationMediator : IRecomendationMediator
+    public class RecommendationMediator : IRecomendationMediator
     {
-        public RecomendationMediator(IUserRepository userRepository, IJwtTokenService jwtToken)
+        public RecommendationMediator(IUserRepository userRepository, IJwtTokenService jwtToken)
         {
             this._userRepository = userRepository;
             this._jwtToken = jwtToken;

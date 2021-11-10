@@ -43,7 +43,7 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
             services.AddScoped<ISignInService, SignInService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IInterestMediator, InterestMediator>();
-            services.AddScoped<IRecomendationMediator, RecomendationMediator>();
+            services.AddScoped<IRecomendationMediator, RecommendationMediator>();
             services.AddScoped<IProfileAccessMediator, ProfileAccessMediator>();
             services.AddScoped<ISignUpService, SignUpService>();
             services.AddScoped<IUserService, UserService>();

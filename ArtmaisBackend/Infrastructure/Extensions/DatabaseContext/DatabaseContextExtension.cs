@@ -30,7 +30,7 @@ namespace ArtmaisBackend.Infrastructure.Extensions.DatabaseContext
             services.AddScoped<IPublicationRepository, PublicationRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ILikeRepository, LikeRepository>();
-            services.AddScoped<IRecomendationRepository, RecomendationRepository>();
+            services.AddScoped<IRecommendationRepository, RecommendationRepository>();
 
             return services;
         }

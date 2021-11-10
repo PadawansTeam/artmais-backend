@@ -43,7 +43,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
 
             var recomendationServiceMock = new Mock<IRecomendationService>();
 
-            var recomendationRepositoryMock = new Mock<IRecomendationRepository>();
+            var recomendationRepositoryMock = new Mock<IRecommendationRepository>();
 
             var loggerMock = new Mock<ILogger<InterestMediator>>();
 
@@ -62,7 +62,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
         [Fact(DisplayName = "Create should be returns success message when InterestRequest it is save")]
         public async Task CreateReturnsSuccessMessage()
         {
-            var recomendation = new Recomendation
+            var recomendation = new Recommendation
             {
                 RecomendationID = 1,
                 InterestID = 1,
@@ -93,7 +93,8 @@ namespace ArtmaisBackend.Tests.Core.Profile
                 {
                     1,
                     2
-                }
+                },
+                RecommendedSubcategoryID = new List<int>()
             };
 
             var userJwtData = new UserJwtData
@@ -113,7 +114,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
             var recomendationServiceMock = new Mock<IRecomendationService>();
             recomendationServiceMock.Setup(r => r.GetAsync(It.IsAny<int>())).ReturnsAsync(recomendationResponse);
 
-            var recomendationRepositoryMock = new Mock<IRecomendationRepository>();
+            var recomendationRepositoryMock = new Mock<IRecommendationRepository>();
             recomendationRepositoryMock.Setup(r => r.AddAsync(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(recomendation);
 
             var loggerMock = new Mock<ILogger<InterestMediator>>();
@@ -133,7 +134,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
         [Fact(DisplayName = "Create should return fail message when an exception occurs")]
         public async Task CreateShouldReturnFailMessageWhenAnExceptionOccurs()
         {
-            var recomendation = new Recomendation
+            var recomendation = new Recommendation
             {
                 RecomendationID = 1,
                 InterestID = 1,
@@ -183,7 +184,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
 
             var recomendationServiceMock = new Mock<IRecomendationService>();
 
-            var recomendationRepositoryMock = new Mock<IRecomendationRepository>();
+            var recomendationRepositoryMock = new Mock<IRecommendationRepository>();
 
             var loggerMock = new Mock<ILogger<InterestMediator>>();
 

@@ -99,7 +99,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
         {
             var recomendationQuery =
                 (from user in _context.User
-                 join recomendation in _context.Recomendation on user.SubcategoryID equals recomendation.SubcategoryID
+                 join recomendation in _context.Recommendation on user.SubcategoryID equals recomendation.SubcategoryID
                  join subcategory in _context.Subcategory on recomendation.SubcategoryID equals subcategory.SubcategoryID
                  join category in _context.Category on subcategory.CategoryID equals category.CategoryID
                  where

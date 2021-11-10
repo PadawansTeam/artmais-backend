@@ -17,7 +17,7 @@ namespace ArtmaisBackend.Core.Profile.Mediator
             IInterestRepository interestRepository,
             IJwtTokenService jwtToken,
             IRecomendationService recomendationService,
-            IRecomendationRepository recomendationRepository,
+            IRecommendationRepository recomendationRepository,
             ILogger<InterestMediator> logger)
         {
             _categorySubcategoryRepository = categorySubcategoryRepository ?? throw new ArgumentNullException(nameof(categorySubcategoryRepository));
@@ -32,7 +32,7 @@ namespace ArtmaisBackend.Core.Profile.Mediator
         private readonly IInterestRepository _interestRepository;
         private readonly IJwtTokenService _jwtToken;
         private readonly IRecomendationService _recomendationService;
-        private readonly IRecomendationRepository _recomendationRepository;
+        private readonly IRecommendationRepository _recomendationRepository;
         private readonly ILogger<InterestMediator> _logger;
 
         public InterestDto Index(ClaimsPrincipal userClaims)
@@ -42,7 +42,8 @@ namespace ArtmaisBackend.Core.Profile.Mediator
             var dto = new InterestDto
             {
                 Interests = this._categorySubcategoryRepository.GetSubcategoryByInterestAndUserId(userJwtData.UserID),
-                Subcategories = this._categorySubcategoryRepository.GetSubcategory()
+                Subcategories = this._categorySubcategoryRepository.GetSubcategory(),
+                Recommendations = _recomendationRepository.GetSubcategoriesByUserId(userJwtData.UserID)
             };
 
             return dto;
@@ -66,6 +67,11 @@ namespace ArtmaisBackend.Core.Profile.Mediator
                     {
                         await _recomendationRepository.AddAsync(interest.InterestID, recommendedSubcategory);
                     }
+                }
+
+                foreach (var subcategory in interestRequest.RecommendedSubcategoryID)
+                {
+                    _recomendationRepository.DeleteByUserIdAndSubcategoryId(userJwtData.UserID, subcategory);
                 }
 
                 return GetMessageObject("Os interesses foram salvos com sucesso.");

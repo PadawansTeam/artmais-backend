@@ -48,7 +48,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
             var jwtTokenMock = new Mock<IJwtTokenService>();
             jwtTokenMock.Setup(j => j.ReadToken(null)).Returns(userJwtData);
 
-            var recomendationMediator = new RecomendationMediator(userRepositoryMock.Object, jwtTokenMock.Object);
+            var recomendationMediator = new RecommendationMediator(userRepositoryMock.Object, jwtTokenMock.Object);
             var result = recomendationMediator.Index(null);
 
             result.Should().BeAssignableTo<IEnumerable<RecomendationDto>>();
