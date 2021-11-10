@@ -16,23 +16,23 @@ namespace ArtmaisBackend.Core.Profile.Mediator
             ICategorySubcategoryRepository categorySubcategoryRepository,
             IInterestRepository interestRepository,
             IJwtTokenService jwtToken,
-            IRecomendationService recomendationService,
-            IRecommendationRepository recomendationRepository,
+            IRecomendationService recommendationService,
+            IRecommendationRepository recommendationRepository,
             ILogger<InterestMediator> logger)
         {
             _categorySubcategoryRepository = categorySubcategoryRepository ?? throw new ArgumentNullException(nameof(categorySubcategoryRepository));
             _interestRepository = interestRepository ?? throw new ArgumentNullException(nameof(interestRepository));
             _jwtToken = jwtToken ?? throw new ArgumentNullException(nameof(jwtToken));
-            _recomendationService = recomendationService ?? throw new ArgumentNullException(nameof(recomendationService));
-            _recomendationRepository = recomendationRepository ?? throw new ArgumentNullException(nameof(recomendationRepository));
+            _recommendationService = recommendationService ?? throw new ArgumentNullException(nameof(recommendationService));
+            _recommendationRepository = recommendationRepository ?? throw new ArgumentNullException(nameof(recommendationRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         private readonly ICategorySubcategoryRepository _categorySubcategoryRepository;
         private readonly IInterestRepository _interestRepository;
         private readonly IJwtTokenService _jwtToken;
-        private readonly IRecomendationService _recomendationService;
-        private readonly IRecommendationRepository _recomendationRepository;
+        private readonly IRecomendationService _recommendationService;
+        private readonly IRecommendationRepository _recommendationRepository;
         private readonly ILogger<InterestMediator> _logger;
 
         public InterestDto Index(ClaimsPrincipal userClaims)
@@ -43,7 +43,7 @@ namespace ArtmaisBackend.Core.Profile.Mediator
             {
                 Interests = this._categorySubcategoryRepository.GetSubcategoryByInterestAndUserId(userJwtData.UserID),
                 Subcategories = this._categorySubcategoryRepository.GetSubcategory(),
-                Recommendations = _recomendationRepository.GetSubcategoriesByUserId(userJwtData.UserID)
+                Recommendations = _recommendationRepository.GetSubcategoriesByUserId(userJwtData.UserID)
             };
 
             return dto;
@@ -55,28 +55,31 @@ namespace ArtmaisBackend.Core.Profile.Mediator
             {
                 var userJwtData = this._jwtToken.ReadToken(userClaims);
 
-                _recomendationRepository.DeleteAllByUserId(userJwtData.UserID);
+                _recommendationRepository.DeleteAllByUserId(userJwtData.UserID);
 
                 var interests = await _interestRepository.DeleteAllAndCreateAllAsync(interestRequest, userJwtData.UserID);
 
                 foreach (var interest in interests)
                 {
-                    var recomendationResponse = await _recomendationService.GetAsync(interest.SubcategoryID);
+                    var recomendationResponse = await _recommendationService.GetAsync(interest.SubcategoryID);
 
                     foreach (var recommendedSubcategory in recomendationResponse.RecommendedSubcategories)
                     {
-                        await _recomendationRepository.AddAsync(interest.InterestID, recommendedSubcategory);
+                        await _recommendationRepository.AddAsync(interest.InterestID, recommendedSubcategory);
                     }
                 }
 
                 foreach (var subcategory in interestRequest.RecommendedSubcategoryID)
                 {
-                    _recomendationRepository.DeleteByUserIdAndSubcategoryId(userJwtData.UserID, subcategory);
+                    var recommendation = _recommendationRepository.GetRecommendationByUserIdAndSubcategoryId(userJwtData.UserID, subcategory);
+
+                    if (recommendation != null)
+                        _recommendationRepository.Delete(recommendation);
                 }
 
                 return GetMessageObject("Os interesses foram salvos com sucesso.");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError($"The error {ex.Message}, occurred while saving user interests at: {ex.StackTrace}");
                 return GetMessageObject("Erro ao salvar interesses.");

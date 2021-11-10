@@ -10,6 +10,7 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
         Task<Recommendation> AddAsync(int interestId, int subcategoryId);
         void DeleteAllByUserId(long userId);
         IEnumerable<SubcategoryDto> GetSubcategoriesByUserId(long userId);
-        void DeleteByUserIdAndSubcategoryId(long userId, int subcategory);
+        void Delete(Recommendation recommendation);
+        Recommendation GetRecommendationByUserIdAndSubcategoryId(long userId, int subcategory);
     }
 }

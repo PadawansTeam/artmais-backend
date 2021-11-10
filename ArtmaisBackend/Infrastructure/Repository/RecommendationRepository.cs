@@ -57,13 +57,18 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return results;
         }
 
-        public void DeleteByUserIdAndSubcategoryId(long userId, int subcategory)
+        public void Delete(Recommendation recommendation)
         {
-            _context.Recommendation.Remove(_context.Recommendation
-                .Where(r => r.Interest.UserID.Equals(userId) && r.SubcategoryID.Equals(subcategory))
-                .FirstOrDefault());
+            _context.Recommendation.Remove(recommendation);
 
             _context.SaveChanges();
+        }
+
+        public Recommendation GetRecommendationByUserIdAndSubcategoryId(long userId, int subcategory)
+        {
+            return _context.Recommendation
+                .Where(r => r.Interest.UserID.Equals(userId) && r.SubcategoryID.Equals(subcategory))
+                .FirstOrDefault();
         }
     }
 }
