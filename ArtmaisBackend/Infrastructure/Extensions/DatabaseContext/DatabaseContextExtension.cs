@@ -31,6 +31,7 @@ namespace ArtmaisBackend.Infrastructure.Extensions.DatabaseContext
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ILikeRepository, LikeRepository>();
             services.AddScoped<IRecommendationRepository, RecommendationRepository>();
+            services.AddScoped<ISignatureRepository, SignatureRepository>();
 
             return services;
         }
