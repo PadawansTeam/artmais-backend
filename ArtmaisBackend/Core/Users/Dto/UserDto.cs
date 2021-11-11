@@ -32,5 +32,6 @@ namespace ArtmaisBackend.Core.Users.Dto
         public string? TwitterProfile { get; set; }
         public string? WhatsappProfile { get; set; }
         public string? WhatsappContact { get; set; }
+        public bool IsPremium { get; set; }
     }
 }

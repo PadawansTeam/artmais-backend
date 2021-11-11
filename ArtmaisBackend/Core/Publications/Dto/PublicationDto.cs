@@ -27,5 +27,6 @@ namespace ArtmaisBackend.Core.Portfolio.Dto
         public int? CommentsAmount { get; set; }
         public int? LikesAmount { get; set; }
         public bool IsLiked { get; set; }
+        public bool IsPremium { get; set; }
     }
 }
