@@ -13,13 +13,14 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
         User Create(SignUpRequest signUpRequest, int userTypeId = 1);
         User CreateOAuthUser(OAuthSignUpRequest signUpRequest, string provider, int userTypeId = 1);
         User GetUserByEmail(string email);
-        IEnumerable<RecomendationDto> GetUsersByInterest(long userId);
+        IEnumerable<RecommendationDto> GetUsersByInterest(long userId);
         User GetUserByUsername(string username);
         User GetUserById(long? id);
         User Update(User user);
         UserCategoryDto GetSubcategoryByUserId(long userId);
-        IEnumerable<RecomendationDto> GetUsers();
-        IEnumerable<RecomendationDto> GetUsersByUsernameOrNameOrSubcategoryOrCategory(string searchValue);
+        IEnumerable<RecommendationDto> GetUsers();
+        IEnumerable<RecommendationDto> GetUsersByUsernameOrNameOrSubcategoryOrCategory(string searchValue);
         bool ValidateUserData(UserJwtData userJwtData);
+        IEnumerable<RecommendationDto> GetUsersByRecommendatin(long userId);
     }
 }

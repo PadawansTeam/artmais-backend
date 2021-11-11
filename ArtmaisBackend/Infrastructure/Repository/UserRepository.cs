@@ -95,7 +95,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<RecomendationDto> GetUsersByInterest(long userId)
+        public IEnumerable<RecommendationDto> GetUsersByInterest(long userId)
         {
             var userSignature =
                 (from signature in _context.Signature
@@ -107,7 +107,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                  interest.UserID.Equals(userId)
                  && !user.UserID.Equals(userId)
                  && subcategory.OtherSubcategory.Equals(false)
-                 select new RecomendationDto
+                 select new RecommendationDto
                  {
                      UserId = user.UserID,
                      Name = user.Name,
@@ -117,28 +117,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                      Category = category.UserCategory,
                      Subcategory = subcategory.UserSubcategory,
                      IsPremium = true
-                 }).ToList(); 
-
-            var recomendationQuery =
-                (from user in _context.User
-                 join recomendation in _context.Recommendation on user.SubcategoryID equals recomendation.SubcategoryID
-                 join subcategory in _context.Subcategory on recomendation.SubcategoryID equals subcategory.SubcategoryID
-                 join category in _context.Category on subcategory.CategoryID equals category.CategoryID
-                 where
-                 recomendation.Interest.UserID.Equals(userId)
-                 && !user.UserID.Equals(userId)
-                 && subcategory.OtherSubcategory.Equals(false)
-                 select new RecomendationDto
-                 {
-                     UserId = user.UserID,
-                     Name = user.Name,
-                     Username = user.Username,
-                     UserPicture = user.UserPicture,
-                     BackgroundPicture = user.BackgroundPicture,
-                     Category = category.UserCategory,
-                     Subcategory = subcategory.UserSubcategory,
-                     IsPremium = false
-                 }).Distinct();
+                 }).ToList();
 
             var interestQuery =
                 (from user in _context.User
@@ -149,7 +128,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                  interest.UserID.Equals(userId)
                  && !user.UserID.Equals(userId)
                  && subcategory.OtherSubcategory.Equals(false)
-                 select new RecomendationDto
+                 select new RecommendationDto
                  {
                      UserId = user.UserID,
                      Name = user.Name,
@@ -161,7 +140,53 @@ namespace ArtmaisBackend.Infrastructure.Repository
                      IsPremium = false
                  });
 
-            return userSignature.Union(recomendationQuery).Union(interestQuery).OrderBy(x => x.IsPremium == false).GroupBy(x => x.UserId).Select(y => y.First());
+            return userSignature.Union(interestQuery).OrderBy(x => x.IsPremium == false).GroupBy(x => x.UserId).Select(y => y.First());
+        }
+
+        public IEnumerable<RecommendationDto> GetUsersByRecommendatin(long userId)
+        {
+            var userSignature = (from signature in _context.Signature
+                                 join user in _context.User on signature.UserID equals user.UserID
+                                 join recommendation in _context.Recommendation on user.SubcategoryID equals recommendation.SubcategoryID
+                                 join subcategory in _context.Subcategory on recommendation.SubcategoryID equals subcategory.SubcategoryID
+                                 join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+                                 where
+                                 recommendation.Interest.UserID.Equals(userId)
+                                 && !user.UserID.Equals(userId)
+                                 && subcategory.OtherSubcategory.Equals(false)
+                                 select new RecommendationDto
+                                 {
+                                    UserId = user.UserID,
+                                    Name = user.Name,
+                                    Username = user.Username,
+                                    UserPicture = user.UserPicture,
+                                    BackgroundPicture = user.BackgroundPicture,
+                                    Category = category.UserCategory,
+                                    Subcategory = subcategory.UserSubcategory,
+                                    IsPremium = true
+                                 }).ToList();
+
+            var recomendationQuery = (from user in _context.User
+                                      join recomendation in _context.Recommendation on user.SubcategoryID equals recomendation.SubcategoryID
+                                      join subcategory in _context.Subcategory on recomendation.SubcategoryID equals subcategory.SubcategoryID
+                                      join category in _context.Category on subcategory.CategoryID equals category.CategoryID
+                                      where
+                                      recomendation.Interest.UserID.Equals(userId)
+                                      && !user.UserID.Equals(userId)
+                                      && subcategory.OtherSubcategory.Equals(false)
+                                      select new RecommendationDto
+                                      {
+                                          UserId = user.UserID,
+                                          Name = user.Name,
+                                          Username = user.Username,
+                                          UserPicture = user.UserPicture,
+                                          BackgroundPicture = user.BackgroundPicture,
+                                          Category = category.UserCategory,
+                                          Subcategory = subcategory.UserSubcategory,
+                                          IsPremium = false
+                                      }).Distinct();
+
+            return userSignature.Union(recomendationQuery).OrderBy(x => x.IsPremium == false).GroupBy(x => x.UserId).Select(y => y.First());
         }
 
         public User GetUserByUsername(string username)
@@ -202,13 +227,13 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<RecomendationDto> GetUsers()
+        public IEnumerable<RecommendationDto> GetUsers()
         {
             var recommandation =
                 (from user in _context.User
                  join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
                  join category in _context.Category on subcategory.CategoryID equals category.CategoryID
-                 select new RecomendationDto
+                 select new RecommendationDto
                  {
                      UserId = user.UserID,
                      Name = user.Name,
@@ -225,7 +250,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                  join user in _context.User on signature.UserID equals user.UserID
                  join subcategory in _context.Subcategory on user.SubcategoryID equals subcategory.SubcategoryID
                  join category in _context.Category on subcategory.CategoryID equals category.CategoryID
-                 select new RecomendationDto
+                 select new RecommendationDto
                  {
                      UserId = user.UserID,
                      Name = user.Name,
@@ -240,7 +265,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return recommandation.Union(userSignature).OrderBy(x => x.IsPremium == false).GroupBy(x => x.UserId).Select(y => y.First());
         }
 
-        public IEnumerable<RecomendationDto> GetUsersByUsernameOrNameOrSubcategoryOrCategory(string searchValue)
+        public IEnumerable<RecommendationDto> GetUsersByUsernameOrNameOrSubcategoryOrCategory(string searchValue)
         {
             var recommandationSearch =
                 (from user in _context.User
@@ -251,7 +276,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                  || subcategory.UserSubcategory.ToUpper().Contains(searchValue.ToUpper())
                  || category.UserCategory.ToUpper().Contains(searchValue.ToUpper())
                  || user.Description.ToUpper().Contains(searchValue.ToUpper())
-                 select new RecomendationDto
+                 select new RecommendationDto
                  {
                      UserId = user.UserID,
                      Name = user.Name,
@@ -273,7 +298,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                  || subcategory.UserSubcategory.ToUpper().Contains(searchValue.ToUpper())
                  || category.UserCategory.ToUpper().Contains(searchValue.ToUpper())
                  || user.Description.ToUpper().Contains(searchValue.ToUpper())
-                 select new RecomendationDto
+                 select new RecommendationDto
                  {
                      UserId = user.UserID,
                      Name = user.Name,

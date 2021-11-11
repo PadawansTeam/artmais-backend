@@ -1,5 +1,6 @@
 ﻿using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.Profile.Mediator;
+using ArtmaisBackend.Core.Profile.Responses;
 using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
@@ -15,9 +16,9 @@ namespace ArtmaisBackend.Tests.Core.Profile
         [Fact(DisplayName = "Index should be validate GetUsersByInterest method and returns RecomendationDto")]
         public void IndexReturnsRecomendationDto()
         {
-            var recomendations = new List<RecomendationDto>
+            var recomendations = new List<RecommendationDto>
             {
-                new RecomendationDto
+                new RecommendationDto
                 {
                     Username = "Joao",
                     Name = "Name",
@@ -26,7 +27,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
                     Category = "Tatuador(a)",
                     Subcategory = "Aquarela"
                 },
-                new RecomendationDto
+                new RecommendationDto
                 {
                     Username = "Gabriela",
                     Name = "OtherName",
@@ -51,7 +52,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
             var recomendationMediator = new RecommendationMediator(userRepositoryMock.Object, jwtTokenMock.Object);
             var result = recomendationMediator.Index(null);
 
-            result.Should().BeAssignableTo<IEnumerable<RecomendationDto>>();
+            result.Should().BeAssignableTo<RecommendationResponse>();
         }
     }
 }

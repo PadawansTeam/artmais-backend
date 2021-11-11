@@ -27,7 +27,7 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("{searchValue}")]
-        public ActionResult<IEnumerable<RecomendationDto>> Index([FromRoute] string searchValue)
+        public ActionResult<IEnumerable<RecommendationDto>> Index([FromRoute] string searchValue)
         {
             try
             {

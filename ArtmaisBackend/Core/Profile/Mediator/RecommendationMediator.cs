@@ -1,5 +1,6 @@
 ﻿using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.Profile.Interface;
+using ArtmaisBackend.Core.Profile.Responses;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System.Collections.Generic;
@@ -11,20 +12,26 @@ namespace ArtmaisBackend.Core.Profile.Mediator
     {
         public RecommendationMediator(IUserRepository userRepository, IJwtTokenService jwtToken)
         {
-            this._userRepository = userRepository;
+            _userRepository = userRepository;
             this._jwtToken = jwtToken;
         }
 
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenService _jwtToken;
 
-        public IEnumerable<RecomendationDto> Index(ClaimsPrincipal userClaims)
+        public RecommendationResponse Index(ClaimsPrincipal userClaims)
         {
+            var response = new RecommendationResponse();
+
             var userJwtData = this._jwtToken.ReadToken(userClaims);
-            return this._userRepository.GetUsersByInterest(userJwtData.UserID);
+
+            response.UserInterests = _userRepository.GetUsersByInterest(userJwtData.UserID);
+            response.RecommendedInterests = _userRepository.GetUsersByRecommendatin(userJwtData.UserID);
+
+            return response;
         }
 
-        public IEnumerable<RecomendationDto> GetUsers()
+        public IEnumerable<RecommendationDto> GetUsers()
         {
             return this._userRepository.GetUsers();
         }

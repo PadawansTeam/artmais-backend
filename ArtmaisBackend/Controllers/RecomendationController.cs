@@ -1,5 +1,6 @@
 ﻿using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.Profile.Interface;
+using ArtmaisBackend.Core.Profile.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<IEnumerable<RecomendationDto>> Index()
+        public ActionResult<IEnumerable<RecommendationResponse>> Index()
         {
             try
             {
@@ -36,7 +37,7 @@ namespace ArtmaisBackend.Controllers
         [HttpGet]
         [Route("users")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<RecomendationDto>> GetUsers()
+        public ActionResult<IEnumerable<RecommendationDto>> GetUsers()
         {
             return this.Ok(this._recomendationMediator.GetUsers());
         }
