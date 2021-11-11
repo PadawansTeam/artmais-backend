@@ -4,11 +4,13 @@ using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class RecommendationRepository : IRecommendationRepository
     {
         private readonly ArtplusContext _context;

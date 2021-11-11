@@ -9,10 +9,12 @@ using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class UserRepository : IUserRepository
     {
         public UserRepository(ArtplusContext context)

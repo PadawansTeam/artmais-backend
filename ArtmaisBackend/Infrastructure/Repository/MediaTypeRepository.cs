@@ -1,10 +1,12 @@
 ﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class MediaTypeRepository : IMediaTypeRepository
     {
         public MediaTypeRepository(ArtplusContext context)
