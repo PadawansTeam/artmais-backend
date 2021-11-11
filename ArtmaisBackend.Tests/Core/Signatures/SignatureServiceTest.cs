@@ -1,4 +1,6 @@
 ﻿using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.Signatures.Dto;
+using ArtmaisBackend.Core.Signatures.Interface;
 using ArtmaisBackend.Core.Signatures.Service;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using FluentAssertions;
@@ -16,9 +18,10 @@ namespace ArtmaisBackend.Tests.Core.Signatures
         {
             var userId = 3;
             var mockSignatureRepository = new Mock<ISignatureRepository>();
+            var mockUserRepository = new Mock<IUserRepository>();
             mockSignatureRepository.Setup(x => x.Create(userId));
-            
-            var signatureService = new SignatureService(mockSignatureRepository.Object);
+
+            var signatureService = new SignatureService(mockSignatureRepository.Object, mockUserRepository.Object);
             await signatureService.CreateSignature(userId);
         }
 
@@ -35,9 +38,10 @@ namespace ArtmaisBackend.Tests.Core.Signatures
                 EndDate = date.AddYears(1)
             };
             var mockSignatureRepository = new Mock<ISignatureRepository>();
+            var mockUserRepository = new Mock<IUserRepository>();
             mockSignatureRepository.Setup(x => x.GetSignatureByUserId(userId)).ReturnsAsync(signature);
 
-            var signatureService = new SignatureService(mockSignatureRepository.Object);
+            var signatureService = new SignatureService(mockSignatureRepository.Object, mockUserRepository.Object);
             await signatureService.UpdateSignature(userId);
         }
 
@@ -54,9 +58,10 @@ namespace ArtmaisBackend.Tests.Core.Signatures
                 EndDate = date.AddYears(1)
             };
             var mockSignatureRepository = new Mock<ISignatureRepository>();
+            var mockUserRepository = new Mock<IUserRepository>();
             mockSignatureRepository.Setup(x => x.GetSignatureByUserId(userId)).ReturnsAsync(signature);
 
-            var signatureService = new SignatureService(mockSignatureRepository.Object);
+            var signatureService = new SignatureService(mockSignatureRepository.Object, mockUserRepository.Object);
             var result = await signatureService.GetSignatureByUserId(userId);
             result.Should().BeTrue();
         }
@@ -68,9 +73,10 @@ namespace ArtmaisBackend.Tests.Core.Signatures
             var date = DateTime.UtcNow;
             Signature signature = null;
             var mockSignatureRepository = new Mock<ISignatureRepository>();
+            var mockUserRepository = new Mock<IUserRepository>();
             mockSignatureRepository.Setup(x => x.GetSignatureByUserId(userId)).ReturnsAsync(signature);
 
-            var signatureService = new SignatureService(mockSignatureRepository.Object);
+            var signatureService = new SignatureService(mockSignatureRepository.Object, mockUserRepository.Object);
             var result = await signatureService.GetSignatureByUserId(userId);
             result.Should().BeFalse();
         }
@@ -88,11 +94,96 @@ namespace ArtmaisBackend.Tests.Core.Signatures
                 EndDate = date.AddYears(1).AddDays(-1)
             };
             var mockSignatureRepository = new Mock<ISignatureRepository>();
+            var mockUserRepository = new Mock<IUserRepository>();
             mockSignatureRepository.Setup(x => x.GetSignatureByUserId(userId)).ReturnsAsync(signature);
 
-            var signatureService = new SignatureService(mockSignatureRepository.Object);
+            var signatureService = new SignatureService(mockSignatureRepository.Object, mockUserRepository.Object);
             var result = await signatureService.GetSignatureByUserId(userId);
             result.Should().BeFalse();
+        }
+
+        [Fact(DisplayName = "Get Signature By User Id Should Be Returns Info About Not Premium User")]
+        public async Task GetSignatureUserDtoShouldBeReturnDtoUserNotPremium()
+        {
+            var userId = 3;
+            Signature signature = null;
+            var user = new User
+            {
+                UserID = userId,
+                Name = "name"
+            };
+            var expectedResult = new SignatureDto
+            {
+                UserId = 3,
+                Name = "name",
+                EndDate = DateTime.MinValue,
+                IsPremium = false
+            };
+            var mockSignatureRepository = new Mock<ISignatureRepository>();
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
+            mockSignatureRepository.Setup(x => x.GetSignatureByUserId(userId)).ReturnsAsync(signature);
+            mockUserRepository.Setup(x => x.GetUserById(userId)).Returns(user);
+            mockSignatureService.Setup(x => x.GetSignatureByUserId(userId)).ReturnsAsync(false);
+
+            var signatureService = new SignatureService(mockSignatureRepository.Object, mockUserRepository.Object);
+            var result = await signatureService.GetSignatureUserDto(userId);
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact(DisplayName = "Get Signature Dto By User Id Should Be Returns Info About Not Premium User")]
+        public async Task GetSignatureUserDtoShouldBeReturnDtoUserPremium()
+        {
+            var userId = 3;
+            var date = DateTime.UtcNow;
+            var user = new User
+            {
+                UserID = userId,
+                Name = "name"
+            };
+            var signature = new Signature
+            {
+                SignatureID = 1,
+                UserID = user.UserID,
+                StartDate = date,
+                EndDate = date.AddYears(1).AddDays(-1)
+            };
+            var expectedResult = new SignatureDto
+            {
+                UserId = 3,
+                Name = "name",
+                EndDate = signature.EndDate,
+                IsPremium = true
+            };
+            var mockSignatureRepository = new Mock<ISignatureRepository>();
+            var mockUserRepository = new Mock<IUserRepository>();
+            mockSignatureRepository.Setup(x => x.GetSignatureByUserId(userId)).ReturnsAsync(signature);
+            mockUserRepository.Setup(x => x.GetUserById(userId)).Returns(user);
+
+            var signatureService = new SignatureService(mockSignatureRepository.Object, mockUserRepository.Object);
+
+            var result = await signatureService.GetSignatureUserDto(userId);
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact(DisplayName = "Get Signature Dto By User Id Should Be throw when user is null")]
+        public async Task GetSignatureUserDtoShouldBeThrow()
+        {
+            User user = null;
+            Signature signature = null;
+
+            var mockSignatureRepository = new Mock<ISignatureRepository>();
+            var mockUserRepository = new Mock<IUserRepository>();
+            mockSignatureRepository.Setup(x => x.GetSignatureByUserId(It.IsAny<long>())).ReturnsAsync(signature);
+            mockUserRepository.Setup(x => x.GetUserById(It.IsAny<long>())).Returns(user);
+
+            var signatureService = new SignatureService(mockSignatureRepository.Object, mockUserRepository.Object);
+
+            Func<Task> result = async () =>
+            {
+                await signatureService.GetSignatureUserDto(It.IsAny<long>());
+            };
+            await result.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
     }
 }
