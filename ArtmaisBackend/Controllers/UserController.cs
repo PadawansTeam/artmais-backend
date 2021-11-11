@@ -5,6 +5,7 @@ using ArtmaisBackend.Core.Users.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Controllers
 {
@@ -25,12 +26,12 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<UserDto> GetLoggedUserInfo()
+        public async Task<ActionResult<UserDto>> GetLoggedUserInfo()
         {
             try
             {
                 var user = this._jwtToken.ReadToken(this.User);
-                var result = this._userService.GetLoggedUserInfoById(user.UserID);
+                var result = await this._userService.GetLoggedUserInfoById(user.UserID);
 
                 return this.Ok(result);
             }
@@ -44,11 +45,11 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<UserDto> GetUserInfo(int userId)
+        public async Task<ActionResult<UserDto>> GetUserInfo(int userId)
         {
             try
             {
-                var result = this._userService.GetUserInfoById(userId);
+                var result = await this._userService.GetUserInfoById(userId);
                 return this.Ok(result);
 
             }
