@@ -74,7 +74,9 @@ namespace ArtmaisBackend.Core.Profile.Mediator
                     var recommendation = _recommendationRepository.GetRecommendationByUserIdAndSubcategoryId(userJwtData.UserID, subcategory);
 
                     if (recommendation != null)
+                    {
                         _recommendationRepository.Delete(recommendation);
+                    }
                 }
 
                 return GetMessageObject("Os interesses foram salvos com sucesso.");
