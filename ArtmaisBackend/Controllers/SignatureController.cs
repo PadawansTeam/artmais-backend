@@ -14,8 +14,8 @@ namespace ArtmaisBackend.Controllers
     {
         public SignatureController(ISignatureService signatureService, IJwtTokenService jwtToken)
         {
-            _signatureService = signatureService ?? throw new ArgumentNullException(nameof(signatureService)); ;
-            _jwtToken = jwtToken ?? throw new ArgumentNullException(nameof(jwtToken)); ;
+            _signatureService = signatureService ?? throw new ArgumentNullException(nameof(signatureService));
+            _jwtToken = jwtToken ?? throw new ArgumentNullException(nameof(jwtToken));
         }
 
         private readonly ISignatureService _signatureService;
@@ -29,13 +29,13 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = _jwtToken.ReadToken(this.User);
+                var user = _jwtToken.ReadToken(User);
                 var result = await _signatureService.GetSignatureUserDto(user.UserID);
-                return this.Ok(result);
+                return Ok(result);
             }
             catch (ArgumentNullException ex)
             {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return UnprocessableEntity(new { message = ex.Message });
             }
         }
 

@@ -169,7 +169,6 @@ namespace ArtmaisBackend.Tests.Core.Signatures
         [Fact(DisplayName = "Get Signature Dto By User Id Should Be throw when user is null")]
         public async Task GetSignatureUserDtoShouldBeThrow()
         {
-            var date = DateTime.UtcNow.AddYears(-1);
             User user = null;
             Signature signature = null;
 

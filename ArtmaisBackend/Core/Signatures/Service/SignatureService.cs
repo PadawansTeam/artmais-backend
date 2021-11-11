@@ -50,7 +50,6 @@ namespace ArtmaisBackend.Core.Signatures.Service
                 return false;
         }
 
-
         public async Task<SignatureDto> GetSignatureUserDto(long userId)
         {
             var signature = await _signatureRepository.GetSignatureByUserId(userId);
