@@ -56,11 +56,15 @@ namespace ArtmaisBackend.Core.Signatures.Service
             var signature = await _signatureRepository.GetSignatureByUserId(userId);
             var isPremium = true;
             if (signature is null || signature.EndDate < DateTime.UtcNow)
+            {
                 isPremium = false;
+            }
 
             var userInfo = _userRepository.GetUserById(userId);
             if (userInfo is null)
+            { 
                 throw new ArgumentNullException();
+            }
 
             var signatureDto = new SignatureDto
             {
