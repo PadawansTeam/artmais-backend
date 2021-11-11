@@ -43,7 +43,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             mockCommentRepository.Setup(x => x.Create(commentRequest, userId));
             #endregion
 
-            var publicationService = new PublicationService(mockSignatureService.Object, mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object); ;
+            var publicationService = new PublicationService(mockSignatureService.Object, mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
             var result = publicationService.InsertComment(commentRequest, userId);
 
             result.Should().BeTrue();
@@ -366,7 +366,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var publicationService = new PublicationService(mockSignatureService.Object, mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object); ;
+            var publicationService = new PublicationService(mockSignatureService.Object, mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
 
             Func<Task> result = async () =>
             {
