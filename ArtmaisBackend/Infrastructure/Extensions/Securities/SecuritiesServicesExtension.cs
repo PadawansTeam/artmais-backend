@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -34,7 +35,10 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Securities
                 options.AddPolicy(name: "AllowAny",
                     builder =>
                     {
-                        builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+                        builder
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowAnyOrigin();
                     });
             });
 

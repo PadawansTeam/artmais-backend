@@ -96,7 +96,7 @@ namespace ArtmaisBackend.Core.Aws.Service
 
                 await this._client.DeleteObjectAsync(deleteObjectRequest);
 
-                this.DeletePortfolioContent(portfolioContent, deleteObjectCommand.UserId);
+                await this.DeletePortfolioContent(portfolioContent, deleteObjectCommand.UserId);
 
                 return true;
             }
@@ -106,8 +106,10 @@ namespace ArtmaisBackend.Core.Aws.Service
             }
         }
 
-        private void DeletePortfolioContent(PortfolioContentDto portfolioContent, long userId)
+        private async Task DeletePortfolioContent(PortfolioContentDto portfolioContent, long userId)
         {
+            await this._portfolioService.DeleteAllLikes(portfolioContent);
+            await this._portfolioService.DeleteAllComments(portfolioContent);
             this._portfolioService.DeletePublication(portfolioContent, userId);
             this._portfolioService.DeleteMedia(portfolioContent, userId);
         }

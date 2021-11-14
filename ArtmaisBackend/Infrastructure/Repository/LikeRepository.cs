@@ -3,6 +3,7 @@ using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -40,9 +41,14 @@ namespace ArtmaisBackend.Infrastructure.Repository
         {
             return _context.Like.FirstOrDefault(like => like.UserID == userId && like.PublicationID == publicationId);
         }
-        public async Task<int> GetAllLikesByPublicationId(int? publicationId)
+
+        public async Task<int> GetAllLikesAmountByPublicationId(int? publicationId)
         {
             return await _context.Like.Where(like => like.PublicationID == publicationId).CountAsync();
+        }
+        public async Task<List<Like>> GetAllLikesByPublicationId(int? publicationId)
+        {
+            return await _context.Like.Where(like => like.PublicationID == publicationId).ToListAsync();
         }
     }
 }

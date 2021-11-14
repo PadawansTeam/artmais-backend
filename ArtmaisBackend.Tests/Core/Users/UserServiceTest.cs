@@ -1,5 +1,6 @@
 ﻿using ArtmaisBackend.Core.Aws.Interface;
 using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.Signatures.Interface;
 using ArtmaisBackend.Core.Users.Dto;
 using ArtmaisBackend.Core.Users.Request;
 using ArtmaisBackend.Core.Users.Service;
@@ -10,6 +11,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace ArtmaisBackend.Tests.Core.Users
@@ -23,7 +25,9 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
+            
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User
             {
@@ -43,7 +47,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             );
 
             var userIdProfile = 3;
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockSignatureService.Object, mockMapper.Object);
 
             var result = userService.GetShareLinkByLoggedUser(userIdProfile);
 
@@ -63,6 +67,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User { });
@@ -71,7 +76,7 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var url = mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockSignatureService.Object, mockMapper.Object);
 
             Action act = () => userService.GetShareLinkByLoggedUser(userIdProfile);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -84,6 +89,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User
@@ -106,7 +112,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             }
             );
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockSignatureService.Object, mockMapper.Object);
 
             var result = userService.GetShareLinkByUserId(3);
 
@@ -126,6 +132,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User { });
@@ -134,7 +141,7 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockSignatureService.Object, mockMapper.Object);
 
             Action act = () => userService.GetShareLinkByLoggedUser(userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -147,6 +154,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User { });
@@ -166,7 +174,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             }
             );
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockSignatureService.Object, mockMapper.Object);
 
             var result = userService.GetShareProfile(3);
 
@@ -184,6 +192,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User { });
@@ -192,19 +201,20 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockSignatureService.Object, mockMapper.Object);
 
             Action act = () => userService.GetShareProfile(userId);
             act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "GetLoggedUserInfoById should be returns UserDto by userId")]
-        public void GetLoggedUserInfoByIdShouldBeUserInfo()
+        public async Task GetLoggedUserInfoByIdShouldBeUserInfo()
         {
             var mockAddressRepository = new Mock<IAddressRepository>();
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User
@@ -230,35 +240,38 @@ namespace ArtmaisBackend.Tests.Core.Users
                 InstagramProfile = "https://www.instagram.com/"
             });
 
+            mockSignatureService.Setup(x => x.GetSignatureByUserId(It.IsAny<long>())).ReturnsAsync(false);
+
             var expectedUser = new UserDto
             {
                 UserID = 3,
                 Username = "Username",
                 Street = "Street",
                 MainPhone = "999987766",
+                IsPremium = false
             };
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockSignatureService.Object, mockMapper.Object);
 
             var contactProfile = userService?.GetShareProfile(3);
             var contactShareLink = userService?.GetShareLinkByLoggedUser(3);
-            var result = userService.GetLoggedUserInfoById(3);
+            var result = await userService.GetLoggedUserInfoById(3);
 
             result.UserID.Should().Be(expectedUser.UserID);
             result.Username.Should().BeEquivalentTo(expectedUser.Username);
             result.Street.Should().BeEquivalentTo(expectedUser.Street);
             result.MainPhone.Should().BeEquivalentTo(expectedUser.MainPhone);
+            result.IsPremium.Should().BeFalse();
         }
 
         [Fact(DisplayName = "GetLoggedUserInfoById should be null when request is null or empty")]
-        public void GetLoggedUserInfoByIdShouldBeReturnsNull()
+        public async Task GetLoggedUserInfoByIdShouldBeReturnsNull()
         {
-            int? userId = null;
-
             var mockAddressRepository = new Mock<IAddressRepository>();
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User { });
@@ -267,19 +280,23 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockSignatureService.Object, mockMapper.Object);
 
-            Action act = () => userService.GetLoggedUserInfoById(userId);
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
+            Func<Task> result = async () =>
+            {
+                await userService.GetLoggedUserInfoById(It.IsAny<int>());
+            };
+            await result.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "GetShareProfile should be returns user info by userId")]
-        public void GetUserInfoByIdShouldBeUserInfo()
+        public async Task GetUserInfoByIdShouldBeUserInfo()
         {
             var mockAddressRepository = new Mock<IAddressRepository>();
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User
@@ -302,40 +319,45 @@ namespace ArtmaisBackend.Tests.Core.Users
                 ArtMais = "https://artmais-frontend.herokuapp.com/artista/"
             }
             );
+            mockSignatureService.Setup(x => x.GetSignatureByUserId(It.IsAny<long>())).ReturnsAsync(true);
 
             var expectedUser = new UserDto
             {
                 UserID = 3,
-                Username = "Username"
+                Username = "Username",
+                IsPremium = true
             };
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockSignatureService.Object, mockMapper.Object);
 
-            var result = userService.GetUserInfoById(3);
+            var result = await userService.GetUserInfoById(3);
 
             result.UserID.Should().Be(expectedUser.UserID);
             result.Username.Should().BeEquivalentTo(expectedUser.Username);
+            result.IsPremium.Should().BeTrue();
         }
 
         [Fact(DisplayName = "GetShareProfile should be null when request is null or empty")]
-        public void GetUserInfoByIdShouldBeReturnsNull()
+        public async Task GetUserInfoByIdShouldBeReturnsNull()
         {
-            int? userId = null;
-
             var mockAddressRepository = new Mock<IAddressRepository>();
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<int>()))).Returns(new User { });
 
             mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
-            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockMapper.Object);
+            var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockSignatureService.Object, mockMapper.Object);
 
-            Action act = () => userService.GetUserInfoById(userId);
-            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
+            Func<Task> result = async () =>
+            {
+                await userService.GetUserInfoById(It.IsAny<long>());
+            };
+            await result.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [Fact(DisplayName = "UpdateUserInfo should be returns UserProfileInfoDto and update database")]
@@ -354,6 +376,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             var userInfo = new User
@@ -395,7 +418,8 @@ namespace ArtmaisBackend.Tests.Core.Users
                 mockContactRepository.Object,
                 mockOptions.Object,
                 mockUserRepository.Object,
-                mockMapper.Object);
+                mockSignatureService.Object,
+                 mockMapper.Object);
 
             var result = userService.UpdateUserInfo(userRequest, 3);
 
@@ -412,6 +436,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             var userService = new UserService(
@@ -419,6 +444,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 mockContactRepository.Object,
                 mockOptions.Object,
                 mockUserRepository.Object,
+                mockSignatureService.Object,
                 mockMapper.Object);
 
             Action act = () => userService.UpdateUserInfo(userRequest, 3);
@@ -440,6 +466,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             var userInfo = new User
@@ -464,6 +491,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 mockContactRepository.Object,
                 mockOptions.Object,
                 mockUserRepository.Object,
+                mockSignatureService.Object,
                 mockMapper.Object);
 
             var result = userService.UpdateUserPassword(passwordRequest, 3);
@@ -480,6 +508,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             var userService = new UserService(
@@ -487,6 +516,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 mockContactRepository.Object,
                 mockOptions.Object,
                 mockUserRepository.Object,
+                mockSignatureService.Object,
                 mockMapper.Object);
 
             Action act = () => userService.UpdateUserPassword(passwordRequest, 3);
@@ -506,6 +536,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             var userInfo = new User
@@ -530,6 +561,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 mockContactRepository.Object,
                 mockOptions.Object,
                 mockUserRepository.Object,
+                mockSignatureService.Object,
                 mockMapper.Object);
 
             var result = userService.UpdateUserDescription(descriptionRequest, 3);
@@ -546,6 +578,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockContactRepository = new Mock<IContactRepository>();
             var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
             var mockUserRepository = new Mock<IUserRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
             var mockMapper = new Mock<IMapper>();
 
             var userService = new UserService(
@@ -553,6 +586,7 @@ namespace ArtmaisBackend.Tests.Core.Users
                 mockContactRepository.Object,
                 mockOptions.Object,
                 mockUserRepository.Object,
+                mockSignatureService.Object,
                 mockMapper.Object);
 
             Action act = () => userService.UpdateUserDescription(descriptionRequest, 3);

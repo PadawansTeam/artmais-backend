@@ -1,5 +1,6 @@
 ﻿using ArtmaisBackend.Core.Portfolio.Dto;
 using ArtmaisBackend.Core.Portfolio.Request;
+using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Portfolio.Interface
 {
@@ -14,6 +15,10 @@ namespace ArtmaisBackend.Core.Portfolio.Interface
         bool UpdateDescription(PortfolioDescriptionRequest? portfolioDescriptionRequest, long userId);
 
         PortfolioContentDto GetPublicationByIdToDelete(int? publicationId, long userId);
+
+        Task DeleteAllLikes(PortfolioContentDto? portfolioContentDto);
+
+        Task DeleteAllComments(PortfolioContentDto? portfolioContentDto);
 
         void DeletePublication(PortfolioContentDto? portfolioContentDto, long userId);
 

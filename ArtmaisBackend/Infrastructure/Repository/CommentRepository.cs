@@ -20,7 +20,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public async Task<List<CommentDto?>> GetAllCommentsByPublicationId(int? publicationId)
+        public async Task<List<CommentDto?>> GetAllCommentsDtoByPublicationId(int? publicationId)
         {
             var listComments = await (from comments in _context.Comment
                                       join user in _context.User on comments.UserID equals user.UserID
@@ -37,6 +37,11 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return listComments;
         }
 
+        public async Task<List<Comment>> GetAllCommentsByPublicationId(int? publicationId)
+        {
+            return await _context.Comment.Where(comment => comment.PublicationID == publicationId).ToListAsync();
+        }
+
         public void Create(CommentRequest commentRequest, long userId)
         {
             var commentContent = new Comment
@@ -48,6 +53,12 @@ namespace ArtmaisBackend.Infrastructure.Repository
             };
 
             _context.Comment.Add(commentContent);
+            _context.SaveChanges();
+        }
+
+        public void Delete(Comment comment)
+        {
+            _context.Comment.Remove(comment);
             _context.SaveChanges();
         }
     }

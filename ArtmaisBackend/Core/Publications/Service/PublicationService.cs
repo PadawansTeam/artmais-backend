@@ -2,6 +2,7 @@
 using ArtmaisBackend.Core.Publications.Dto;
 using ArtmaisBackend.Core.Publications.Interface;
 using ArtmaisBackend.Core.Publications.Request;
+using ArtmaisBackend.Core.Signatures.Interface;
 using ArtmaisBackend.Core.SignIn;
 using ArtmaisBackend.Core.Users.Interface;
 using ArtmaisBackend.Infrastructure;
@@ -16,7 +17,7 @@ namespace ArtmaisBackend.Core.Publications.Service
 {
     public class PublicationService : IPublicationService
     {
-        public PublicationService(IUserService userService, IUserRepository userRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, ICommentRepository commentRepository, ILikeRepository likeRepository, IOptions<SocialMediaConfiguration> options)
+        public PublicationService(ISignatureService signatureService, IUserService userService, IUserRepository userRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, ICommentRepository commentRepository, ILikeRepository likeRepository, IOptions<SocialMediaConfiguration> options)
         {
             _userService = userService;
             _userRepository = userRepository;
@@ -25,6 +26,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             _commentRepository = commentRepository;
             _likeRepository = likeRepository;
             _socialMediaConfiguration = options.Value;
+            _signatureService = signatureService;
         }
 
         private readonly IUserService _userService;
@@ -33,6 +35,7 @@ namespace ArtmaisBackend.Core.Publications.Service
         private readonly IPublicationRepository _publicationRepository;
         private readonly ILikeRepository _likeRepository;
         private readonly ICommentRepository _commentRepository;
+        private readonly ISignatureService _signatureService;
         private readonly SocialMediaConfiguration _socialMediaConfiguration;
 
         public bool InsertComment(CommentRequest? commentRequest, long userId)
@@ -50,7 +53,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             if (publicationId is null)
                 throw new ArgumentNullException();
 
-            var comments = await _commentRepository.GetAllCommentsByPublicationId(publicationId);
+            var comments = await _commentRepository.GetAllCommentsDtoByPublicationId(publicationId);
             var commentsAmount = comments.Count();
 
             var publicationCommentsDto = new PublicationCommentsDto(comments, commentsAmount);
@@ -119,12 +122,12 @@ namespace ArtmaisBackend.Core.Publications.Service
             if (publicationId is null)
                 throw new ArgumentNullException();
 
-            var likesAmount = await _likeRepository.GetAllLikesByPublicationId(publicationId);
+            var likesAmount = await _likeRepository.GetAllLikesAmountByPublicationId(publicationId);
 
             return likesAmount;
         }
 
-        public async Task<PublicationDto> GetPublicationById(int? publicationId, long? publicationOwnerUserId, UserJwtData visitorUser)
+        public async Task<PublicationDto> GetPublicationByIdAndLoggedUser(int? publicationId, long? publicationOwnerUserId, UserJwtData visitorUser)
         {
             if (publicationId is null || publicationOwnerUserId is null)
                 throw new ArgumentNullException();
@@ -141,6 +144,9 @@ namespace ArtmaisBackend.Core.Publications.Service
             if (publication is null)
                 throw new ArgumentNullException();
 
+            if (String.IsNullOrEmpty(publication.Description) || publication.Description == "null")
+                publication.Description = "";
+
             var userCategory = _userRepository.GetSubcategoryByUserId(publicationOwnerUser.UserID);
             var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(publicationOwnerUser.UserID, publication.PublicationID);
             var isLiked = GetIsLikedPublication(publication.PublicationID, visitorUser.UserID);
@@ -148,6 +154,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             var contactProfile = _userService.GetShareProfile(publicationOwnerUser.UserID);
             var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID);
             var mediaType = _mediaTypeRepository.GetMediaTypeById (publication.MediaTypeID);
+            var isPremium = await _signatureService.GetSignatureByUserId(publicationOwnerUser.UserID);
 
             var publicationDto = new PublicationDto
             {
@@ -171,7 +178,63 @@ namespace ArtmaisBackend.Core.Publications.Service
                 Comments = comments.Comments,
                 CommentsAmount = comments?.CommentsAmount,
                 LikesAmount = likesAmount,
-                IsLiked = isLiked
+                IsLiked = isLiked,
+                IsPremium = isPremium
+            };
+
+            return publicationDto;
+        }
+        public async Task<PublicationDto> GetPublicationById(int? publicationId, long? publicationOwnerUserId)
+        {
+            if (publicationId is null || publicationOwnerUserId is null)
+                throw new ArgumentNullException();
+
+            var publicationOwnerUser = _userRepository.GetUserById(publicationOwnerUserId);
+            if (publicationOwnerUser is null)
+                throw new ArgumentNullException();
+
+            var portfolio = _publicationRepository.GetAllPublicationsByUserId(publicationOwnerUserId);
+            if (portfolio is null)
+                throw new ArgumentNullException();
+
+            var publication = portfolio.Where(p => p.PublicationID == publicationId).FirstOrDefault();
+            if (publication is null)
+                throw new ArgumentNullException();
+
+            if (String.IsNullOrEmpty(publication.Description) || publication.Description == "null")
+                publication.Description = "";
+
+            var userCategory = _userRepository.GetSubcategoryByUserId(publicationOwnerUser.UserID);
+            var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(publicationOwnerUser.UserID, publication.PublicationID);
+            var comments = await GetAllCommentsByPublicationId(publication.PublicationID);
+            var contactProfile = _userService.GetShareProfile(publicationOwnerUser.UserID);
+            var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID);
+            var mediaType = _mediaTypeRepository.GetMediaTypeById(publication.MediaTypeID);
+            var isPremium = await _signatureService.GetSignatureByUserId(publicationOwnerUser.UserID);
+
+            var publicationDto = new PublicationDto
+            {
+                UserId = publicationOwnerUser?.UserID,
+                Name = publicationOwnerUser?.Name,
+                Username = publicationOwnerUser?.Username,
+                UserPicture = publicationOwnerUser?.UserPicture,
+                BackgroundPicture = publicationOwnerUser?.BackgroundPicture,
+                Category = userCategory?.Category,
+                Subcategory = userCategory?.Subcategory,
+                UserFacebook = contactProfile?.Facebook,
+                UserInstagram = contactProfile?.Instagram,
+                UserTwitter = contactProfile?.Twitter,
+                PublicationFacebook = publicationShareLink?.Facebook,
+                PublicationTwitter = publicationShareLink?.Twitter,
+                PublicationWhatsapp = publicationShareLink?.Whatsapp,
+                S3UrlMedia = publication?.S3UrlMedia,
+                Description = publication?.Description,
+                PublicationDate = publication?.PublicationDate,
+                MediaType = mediaType?.Description,
+                Comments = comments.Comments,
+                CommentsAmount = comments?.CommentsAmount,
+                LikesAmount = likesAmount,
+                IsPremium = isPremium
             };
 
             return publicationDto;
