@@ -33,7 +33,9 @@ namespace ArtmaisBackend.Controllers
                 var payment = await _paymentService.PaymentCreateRequest(paymentRequest, user.UserID);
 
                 if (payment is null)
+                {
                     return UnprocessableEntity();
+                }
 
                 return Ok();
             }

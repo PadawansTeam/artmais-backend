@@ -67,8 +67,10 @@ namespace ArtmaisBackend.Core.Payments.Service
             var client = new PaymentClient();
             Payment payment = await client.CreateAsync(request, requestOptions);
 
-            if(payment is null)
+            if (payment is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             return payment;
         }
@@ -79,7 +81,9 @@ namespace ArtmaisBackend.Core.Payments.Service
             var payment = await _paymentRepository.Create(userId, (int)paymentStatusEnum);
 
             if (payment is null)
+            {
                 return false;
+            }
 
             return true;
         }
@@ -90,7 +94,9 @@ namespace ArtmaisBackend.Core.Payments.Service
             var payment = await _paymentRepository.Update(paymentRequest);
 
             if (payment is null)
+            {
                 return false;
+            }
 
             return true;
         }
@@ -110,7 +116,9 @@ namespace ArtmaisBackend.Core.Payments.Service
             var paymentHistory = await _paymentHistoryRepository.Create(paymentId, (int)paymentStatusEnum);
 
             if (paymentHistory is null)
+            {
                 return false;
+            }
 
             return true;
         }
@@ -125,7 +133,9 @@ namespace ArtmaisBackend.Core.Payments.Service
             var paymentProduct = await _paymentProductRepository.Create(productId, paymentId);
 
             if (paymentProduct is null)
+            {
                 return false;
+            }
 
             return true;
         }
