@@ -1,5 +1,5 @@
 ﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Payment.Request;
+using ArtmaisBackend.Core.Payments.Request;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-﻿namespace ArtmaisBackend.Core.Payment.Enum
+﻿namespace ArtmaisBackend.Core.Payments.Enums
 {
     public enum PaymentTypeEnum
     {

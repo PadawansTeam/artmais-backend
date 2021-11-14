@@ -5,12 +5,12 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
 {
     public interface IPaymentRepository
     {
-        Task<Payment?> Create(long userId, int paymentTypeEnum);
+        Task<Payments?> Create(long userId, int paymentTypeEnum);
 
-        Task<Payment?> Update(Payment paymentRequest);
+        Task<Payments?> Update(Payments paymentRequest);
 
-        Task<Payment?> GetPaymentByUserId(long userId);
+        Task<Payments?> GetPaymentByUserId(long userId);
 
-        Task<Payment?> GetPaymentByIdAndUserId(int paymentId, long userId);
+        Task<Payments?> GetPaymentByIdAndUserId(int paymentId, long userId);
     }
 }

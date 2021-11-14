@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ArtmaisBackend.Core.Entities
 {
     [Table("pagamento")]
-    public class Payment
+    public class Payments
     {
         [Key]
         [Column("idpagamento")]

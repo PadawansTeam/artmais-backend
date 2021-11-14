@@ -5,6 +5,6 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
 {
     public interface IPaymentStatusRepository
     {
-        Task<PaymentStatus?> GetPaymentStatusById(int? paymentStatusId);
+        Task<PaymentsStatus?> GetPaymentStatusById(int? paymentStatusId);
     }
 }

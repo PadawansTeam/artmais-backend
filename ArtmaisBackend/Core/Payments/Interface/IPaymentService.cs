@@ -1,20 +1,23 @@
 ﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Payment.Enum;
-using ArtmaisBackend.Core.Payment.Enums;
+using ArtmaisBackend.Core.Payments.Enums;
+using ArtmaisBackend.Core.Payments.Request;
+using MercadoPago.Resource.Payment;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ArtmaisBackend.Core.Payment.Interface
+namespace ArtmaisBackend.Core.Payments.Interface
 {
     public interface IPaymentService
     {
+        Task<Payment> PaymentCreateRequest(PaymentRequest paymentRequest, long userId);
+        
         Task<bool> InsertPayment(long userId, PaymentStatusEnum PaymentStatusEnum);
 
-        Task<bool> UpdatePayment(Entities.Payment paymentRequest);
+        Task<bool> UpdatePayment(Entities.Payments paymentRequest);
 
-        Task<Entities.Payment?> GetPaymentByUserId(long userId);
+        Task<Entities.Payments?> GetPaymentByUserId(long userId);
 
-        Task<Entities.Payment?> GetPaymentByIdAndUserId(int paymentId, long userId);
+        Task<Entities.Payments?> GetPaymentByIdAndUserId(int paymentId, long userId);
 
         Task<bool> InsertPaymentHistory(int paymentId, PaymentStatusEnum paymentStatusEnum);
 
@@ -28,7 +31,7 @@ namespace ArtmaisBackend.Core.Payment.Interface
 
         Task<List<Product>> GetProductsByUserId(long userId);
 
-        Task<PaymentStatus?> GetPaymentStatus(PaymentStatusEnum paymentStatusEnum);
+        Task<PaymentsStatus?> GetPaymentStatus(PaymentStatusEnum paymentStatusEnum);
 
         Task<PaymentType?> GetPaymentType(PaymentTypeEnum paymentTypeEnum);
     }

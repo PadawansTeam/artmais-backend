@@ -15,13 +15,13 @@ namespace ArtmaisBackend.Core.Entities
         public int? PaymentID { get; set; }
 
         [ForeignKey("PaymentID")]
-        public Payment? Payment { get; set; }
+        public Payments? Payment { get; set; }
 
         [Column("idestadopagamento")]
         public int? PaymentStatusID { get; set; }
 
         [ForeignKey("PaymentID")]
-        public PaymentStatus? PaymentStatus { get; set; }
+        public PaymentsStatus? PaymentStatus { get; set; }
 
         [Column("datahoracriacao")]
         public DateTime? CreateDate { get; set; }

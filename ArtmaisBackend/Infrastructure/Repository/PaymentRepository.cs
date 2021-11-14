@@ -17,10 +17,10 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public async Task<Payment?> Create(long userId, int paymentTypeEnum)
+        public async Task<Payments?> Create(long userId, int paymentTypeEnum)
         {
             var date = DateTime.UtcNow;
-            var payment = new Payment
+            var payment = new Payments
             {
                 UserID = userId,
                 PaymentTypeID = paymentTypeEnum,
@@ -34,7 +34,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return payment;
         }
 
-        public async Task<Payment?> Update(Payment paymentRequest)
+        public async Task<Payments?> Update(Payments paymentRequest)
         {
             _context.Payment.Update(paymentRequest);
             await _context.SaveChangesAsync();
@@ -42,7 +42,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return paymentRequest;
         }
 
-        public async Task<Payment?> GetPaymentByUserId(long userId)
+        public async Task<Payments?> GetPaymentByUserId(long userId)
         {
             return await _context.Payment
                 .Where(payment => payment.UserID == userId)
@@ -50,7 +50,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Payment?> GetPaymentByIdAndUserId(int paymentId, long userId)
+        public async Task<Payments?> GetPaymentByIdAndUserId(int paymentId, long userId)
         {
             return await _context.Payment
                 .Where(payment => payment.PaymentID == paymentId && payment.UserID == userId)

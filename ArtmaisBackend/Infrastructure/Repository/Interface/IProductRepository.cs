@@ -1,5 +1,5 @@
 ﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Payment.Request;
+using ArtmaisBackend.Core.Payments.Request;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

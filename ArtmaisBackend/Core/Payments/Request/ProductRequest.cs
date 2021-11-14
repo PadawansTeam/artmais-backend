@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ArtmaisBackend.Core.Payment.Request
+﻿namespace ArtmaisBackend.Core.Payments.Request
 {
     public class ProductRequest
     {

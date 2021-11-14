@@ -1,14 +1,18 @@
 ﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Payment.Enum;
-using ArtmaisBackend.Core.Payment.Enums;
-using ArtmaisBackend.Core.Payment.Interface;
+using ArtmaisBackend.Core.Payments.Enums;
+using ArtmaisBackend.Core.Payments.Interface;
+using ArtmaisBackend.Core.Payments.Request;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using AutoMapper;
+using MercadoPago.Client;
+using MercadoPago.Client.Payment;
+using MercadoPago.Config;
+using MercadoPago.Resource.Payment;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ArtmaisBackend.Core.Payment.Service
+namespace ArtmaisBackend.Core.Payments.Service
 {
     public class PaymentService : IPaymentService
     {
@@ -40,6 +44,36 @@ namespace ArtmaisBackend.Core.Payment.Service
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
+        public async Task<Payment> PaymentCreateRequest(PaymentRequest paymentRequest, long userId)
+        {
+            MercadoPagoConfig.AccessToken = "YOUR_ACCESS_TOKEN";
+
+            var request = new PaymentCreateRequest
+            {
+                TransactionAmount = paymentRequest.TransactionAmount,
+                Token = paymentRequest.CardToken,
+                Description = paymentRequest.Description,
+                Installments = paymentRequest.Installments,
+                PaymentMethodId = paymentRequest.PaymentMethodId,
+                Payer = new PaymentPayerRequest
+                {
+                    Email = paymentRequest.Email,
+                }
+            };
+            var requestOptions = new RequestOptions();
+            requestOptions.AccessToken = "YOUR_ACCESS_TOKEN";
+            // ...
+
+            var client = new PaymentClient();
+            Payment payment = await client.CreateAsync(request, requestOptions);
+
+            if(payment is null)
+                throw new ArgumentNullException();
+
+            return payment;
+        }
+
+
         public async Task<bool> InsertPayment(long userId, PaymentStatusEnum paymentStatusEnum)
         {
             var payment = await _paymentRepository.Create(userId, (int)paymentStatusEnum);
@@ -50,7 +84,7 @@ namespace ArtmaisBackend.Core.Payment.Service
             return true;
         }
 
-        public async Task<bool> UpdatePayment(Entities.Payment paymentRequest)
+        public async Task<bool> UpdatePayment(Entities.Payments paymentRequest)
         {
             paymentRequest.LastUpdateDate = DateTime.UtcNow;
             var payment = await _paymentRepository.Update(paymentRequest);
@@ -61,12 +95,12 @@ namespace ArtmaisBackend.Core.Payment.Service
             return true;
         }
 
-        public async Task<Entities.Payment?> GetPaymentByUserId(long userId)
+        public async Task<Entities.Payments?> GetPaymentByUserId(long userId)
         {
             return await _paymentRepository.GetPaymentByUserId(userId);
         }
 
-        public async Task<Entities.Payment?> GetPaymentByIdAndUserId(int paymentId, long userId)
+        public async Task<Entities.Payments?> GetPaymentByIdAndUserId(int paymentId, long userId)
         {
             return await _paymentRepository.GetPaymentByIdAndUserId(paymentId, userId);
         }
@@ -111,7 +145,7 @@ namespace ArtmaisBackend.Core.Payment.Service
             return await _productRepository.GetProductsByUserId(userId);
         }
 
-        public async Task<PaymentStatus?> GetPaymentStatus(PaymentStatusEnum paymentStatusEnum)
+        public async Task<PaymentsStatus?> GetPaymentStatus(PaymentStatusEnum paymentStatusEnum)
         {
             return await _paymentStatusRepository.GetPaymentStatusById((int)paymentStatusEnum);
         }

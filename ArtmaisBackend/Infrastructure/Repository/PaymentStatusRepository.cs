@@ -14,7 +14,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
         }
         private readonly ArtplusContext _context;
 
-        public async Task<PaymentStatus?> GetPaymentStatusById(int? paymentStatusId)
+        public async Task<PaymentsStatus?> GetPaymentStatusById(int? paymentStatusId)
         {
             return await _context.PaymentStatus.FirstOrDefaultAsync(paymentStatus => paymentStatus.PaymentStatusID == paymentStatusId);
         }
