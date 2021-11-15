@@ -30,7 +30,7 @@ namespace ArtmaisBackend.Core.Aws.Service
 
         public async Task<AwsDto?> UploadObjectAsync(UploadObjectCommand uploadObjectCommand)
         {
-            var response = await WritingAnObjectAsync(uploadObjectCommand);
+            var response = await WritingAnObjectAsync(uploadObjectCommand).ConfigureAwait(false);
 
             if (uploadObjectCommand.IsProfileContent)
             {

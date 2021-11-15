@@ -180,9 +180,9 @@ namespace ArtmaisBackend.Core.Publications.Service
             var userCategory = _userRepository.GetSubcategoryByUserId(publicationOwnerUser.UserID);
             var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(publicationOwnerUser.UserID, publication.PublicationID);
             var isLiked = GetIsLikedPublication(publication.PublicationID, visitorUser.UserID);
-            var comments = await GetAllCommentsByPublicationId(publication.PublicationID);
+            var comments = await GetAllCommentsByPublicationId(publication.PublicationID).ConfigureAwait(false);
             var contactProfile = _userService.GetShareProfile(publicationOwnerUser.UserID);
-            var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID);
+            var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID).ConfigureAwait(false);
             var mediaType = _mediaTypeRepository.GetMediaTypeById(publication.MediaTypeID);
             var isPremium = await _signatureService.GetSignatureByUserId(publicationOwnerUser.UserID);
 
@@ -246,9 +246,9 @@ namespace ArtmaisBackend.Core.Publications.Service
 
             var userCategory = _userRepository.GetSubcategoryByUserId(publicationOwnerUser.UserID);
             var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(publicationOwnerUser.UserID, publication.PublicationID);
-            var comments = await GetAllCommentsByPublicationId(publication.PublicationID);
+            var comments = await GetAllCommentsByPublicationId(publication.PublicationID).ConfigureAwait(false);
             var contactProfile = _userService.GetShareProfile(publicationOwnerUser.UserID);
-            var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID);
+            var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID).ConfigureAwait(false);
             var mediaType = _mediaTypeRepository.GetMediaTypeById(publication.MediaTypeID);
             var isPremium = await _signatureService.GetSignatureByUserId(publicationOwnerUser.UserID);
 
