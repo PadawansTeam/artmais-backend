@@ -12,13 +12,19 @@ namespace ArtmaisBackend.Util.File
             var audioRegex = new Regex(@"(.MP3|.AAC|.WMA|.WAV)$", RegexOptions.IgnoreCase);
 
             if (imageRegex.IsMatch(fileExtension))
+            {
                 return MediaType.IMAGE;
+            }
 
             if (videoRegex.IsMatch(fileExtension))
+            {
                 return MediaType.VIDEO;
+            }
 
             if (audioRegex.IsMatch(fileExtension))
+            {
                 return MediaType.AUDIO;
+            }
 
             throw new InvalidDataException();
         }

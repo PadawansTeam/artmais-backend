@@ -27,7 +27,9 @@ namespace ArtmaisBackend.Core.Signatures.Service
             var signature = await _signatureRepository.GetSignatureByUserId(userId);
 
             if (signature is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var date = DateTime.UtcNow;
             signature.StartDate = date;
@@ -41,13 +43,19 @@ namespace ArtmaisBackend.Core.Signatures.Service
             var signature = await _signatureRepository.GetSignatureByUserId(userId);
 
             if (signature is null)
+            {
                 return false;
+            }
 
             else if (signature.EndDate >= DateTime.UtcNow)
+            {
                 return true;
+            }
 
             else
+            {
                 return false;
+            }
         }
 
         public async Task<SignatureDto> GetSignatureUserDto(long userId)

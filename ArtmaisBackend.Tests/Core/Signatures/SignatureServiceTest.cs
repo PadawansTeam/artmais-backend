@@ -70,7 +70,6 @@ namespace ArtmaisBackend.Tests.Core.Signatures
         public async Task GetSignatureByUserIdShouldBeFalse()
         {
             var userId = 3;
-            var date = DateTime.UtcNow;
             Signature signature = null;
             var mockSignatureRepository = new Mock<ISignatureRepository>();
             var mockUserRepository = new Mock<IUserRepository>();

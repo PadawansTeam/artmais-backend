@@ -41,7 +41,9 @@ namespace ArtmaisBackend.Core.Publications.Service
         public bool InsertComment(CommentRequest? commentRequest, long userId)
         {
             if (commentRequest.PublicationID is null || commentRequest.Description is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             _commentRepository.Create(commentRequest, userId);
 
@@ -51,7 +53,9 @@ namespace ArtmaisBackend.Core.Publications.Service
         private async Task<PublicationCommentsDto?> GetAllCommentsByPublicationId(int? publicationId)
         {
             if (publicationId is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var comments = await _commentRepository.GetAllCommentsDtoByPublicationId(publicationId);
             var commentsAmount = comments.Count();
@@ -64,7 +68,9 @@ namespace ArtmaisBackend.Core.Publications.Service
         private PublicationShareLinkDto? GetPublicationShareLinkByPublicationIdAndUserId(long? userId, int? publicationId)
         {
             if (publicationId is null || userId is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var publicationShareLinkDto = new PublicationShareLinkDto
             {
@@ -78,12 +84,16 @@ namespace ArtmaisBackend.Core.Publications.Service
         public async Task<bool> InsertLike(int? publicationId, long userId)
         {
             if (publicationId is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var likeInfo = _likeRepository.GetLikeByPublicationIdAndUserId(publicationId, userId);
 
             if (likeInfo != null)
+            {
                 return false;
+            }
 
             await _likeRepository.Create(publicationId, userId);
             return true;
@@ -92,12 +102,16 @@ namespace ArtmaisBackend.Core.Publications.Service
         public bool DeleteLike(int? publicationId, long userId)
         {
             if (publicationId is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var likeInfo = _likeRepository.GetLikeByPublicationIdAndUserId(publicationId, userId);
 
             if (likeInfo is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             _likeRepository.Delete(likeInfo);
 
@@ -107,12 +121,16 @@ namespace ArtmaisBackend.Core.Publications.Service
         private bool GetIsLikedPublication(int? publicationId, long userId)
         {
             if (publicationId is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var isLiked = _likeRepository.GetLikeByPublicationIdAndUserId(publicationId, userId);
 
             if (isLiked is null)
+            {
                 return false;
+            }
 
             return true;
         }
@@ -120,7 +138,9 @@ namespace ArtmaisBackend.Core.Publications.Service
         private async Task<int?> GetAllLikesByPublicationId(int? publicationId)
         {
             if (publicationId is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var likesAmount = await _likeRepository.GetAllLikesAmountByPublicationId(publicationId);
 
@@ -130,22 +150,32 @@ namespace ArtmaisBackend.Core.Publications.Service
         public async Task<PublicationDto> GetPublicationByIdAndLoggedUser(int? publicationId, long? publicationOwnerUserId, UserJwtData visitorUser)
         {
             if (publicationId is null || publicationOwnerUserId is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var publicationOwnerUser = _userRepository.GetUserById(publicationOwnerUserId);
             if (publicationOwnerUser is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var portfolio = _publicationRepository.GetAllPublicationsByUserId(publicationOwnerUserId);
             if (portfolio is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var publication = portfolio.Where(p => p.PublicationID == publicationId).FirstOrDefault();
             if (publication is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             if (String.IsNullOrEmpty(publication.Description) || publication.Description == "null")
+            {
                 publication.Description = "";
+            }
 
             var userCategory = _userRepository.GetSubcategoryByUserId(publicationOwnerUser.UserID);
             var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(publicationOwnerUser.UserID, publication.PublicationID);
@@ -153,7 +183,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             var comments = await GetAllCommentsByPublicationId(publication.PublicationID);
             var contactProfile = _userService.GetShareProfile(publicationOwnerUser.UserID);
             var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID);
-            var mediaType = _mediaTypeRepository.GetMediaTypeById (publication.MediaTypeID);
+            var mediaType = _mediaTypeRepository.GetMediaTypeById(publication.MediaTypeID);
             var isPremium = await _signatureService.GetSignatureByUserId(publicationOwnerUser.UserID);
 
             var publicationDto = new PublicationDto
@@ -187,22 +217,32 @@ namespace ArtmaisBackend.Core.Publications.Service
         public async Task<PublicationDto> GetPublicationById(int? publicationId, long? publicationOwnerUserId)
         {
             if (publicationId is null || publicationOwnerUserId is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var publicationOwnerUser = _userRepository.GetUserById(publicationOwnerUserId);
             if (publicationOwnerUser is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var portfolio = _publicationRepository.GetAllPublicationsByUserId(publicationOwnerUserId);
             if (portfolio is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var publication = portfolio.Where(p => p.PublicationID == publicationId).FirstOrDefault();
             if (publication is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             if (String.IsNullOrEmpty(publication.Description) || publication.Description == "null")
+            {
                 publication.Description = "";
+            }
 
             var userCategory = _userRepository.GetSubcategoryByUserId(publicationOwnerUser.UserID);
             var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(publicationOwnerUser.UserID, publication.PublicationID);
