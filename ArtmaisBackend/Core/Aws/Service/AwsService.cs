@@ -98,7 +98,7 @@ namespace ArtmaisBackend.Core.Aws.Service
 
                 await _client.DeleteObjectAsync(deleteObjectRequest);
 
-                await DeletePortfolioContent(portfolioContent, deleteObjectCommand.UserId);
+                await DeletePortfolioContent(portfolioContent, deleteObjectCommand.UserId).ConfigureAwait(false);
 
                 return true;
             }
