@@ -61,7 +61,9 @@ namespace ArtmaisBackend.Core.Profile.Services
                 if (Math.Round(predictionEngine.Predict(categoryRating).Score, 1) >= 2)
                 {
                     if (!_asyncInterestRepository.GetInterestByUserIdAndSubcategoryId(categoryRating))
+                    {
                         _asyncInterestRepository.Create(categoryRating);
+                    }
                 }
             }
         }

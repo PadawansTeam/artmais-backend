@@ -71,10 +71,7 @@ namespace ArtmaisBackend.Tests.Core.Users
             var mockMapper = new Mock<IMapper>();
 
             mockUserRepository.Setup(x => x.GetUserById((It.IsAny<long>()))).Returns(new User { });
-
             mockContactRepository.Setup(x => x.GetContactByUser((It.IsAny<long>()))).Returns(new Contact { });
-
-            var url = mockOptions.Setup(x => x.Value).Returns(new SocialMediaConfiguration { });
 
             var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockSignatureService.Object, mockMapper.Object);
 
@@ -252,9 +249,6 @@ namespace ArtmaisBackend.Tests.Core.Users
             };
 
             var userService = new UserService(mockAddressRepository.Object, mockContactRepository.Object, mockOptions.Object, mockUserRepository.Object, mockSignatureService.Object, mockMapper.Object);
-
-            var contactProfile = userService?.GetShareProfile(3);
-            var contactShareLink = userService?.GetShareLinkByLoggedUser(3);
             var result = await userService.GetLoggedUserInfoById(3);
 
             result.UserID.Should().Be(expectedUser.UserID);

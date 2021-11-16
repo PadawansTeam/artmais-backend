@@ -37,7 +37,9 @@ namespace ArtmaisBackend.Core.Users.Service
         {
             var user = _userRepository.GetUserById(userId);
             if (user is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var shareLinkDto = new ShareLinkDto
             {
@@ -52,7 +54,9 @@ namespace ArtmaisBackend.Core.Users.Service
         {
             var user = _userRepository.GetUserById(userId);
             if (user is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var contact = _contactRepository.GetContactByUser(user.UserID);
 
@@ -71,7 +75,9 @@ namespace ArtmaisBackend.Core.Users.Service
         {
             var user = _userRepository.GetUserById(userId);
             if (user is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var contact = _contactRepository.GetContactByUser(user.UserID);
 
@@ -96,7 +102,9 @@ namespace ArtmaisBackend.Core.Users.Service
         {
             var user = _userRepository.GetUserById(userId);
             if (user is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var userCategory = _userRepository.GetSubcategoryByUserId(user.UserID);
             var contact = _contactRepository.GetContactByUser(user.UserID);
@@ -105,7 +113,7 @@ namespace ArtmaisBackend.Core.Users.Service
             var contactShareLink = GetShareLinkByLoggedUser(user.UserID);
             var isPremium = await _signatureService.GetSignatureByUserId(user.UserID);
 
-            var userDto = new UserDto()
+            var userDto = new UserDto
             {
                 UserID = user.UserID,
                 Name = user?.Name,
@@ -144,7 +152,9 @@ namespace ArtmaisBackend.Core.Users.Service
         {
             var user = _userRepository.GetUserById(userId);
             if (user is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var userCategory = _userRepository.GetSubcategoryByUserId(user.UserID);
             var contact = _contactRepository.GetContactByUser(user.UserID);
@@ -153,7 +163,7 @@ namespace ArtmaisBackend.Core.Users.Service
             var contactShareLink = GetShareLinkByUserId(user.UserID);
             var isPremium = await _signatureService.GetSignatureByUserId(user.UserID);
 
-            var userDto = new UserDto()
+            var userDto = new UserDto
             {
                 UserID = user.UserID,
                 Name = user?.Name,
@@ -189,7 +199,9 @@ namespace ArtmaisBackend.Core.Users.Service
         public UserProfileInfoDto UpdateUserInfo(UserRequest? userRequest, long userId)
         {
             if (userRequest is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var userInfo = _userRepository.GetUserById(userId);
             userInfo = _mapper.Map(userRequest, userInfo);
@@ -202,7 +214,9 @@ namespace ArtmaisBackend.Core.Users.Service
                 var contactRequest = _mapper.Map<ContactRequest>(userRequest);
                 var newContact = _contactRepository.Create(contactRequest, user.UserID);
                 if (newContact is null)
+                {
                     throw new ArgumentNullException();
+                }
 
                 var userDto = new UserProfileInfoDto
                 {
@@ -230,20 +244,28 @@ namespace ArtmaisBackend.Core.Users.Service
         public bool UpdateUserPassword(PasswordRequest? passwordRequest, long userId)
         {
             if (passwordRequest is null || passwordRequest.NewPassword == "" || passwordRequest.Password == "")
+            { 
                 throw new ArgumentNullException();
+            }
 
             if (!(passwordRequest.Password.Equals(passwordRequest.NewPassword)))
+            {
                 throw new ArgumentException();
+            }
 
             var userInfo = _userRepository.GetUserById(userId);
             if (userInfo is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var salt = userInfo.Password.Substring(0, 24);
             var encryptedPassword = PasswordUtil.Encrypt(passwordRequest.OldPassword, salt);
 
             if (!encryptedPassword.Equals(userInfo.Password))
+            {
                 throw new AccessViolationException();
+            }
 
             passwordRequest.Password = PasswordUtil.Encrypt(passwordRequest.Password);
 
@@ -256,7 +278,9 @@ namespace ArtmaisBackend.Core.Users.Service
         public bool UpdateUserDescription(UserDescriptionRequest? userDescriptionRequest, long userId)
         {
             if (userDescriptionRequest is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var userInfo = _userRepository.GetUserById(userId);
 

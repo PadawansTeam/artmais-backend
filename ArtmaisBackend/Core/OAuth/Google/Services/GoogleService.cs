@@ -16,7 +16,7 @@ namespace ArtmaisBackend.Services
 
         public async Task<GoogleJsonWebSignature.Payload> ValidateToken(string token)
         {
-            var googleUser = await GoogleJsonWebSignature.ValidateAsync(token, new GoogleJsonWebSignature.ValidationSettings()
+            var googleUser = await GoogleJsonWebSignature.ValidateAsync(token, new GoogleJsonWebSignature.ValidationSettings
             {
                 Audience = new[] { _configuration["GoogleClientId"] }
             });

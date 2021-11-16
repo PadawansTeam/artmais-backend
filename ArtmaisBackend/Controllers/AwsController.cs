@@ -21,10 +21,10 @@ namespace ArtmaisBackend.Controllers
     {
         public AwsController(IAwsService awsService, IJwtTokenService jwtToken, ILogger<AwsController> logger, IPortfolioService portfolioService)
         {
-            this._awsService = awsService;
-            this._jwtToken = jwtToken;
-            this._logger = logger;
-            this._portfolioService = portfolioService;
+            _awsService = awsService;
+            _jwtToken = jwtToken;
+            _logger = logger;
+            _portfolioService = portfolioService;
         }
 
         private readonly IAwsService _awsService;
@@ -40,19 +40,19 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
-                var uploadObjectCommand = UploadObjectCommandFactory.Create(user.UserID, this.Request.Form.Files[0], Channel.PROFILE);
-                await this._awsService.UploadObjectAsync(uploadObjectCommand);
-                return this.Ok();
+                var user = _jwtToken.ReadToken(User);
+                var uploadObjectCommand = UploadObjectCommandFactory.Create(user.UserID, Request.Form.Files[0], Channel.PROFILE);
+                await _awsService.UploadObjectAsync(uploadObjectCommand);
+                return Ok();
             }
             catch (InvalidOperationException ex)
             {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return UnprocessableEntity(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                this._logger.LogError($"The error {ex.Message}, occurred while updating user profile picture at: {ex.StackTrace}");
-                return this.StatusCode(StatusCodes.Status500InternalServerError);
+                _logger.LogError($"The error {ex.Message}, occurred while updating user profile picture at: {ex.StackTrace}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -64,33 +64,33 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
-                var file = this.Request.Form.Files[0];
+                var user = _jwtToken.ReadToken(User);
+                var file = Request.Form.Files[0];
                 var uploadObjectCommand = UploadObjectCommandFactory.Create(user.UserID, file, Channel.PORTFOLIO);
 
-                var awsDto = await this._awsService.UploadObjectAsync(uploadObjectCommand);
+                var awsDto = await _awsService.UploadObjectAsync(uploadObjectCommand);
 
                 var fileExtension = MediaTypeUtil.GetMediaTypeValue(Path.GetExtension(file.FileName));
 
-                var portfolioContentDto = this._portfolioService.InsertPortfolioContent(new PortfolioRequest
+                var portfolioContentDto = _portfolioService.InsertPortfolioContent(new PortfolioRequest
                 {
                     PortfolioImageUrl = awsDto.Content,
-                    Description = this.Request.Form["description"]
+                    Description = Request.Form["description"]
                 },
                 user.UserID,
                 (int)fileExtension
                 );
 
-                return this.Ok(portfolioContentDto);
+                return Ok(portfolioContentDto);
             }
             catch (InvalidOperationException ex)
             {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return UnprocessableEntity(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                this._logger.LogError($"The error {ex.Message}, occurred while inserting portfolio content at: {ex.StackTrace}");
-                return this.StatusCode(StatusCodes.Status500InternalServerError);
+                _logger.LogError($"The error {ex.Message}, occurred while inserting portfolio content at: {ex.StackTrace}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -102,23 +102,27 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var user = this._jwtToken.ReadToken(this.User);
+                var user = _jwtToken.ReadToken(User);
                 var deleteObjectCommand = new DeleteObjectCommand(user.UserID, contentId);
-                var awsDto = await this._awsService.DeletingAnObjectAsync(deleteObjectCommand);
+                var awsDto = await _awsService.DeletingAnObjectAsync(deleteObjectCommand);
 
                 if (awsDto)
-                    return this.Ok(true);
+                {
+                    return Ok(true);
+                }
                 else
-                    return this.BadRequest(false);
+                {
+                    return BadRequest(false);
+                }
             }
             catch (InvalidOperationException ex)
             {
-                return this.UnprocessableEntity(new { message = ex.Message });
+                return UnprocessableEntity(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                this._logger.LogError($"The error {ex.Message}, occurred while deleting portfolio content at: {ex.StackTrace}");
-                return this.StatusCode(StatusCodes.Status500InternalServerError);
+                _logger.LogError($"The error {ex.Message}, occurred while deleting portfolio content at: {ex.StackTrace}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }
