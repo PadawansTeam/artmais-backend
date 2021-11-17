@@ -30,17 +30,17 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
                 foreach (var subcategoryId in interestRequest.SubcategoryID)
                 {
-                    interests.Add(await Create(subcategoryId, userId));
+                    interests.Add(await Create(subcategoryId, userId).ConfigureAwait(false));
                 }
 
                 transaction.Commit();
                 _context.SaveChanges();
                 return interests;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 transaction.Rollback();
-                throw new Exception(ex.Message);
+                throw new Exception();
             }
         }
 
