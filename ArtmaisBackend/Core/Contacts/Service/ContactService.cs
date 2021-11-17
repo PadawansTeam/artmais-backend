@@ -11,8 +11,8 @@ namespace ArtmaisBackend.Core.Contact.Service
     {
         public ContactService(IContactRepository contactRepository, IMapper mapper)
         {
-            this._contactRepository = contactRepository;
-            this._mapper = mapper;
+            _contactRepository = contactRepository;
+            _mapper = mapper;
         }
 
         private readonly IContactRepository _contactRepository;
@@ -21,26 +21,30 @@ namespace ArtmaisBackend.Core.Contact.Service
         public ContactDto? CreateOrUpdateUserContact(ContactRequest? contactRequest, long userId)
         {
             if (contactRequest is null)
-                throw new ArgumentNullException();
-            
-            var contactInfo = this._contactRepository.GetContactByUser(userId);
-
-            if(contactInfo is null)
             {
-                var newContact = this._contactRepository.Create(contactRequest, userId);
-                if (newContact is null)
-                    throw new ArgumentNullException();
+                throw new ArgumentNullException();
+            }
 
-                var contactDto = this._mapper.Map<ContactDto>(newContact);
+            var contactInfo = _contactRepository.GetContactByUser(userId);
+
+            if (contactInfo is null)
+            {
+                var newContact = _contactRepository.Create(contactRequest, userId);
+                if (newContact is null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                var contactDto = _mapper.Map<ContactDto>(newContact);
 
                 return contactDto;
             }
             else
             {
-                this._mapper.Map(contactRequest, contactInfo);
-                var contact = this._contactRepository.Update(contactInfo);
+                _mapper.Map(contactRequest, contactInfo);
+                var contact = _contactRepository.Update(contactInfo);
 
-                var contactDto = this._mapper.Map<ContactDto>(contact);
+                var contactDto = _mapper.Map<ContactDto>(contact);
 
                 return contactDto;
             }
@@ -48,11 +52,13 @@ namespace ArtmaisBackend.Core.Contact.Service
 
         public ContactDto? GetContactByUser(long userId)
         {
-            var contact = this._contactRepository.GetContactByUser(userId);
+            var contact = _contactRepository.GetContactByUser(userId);
             if (contact is null)
+            {
                 throw new ArgumentNullException();
+            }
 
-            var contactDto = this._mapper.Map<ContactDto>(contact);
+            var contactDto = _mapper.Map<ContactDto>(contact);
             return contactDto;
         }
     }

@@ -35,7 +35,9 @@ namespace ArtmaisBackend.Controllers
                 var validateResult = _userRepository.ValidateUserData(userJwtData);
 
                 if (!validateResult)
+                {
                     return Unauthorized();
+                }
 
                 return Ok();
             }

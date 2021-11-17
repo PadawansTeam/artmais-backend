@@ -24,7 +24,7 @@ namespace ArtmaisBackend.Controllers
             _dashboardService = dashboardService ?? throw new ArgumentNullException(nameof(dashboardService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _jwtTokenService = jwtTokenService ?? throw new ArgumentNullException(nameof(jwtTokenService));
-            this._signatureService = signatureService ?? throw new ArgumentNullException(nameof(signatureService)); ;
+            this._signatureService = signatureService ?? throw new ArgumentNullException(nameof(signatureService));
         }
         
         [HttpGet]

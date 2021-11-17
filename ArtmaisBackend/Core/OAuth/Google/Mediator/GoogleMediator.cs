@@ -30,7 +30,9 @@ namespace ArtmaisBackend.Core.OAuth.Google.Mediator
             var externalAuthorization = _externalAuthorizationRepository.GetExternalAuthorizationByExternalAuthorizationId(googleUser.Subject);
 
             if (externalAuthorization == null)
+            {
                 throw new UserNotFound("Usuário não encontrado");
+            }
 
             var user = _userRepository.GetUserById(externalAuthorization.UserId);
 
@@ -39,21 +41,26 @@ namespace ArtmaisBackend.Core.OAuth.Google.Mediator
 
         public string SignUp(OAuthSignUpRequest request)
         {
-            var existentUsername = this._userRepository.GetUserByUsername(request.Username);
+            var existentUsername = _userRepository.GetUserByUsername(request.Username);
 
             if (existentUsername != null)
+            {
                 throw new UsernameAlreadyInUse("Username já utilizado.");
+            }
 
-            var existentSubcategory = this._categorySubcategoryRepository
-                .GetSubcategoryBySubcategory(request.Subcategory);
+            var existentSubcategory = _categorySubcategoryRepository.GetSubcategoryBySubcategory(request.Subcategory);
 
             if (existentSubcategory == null)
-                existentSubcategory = this._categorySubcategoryRepository.Create(request.Category, request.Subcategory);
+            {
+                existentSubcategory = _categorySubcategoryRepository.Create(request.Category, request.Subcategory);
+            }
 
             request.SubcategoryID = existentSubcategory.SubcategoryID;
 
             if (request.Category.Equals("Consumidor"))
+            {
                 return CreateUser(request, 2);
+            }
 
             return CreateUser(request);
         }

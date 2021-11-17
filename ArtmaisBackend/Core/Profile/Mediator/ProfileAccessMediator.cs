@@ -23,7 +23,9 @@ namespace ArtmaisBackend.Core.Profile.Mediator
             var visitorUserData = _jwtTokenService.ReadToken(visitorUserClaims);
 
             if (visitorUserData.UserID.Equals(visitedUserId))
+            {
                 return null;
+            }
 
             return _profileAcessRepository.Create(visitorUserData.UserID, visitedUserId);
         }

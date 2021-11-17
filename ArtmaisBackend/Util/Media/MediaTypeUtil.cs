@@ -13,9 +13,11 @@ namespace ArtmaisBackend.Util.File
 
             if (imageRegex.IsMatch(fileExtension))
                 return MediaTypeEnum.IMAGE;
+            }
 
             if (videoRegex.IsMatch(fileExtension))
                 return MediaTypeEnum.VIDEO;
+            }
 
             if (audioRegex.IsMatch(fileExtension))
                 return MediaTypeEnum.AUDIO;

@@ -25,7 +25,7 @@ namespace ArtmaisBackend.Tests.Core.Aws
         private const string BUCKET_NAME = "bucket-name";
         private const string FILE_PATH = "file-path-name/";
         private static readonly string objectKey = "objectKey-name";
-        public static S3CannedACL fileCannedACL = S3CannedACL.PublicRead;
+        private static readonly S3CannedACL fileCannedACL = S3CannedACL.PublicRead;
 
         [Fact(DisplayName = "WritingAnObjectAsync should not be null and update database")]
         public async Task WritingAnObjectAsyncShouldNotBeNull()
@@ -124,8 +124,6 @@ namespace ArtmaisBackend.Tests.Core.Aws
             var mockMapper = new Mock<IMapper>();
             var fileMock = new Mock<IFormFile>();
             var mockS3Client = new Mock<IAmazonS3>();
-
-            var keyName = FILE_PATH + 3 + "/" + objectKey + ".png";
             var content = "UserPicture";
             var fileName = "UserPicture.png";
             var fileContent = "image/png";
@@ -160,8 +158,6 @@ namespace ArtmaisBackend.Tests.Core.Aws
             var mockMapper = new Mock<IMapper>();
             var fileMock = new Mock<IFormFile>();
             var mockS3Client = new Mock<IAmazonS3>();
-
-            var keyName = FILE_PATH + 3 + "/" + objectKey + ".png";
             var content = "UserPicture";
             var fileName = "UserPicture.png";
             var fileContent = "image/png";
@@ -194,7 +190,6 @@ namespace ArtmaisBackend.Tests.Core.Aws
             var mockUserRepository = new Mock<IUserRepository>();
             var mockPortfolioService = new Mock<IPortfolioService>();
             var mockMapper = new Mock<IMapper>();
-            var fileMock = new Mock<IFormFile>();
             var mockS3Client = new Mock<IAmazonS3>();
             var userId = 112;
             var publicationId = 12;
@@ -225,7 +220,6 @@ namespace ArtmaisBackend.Tests.Core.Aws
             var mockUserRepository = new Mock<IUserRepository>();
             var mockPortfolioService = new Mock<IPortfolioService>();
             var mockMapper = new Mock<IMapper>();
-            var fileMock = new Mock<IFormFile>();
             var mockS3Client = new Mock<IAmazonS3>();
             var userId = 112;
             var publicationId = 12;

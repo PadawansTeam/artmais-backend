@@ -24,7 +24,7 @@ namespace ArtmaisBackend.Core.SignIn.Service
             var key = Encoding.ASCII.GetBytes(this.Configuration["Secret"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
+                Subject = new ClaimsIdentity(new []
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
                     new Claim(ClaimTypes.Role, user.UserType.Description),
