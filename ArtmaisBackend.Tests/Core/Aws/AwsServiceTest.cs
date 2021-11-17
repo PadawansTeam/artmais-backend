@@ -158,8 +158,6 @@ namespace ArtmaisBackend.Tests.Core.Aws
             var mockMapper = new Mock<IMapper>();
             var fileMock = new Mock<IFormFile>();
             var mockS3Client = new Mock<IAmazonS3>();
-
-            var keyName = FILE_PATH + 3 + "/" + objectKey + ".png";
             var content = "UserPicture";
             var fileName = "UserPicture.png";
             var fileContent = "image/png";

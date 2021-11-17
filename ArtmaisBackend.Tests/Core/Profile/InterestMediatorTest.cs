@@ -133,11 +133,6 @@ namespace ArtmaisBackend.Tests.Core.Profile
         [Fact(DisplayName = "Create should return fail message when an exception occurs")]
         public async Task CreateShouldReturnFailMessageWhenAnExceptionOccurs()
         {
-            var recomendationResponse = new RecomendationResponse
-            {
-                RecommendedSubcategories = new List<int> { 1, 2 }
-            };
-
             var interestList = new List<Interest>
             {
                 new Interest
