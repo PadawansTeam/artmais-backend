@@ -10,6 +10,8 @@ using ArtmaisBackend.Core.Contacts.Interface;
 using ArtmaisBackend.Core.Dashboard.Services;
 using ArtmaisBackend.Core.OAuth.Google.Interface;
 using ArtmaisBackend.Core.OAuth.Google.Mediator;
+using ArtmaisBackend.Core.Payments.Interface;
+using ArtmaisBackend.Core.Payments.Service;
 using ArtmaisBackend.Core.Portfolio.Interface;
 using ArtmaisBackend.Core.Portfolio.Service;
 using ArtmaisBackend.Core.Profile.Interface;
@@ -17,6 +19,8 @@ using ArtmaisBackend.Core.Profile.Mediator;
 using ArtmaisBackend.Core.Publications.Interface;
 using ArtmaisBackend.Core.Publications.Service;
 using ArtmaisBackend.Core.Recomendation.Services;
+using ArtmaisBackend.Core.Signatures.Interface;
+using ArtmaisBackend.Core.Signatures.Service;
 using ArtmaisBackend.Core.SignIn.Interface;
 using ArtmaisBackend.Core.SignIn.Service;
 using ArtmaisBackend.Core.SignUp.Interface;
@@ -29,11 +33,6 @@ using ArtmaisBackend.Services.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
-using ArtmaisBackend.Core.Publications.Interface;
-using ArtmaisBackend.Core.Publications.Service;
-using ArtmaisBackend.Core.Recomendation.Services;
-using ArtmaisBackend.Core.Signatures.Interface;
-using ArtmaisBackend.Core.Signatures.Service;
 
 namespace ArtmaisBackend.Infrastructure.Extensions.Services
 {
@@ -59,9 +58,10 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
             services.AddScoped<IAwsService, AwsService>();
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<IPublicationService, PublicationService>();
-            services.AddScoped<IRecomendationService, Core.Recomendation.Services.RecomendationService>();
+            services.AddScoped<IRecomendationService, RecomendationService>();
             services.AddScoped<ISignatureService, SignatureService>();
-            
+            services.AddScoped<IPaymentService, PaymentService>();
+
             services.AddAWSService<IAmazonS3>(new AWSOptions { Region = RegionEndpoint.GetBySystemName(awsConfigRegion) });
 
             services.Configure<SocialMediaConfiguration>(configuration.GetSection("SocialMediaShareLink"));

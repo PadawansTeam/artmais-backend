@@ -32,6 +32,12 @@ namespace ArtmaisBackend.Infrastructure.Extensions.DatabaseContext
             services.AddScoped<ILikeRepository, LikeRepository>();
             services.AddScoped<IRecomendationRepository, RecomendationRepository>();
             services.AddScoped<ISignatureRepository, SignatureRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IPaymentHistoryRepository, PaymentHistoryRepository>();
+            services.AddScoped<IPaymentProductRepository, PaymentProductRepository>();
+            services.AddScoped<IPaymentStatusRepository, PaymentStatusRepository>();
+            services.AddScoped<IPaymentTypeRepository, PaymentTypeRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
 
             return services;
         }

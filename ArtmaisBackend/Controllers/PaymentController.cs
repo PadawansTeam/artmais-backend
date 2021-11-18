@@ -1,6 +1,7 @@
 ﻿using ArtmaisBackend.Core.Payments.Interface;
 using ArtmaisBackend.Core.Payments.Request;
 using ArtmaisBackend.Core.SignIn.Interface;
+using MercadoPago.Resource.Payment;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,7 +26,7 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> PaymentCreateRequest(PaymentRequest paymentRequest)
+        public async Task<ActionResult<bool>> PaymentCreateRequest(PaymentRequest paymentRequest)
         {
             try
             {
@@ -34,10 +35,10 @@ namespace ArtmaisBackend.Controllers
 
                 if (payment is null)
                 {
-                    return UnprocessableEntity();
+                    return UnprocessableEntity(false);
                 }
 
-                return Ok();
+                return Ok(true);
             }
             catch (ArgumentNullException ex)
             {
