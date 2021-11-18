@@ -138,7 +138,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
             { 
                 PublicationID = 1,
                 LikeID = 1,
-                LikeDate = DateTime.Now
+                LikeDate = DateTime.UtcNow
             };
 
             mockLikeRepository.Setup(x => x.GetLikeByPublicationIdAndUserId(It.IsAny<int>(), It.IsAny<long>())).Returns(like);
@@ -183,7 +183,7 @@ namespace ArtmaisBackend.Tests.Core.Publications
                 LikeID = 1,
                 UserID = userId,
                 PublicationID = publicationId,
-                LikeDate = DateTime.Now
+                LikeDate = DateTime.UtcNow
             };
             var mockUserService = new Mock<IUserService>();
             var mockUserRepository = new Mock<IUserRepository>();

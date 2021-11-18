@@ -13,7 +13,7 @@ namespace ArtmaisBackend.Core.Aws
                 File = file,
                 Channel = $"{channel}",
                 BucketName = "bucket-artmais",
-                ObjectKey = $"{DateTime.Today:yyyyMMdd}{new Random((int)DateTime.Now.Ticks).Next():D14}"
+                ObjectKey = $"{DateTime.Today:yyyyMMdd}{new Random((int)DateTime.UtcNow.Ticks).Next():D14}"
             };
         }
     }

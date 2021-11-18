@@ -281,7 +281,6 @@ namespace ArtmaisBackend.Tests.Core.Aws
             var mockUserRepository = new Mock<IUserRepository>();
             var mockPortfolioService = new Mock<IPortfolioService>();
             var mockMapper = new Mock<IMapper>();
-            var fileMock = new Mock<IFormFile>();
             var mockS3Client = new Mock<IAmazonS3>();
 
             mockPortfolioService.Setup(p => p.GetPublicationByIdToDelete(It.IsAny<int>(), It.IsAny<long>())).Throws<ArgumentNullException>();

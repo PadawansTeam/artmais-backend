@@ -7,7 +7,7 @@ namespace ArtmaisBackend.Core.Entities
     public class PaymentProduct
     {
         [Key]
-        [Column("idproduto")]
+        [Column("idpagamentoproduto")]
         public int PaymentProductID { get; set; }
 
         [Column("idproduto")]
@@ -20,6 +20,6 @@ namespace ArtmaisBackend.Core.Entities
         public int? PaymentID { get; set; }
 
         [ForeignKey("PaymentID")]
-        public Payment? Payment { get; set; }
+        public Payments? Payment { get; set; }
     }
 }
