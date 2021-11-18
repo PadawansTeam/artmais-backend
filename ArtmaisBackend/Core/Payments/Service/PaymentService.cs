@@ -60,19 +60,19 @@ namespace ArtmaisBackend.Core.Payments.Service
                 AccessToken = tokenMercadoPago
             };
 
-            var insertPayment = await InsertPayment(userId, PaymentTypeEnum.CREDIT);
+            var insertPayment = await InsertPayment(userId, PaymentTypeEnum.CREDIT).ConfigureAwait(false);
             if (!insertPayment)
             {
                 throw new ArgumentNullException();
             }
 
-            var paymentInfo = await GetPaymentByUserId(userId);
+            var paymentInfo = await GetPaymentByUserId(userId).ConfigureAwait(false);
             if (paymentInfo is null)
             {
                 throw new ArgumentNullException();
             }
 
-            var insertCreatedHistoryPayment = await InsertPaymentHistory(paymentInfo.PaymentID, PaymentStatusEnum.CREATED);
+            var insertCreatedHistoryPayment = await InsertPaymentHistory(paymentInfo.PaymentID, PaymentStatusEnum.CREATED).ConfigureAwait(false);
             if (!insertCreatedHistoryPayment)
             {
                 throw new ArgumentNullException();
@@ -86,13 +86,13 @@ namespace ArtmaisBackend.Core.Payments.Service
                 throw new ArgumentNullException();
             }
 
-            var product = await GetSignature();
+            var product = await GetSignature().ConfigureAwait(false);
             if (product is null)
             {
                 throw new ArgumentNullException();
             }
 
-            var paymentProduct = await InsertPaymentProduct(product.ProductID, paymentInfo.PaymentID);
+            var paymentProduct = await InsertPaymentProduct(product.ProductID, paymentInfo.PaymentID).ConfigureAwait(false);
             if (!paymentProduct)
             {
                 throw new ArgumentNullException();
@@ -100,13 +100,13 @@ namespace ArtmaisBackend.Core.Payments.Service
 
             await _signatureRepository.Create(userId);
 
-            var updatePayment = await UpdatePayment(paymentInfo);
+            var updatePayment = await UpdatePayment(paymentInfo).ConfigureAwait(false);
             if (!updatePayment)
             {
                 throw new ArgumentNullException();
             }
 
-            var insertDoneHistoryPayment = await InsertPaymentHistory(paymentInfo.PaymentID, PaymentStatusEnum.DONE);
+            var insertDoneHistoryPayment = await InsertPaymentHistory(paymentInfo.PaymentID, PaymentStatusEnum.DONE).ConfigureAwait(false);
             if (!insertDoneHistoryPayment)
             {
                 throw new ArgumentNullException();
