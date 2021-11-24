@@ -42,6 +42,12 @@ namespace ArtmaisBackend.Core.Payments.Service
 
         public async Task<Payment> PaymentCreateRequest(PaymentRequest paymentRequest, long userId)
         {
+            var signatureByUserId = await _signatureRepository.GetSignatureByUserId(userId);
+            if(signatureByUserId != null)
+            {
+                throw new ArgumentException();
+            }
+
             var request = new PaymentCreateRequest
             {
                 TransactionAmount = paymentRequest.TransactionAmount,
