@@ -23,6 +23,8 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Securities
                 httpContext.Response.Headers.Add("X-Content-Type-Options", "nosniff");
                 httpContext.Response.Headers.Add("X-Frame-Options", "DENY");
                 httpContext.Response.Headers.Add("Referrer-Policy", "no-referrer");
+                httpContext.Response.Headers.Add("Permissions-Policy", "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()");
+                httpContext.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
                 return Task.CompletedTask;
             }, context);
 
