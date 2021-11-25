@@ -44,6 +44,10 @@ namespace ArtmaisBackend.Controllers
             {
                 return UnprocessableEntity(new { message = ex.Message });
             }
+            catch (ArgumentException ex)
+            {
+                return StatusCode(403, new { message = ex.Message });
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = ex.Message });
