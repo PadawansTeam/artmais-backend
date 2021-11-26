@@ -1,6 +1,9 @@
-﻿using ArtmaisBackend.Infrastructure.Data;
+﻿using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
@@ -12,5 +15,10 @@ namespace ArtmaisBackend.Infrastructure.Repository
             _context = context;
         }
         private readonly ArtplusContext _context;
+
+        public async Task<PaymentsStatus?> GetPaymentStatusById(int? paymentStatusId)
+        {
+            return await _context.PaymentStatus.FirstOrDefaultAsync(paymentStatus => paymentStatus.PaymentStatusID == paymentStatusId);
+        }
     }
 }

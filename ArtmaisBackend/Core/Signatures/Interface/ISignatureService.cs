@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using ArtmaisBackend.Core.Signatures.Dto;
+using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Signatures.Interface
 {
@@ -9,5 +10,7 @@ namespace ArtmaisBackend.Core.Signatures.Interface
         Task UpdateSignature(long userId);
 
         Task<bool> GetSignatureByUserId(long userId);
+
+        Task<SignatureDto> GetSignatureUserDto(long userId);
     }
 }

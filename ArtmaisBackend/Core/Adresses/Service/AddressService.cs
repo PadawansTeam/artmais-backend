@@ -11,8 +11,8 @@ namespace ArtmaisBackend.Core.Adresses.Service
     {
         public AddressService(IAddressRepository addressRepository, IMapper mapper)
         {
-            this._addressRepository = addressRepository;
-            this._mapper = mapper;
+            _addressRepository = addressRepository;
+            _mapper = mapper;
         }
 
         private readonly IAddressRepository _addressRepository;
@@ -20,27 +20,31 @@ namespace ArtmaisBackend.Core.Adresses.Service
 
         public AddressDto? CreateOrUpdateUserAddress(AddressRequest? addressRequest, long userId)
         {
-            if (addressRequest is null) 
+            if (addressRequest is null)
+            {
                 throw new ArgumentNullException();
+            }
 
-            var addressInfo = this._addressRepository.GetAddressByUser(userId);
+            var addressInfo = _addressRepository.GetAddressByUser(userId);
 
             if (addressInfo is null)
             {
-                var newAddress = this._addressRepository.Create(addressRequest, userId);
+                var newAddress = _addressRepository.Create(addressRequest, userId);
                 if (newAddress is null)
+                {
                     throw new ArgumentNullException();
+                }
 
 
-                var addressDto = this._mapper.Map<AddressDto>(newAddress);
+                var addressDto = _mapper.Map<AddressDto>(newAddress);
                 return addressDto;
             }
             else
             {
-                this._mapper.Map(addressRequest, addressInfo);
-                var address = this._addressRepository.Update(addressInfo);
+                _mapper.Map(addressRequest, addressInfo);
+                var address = _addressRepository.Update(addressInfo);
 
-                var addressDto = this._mapper.Map<AddressDto>(address);
+                var addressDto = _mapper.Map<AddressDto>(address);
 
                 return addressDto;
             }
@@ -48,11 +52,13 @@ namespace ArtmaisBackend.Core.Adresses.Service
 
         public AddressDto? GetAddressByUser(long userId)
         {
-            var address = this._addressRepository.GetAddressByUser(userId);
+            var address = _addressRepository.GetAddressByUser(userId);
             if (address is null)
+            {
                 throw new ArgumentNullException();
+            }
 
-            var addressDto = this._mapper.Map<AddressDto>(address);
+            var addressDto = _mapper.Map<AddressDto>(address);
             return addressDto;
         }
     }

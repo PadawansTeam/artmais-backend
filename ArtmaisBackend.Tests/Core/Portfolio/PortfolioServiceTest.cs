@@ -651,8 +651,6 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var mediaType = new MediaType { };
             var media = new Media { };
             var publication = new Publication { };
-            var portfolioContentDto = new PortfolioContentDto { };
-
             var mockLikeRepository = new Mock<ILikeRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockMediaRepository = new Mock<IMediaRepository>();
@@ -880,8 +878,6 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             #region Mocks
             var userId = 113;
             int? publicationId = 2;
-            var expectedList = new List<PortfolioContentDto> { };
-
             var mockLikeRepository = new Mock<ILikeRepository>();
             var mockCommentRepository = new Mock<ICommentRepository>();
             var mockMediaRepository = new Mock<IMediaRepository>();

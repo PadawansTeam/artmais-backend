@@ -1,6 +1,6 @@
 ﻿namespace ArtmaisBackend.Util.File
 {
-    public enum MediaType
+    public enum MediaTypeEnum
     {
         IMAGE = 1,
         VIDEO = 2,

@@ -26,7 +26,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             {
                 UserID = userId,
                 PublicationID = publicationId,
-                LikeDate = DateTime.Now
+                LikeDate = DateTime.UtcNow
             };
 
             await _context.Like.AddAsync(likeContent);

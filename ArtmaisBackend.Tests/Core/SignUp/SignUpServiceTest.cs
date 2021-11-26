@@ -54,7 +54,7 @@ namespace ArtmaisBackend.Tests.Core.SignUp
                 Password = "123456789",
                 Description = "Apenas um consumidor",
                 Username = "Joao",
-                BirthDate = DateTime.Now,
+                BirthDate = DateTime.UtcNow,
                 Category = "Tatuador(a)",
                 Subcategory = "Aquarela"
             };
@@ -100,7 +100,7 @@ namespace ArtmaisBackend.Tests.Core.SignUp
                 Password = "123456789",
                 Description = "Apenas um consumidor",
                 Username = "Joao",
-                BirthDate = DateTime.Now,
+                BirthDate = DateTime.UtcNow,
                 Category = "Tatuador(a)",
                 Subcategory = "Aquarela"
             };
@@ -136,7 +136,7 @@ namespace ArtmaisBackend.Tests.Core.SignUp
                 Password = "123456789",
                 Description = "Apenas um consumidor",
                 Username = "Joao",
-                BirthDate = DateTime.Now,
+                BirthDate = DateTime.UtcNow,
                 Category = "Tatuador(a)",
                 Subcategory = "Aquarela"
             };

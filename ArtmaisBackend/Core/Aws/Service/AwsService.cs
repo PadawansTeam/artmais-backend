@@ -17,10 +17,10 @@ namespace ArtmaisBackend.Core.Aws.Service
     {
         public AwsService(IMapper mapper, IUserRepository userRepository, IAmazonS3 client, IPortfolioService portfolioService)
         {
-            this._mapper = mapper;
-            this._userRepository = userRepository;
-            this._client = client;
-            this._portfolioService = portfolioService;
+            _mapper = mapper;
+            _userRepository = userRepository;
+            _client = client;
+            _portfolioService = portfolioService;
         }
 
         private readonly IUserRepository _userRepository;
@@ -30,11 +30,11 @@ namespace ArtmaisBackend.Core.Aws.Service
 
         public async Task<AwsDto?> UploadObjectAsync(UploadObjectCommand uploadObjectCommand)
         {
-            var response = await this.WritingAnObjectAsync(uploadObjectCommand);
+            var response = await WritingAnObjectAsync(uploadObjectCommand).ConfigureAwait(false);
 
             if (uploadObjectCommand.IsProfileContent)
             {
-                this.UpdateProfilePicture(response, uploadObjectCommand.UserId);
+                UpdateProfilePicture(response, uploadObjectCommand.UserId);
                 return response;
             }
 
@@ -58,7 +58,7 @@ namespace ArtmaisBackend.Core.Aws.Service
                     CannedACL = S3CannedACL.PublicRead
                 };
 
-                await this._client.PutObjectAsync(putRequest);
+                await _client.PutObjectAsync(putRequest);
 
                 var urlAws = string.Format("https://{0}.s3.amazonaws.com/{1}", uploadObjectCommand.BucketName, keyName);
 
@@ -72,18 +72,20 @@ namespace ArtmaisBackend.Core.Aws.Service
 
         private void UpdateProfilePicture(AwsDto awsDto, long userId)
         {
-            var userInfo = this._userRepository.GetUserById(userId);
-            this._mapper.Map(awsDto, userInfo);
-            this._userRepository.Update(userInfo);
+            var userInfo = _userRepository.GetUserById(userId);
+            _mapper.Map(awsDto, userInfo);
+            _userRepository.Update(userInfo);
         }
 
         public async Task<bool> DeletingAnObjectAsync(DeleteObjectCommand deleteObjectCommand)
         {
             try
             {
-                var portfolioContent = this._portfolioService.GetPublicationByIdToDelete(deleteObjectCommand.PortfolioId, deleteObjectCommand.UserId);
+                var portfolioContent = _portfolioService.GetPublicationByIdToDelete(deleteObjectCommand.PortfolioId, deleteObjectCommand.UserId);
                 if (portfolioContent is null)
+                {
                     throw new ArgumentNullException();
+                }
 
                 var keyName = portfolioContent.S3UrlMedia.Contains("https") ?
                     portfolioContent.S3UrlMedia.Substring(40) : portfolioContent.S3UrlMedia.Substring(39);
@@ -94,9 +96,9 @@ namespace ArtmaisBackend.Core.Aws.Service
                     Key = keyName,
                 };
 
-                await this._client.DeleteObjectAsync(deleteObjectRequest);
+                await _client.DeleteObjectAsync(deleteObjectRequest);
 
-                await this.DeletePortfolioContent(portfolioContent, deleteObjectCommand.UserId);
+                await DeletePortfolioContent(portfolioContent, deleteObjectCommand.UserId).ConfigureAwait(false);
 
                 return true;
             }
@@ -108,10 +110,10 @@ namespace ArtmaisBackend.Core.Aws.Service
 
         private async Task DeletePortfolioContent(PortfolioContentDto portfolioContent, long userId)
         {
-            await this._portfolioService.DeleteAllLikes(portfolioContent);
-            await this._portfolioService.DeleteAllComments(portfolioContent);
-            this._portfolioService.DeletePublication(portfolioContent, userId);
-            this._portfolioService.DeleteMedia(portfolioContent, userId);
+            await _portfolioService.DeleteAllLikes(portfolioContent);
+            await _portfolioService.DeleteAllComments(portfolioContent);
+            _portfolioService.DeletePublication(portfolioContent, userId);
+            _portfolioService.DeleteMedia(portfolioContent, userId);
         }
     }
 }

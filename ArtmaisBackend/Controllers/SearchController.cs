@@ -34,8 +34,10 @@ namespace ArtmaisBackend.Controllers
                 var results = _userRepostiory.GetUsersByUsernameOrNameOrSubcategoryOrCategory(searchValue);
 
                 if (results.Any())
+                {
                     return Ok(results);
-                
+                }
+
                 return NotFound();
             }
             catch (Exception ex)

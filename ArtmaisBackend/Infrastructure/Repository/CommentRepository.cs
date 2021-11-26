@@ -51,7 +51,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 UserID = userId,
                 PublicationID = commentRequest.PublicationID,
                 Description = commentRequest.Description,
-                CommentDate = DateTime.Now
+                CommentDate = DateTime.UtcNow
             };
 
             _context.Comment.Add(commentContent);

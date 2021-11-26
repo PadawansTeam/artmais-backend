@@ -32,13 +32,15 @@ namespace ArtmaisBackend.Core.Portfolio.Service
         public PortfolioContentListDto GetLoggedUserPortfolioById(long? userId)
         {
             if (userId is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var publicationContent = _publicationRepository.GetAllPublicationsByUserId(userId);
 
-            var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.IMAGE).ToList();
-            var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.VIDEO).ToList();
-            var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.AUDIO).ToList();
+            var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.IMAGE).ToList();
+            var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.VIDEO).ToList();
+            var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.AUDIO).ToList();
 
             var publicationList = new PortfolioContentListDto
             {
@@ -54,13 +56,15 @@ namespace ArtmaisBackend.Core.Portfolio.Service
         public PortfolioContentListDto GetPortfolioByUserId(long? userId)
         {
             if (userId is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var publicationContent = _publicationRepository.GetAllPublicationsByUserId(userId);
 
-            var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.IMAGE).ToList();
-            var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.VIDEO).ToList();
-            var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaType.AUDIO).ToList();
+            var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.IMAGE).ToList();
+            var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.VIDEO).ToList();
+            var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.AUDIO).ToList();
 
             var publicationList = new PortfolioContentListDto
             {
@@ -76,19 +80,27 @@ namespace ArtmaisBackend.Core.Portfolio.Service
         public PortfolioContentDto? InsertPortfolioContent(PortfolioRequest? portfolioRequest, long userId, int mediaTypeId)
         {
             if (portfolioRequest.PortfolioImageUrl is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var mediaTypeContent = _mediaTypeRepository.GetMediaTypeById(mediaTypeId);
             if (mediaTypeContent is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var mediaContent = _mediaRepository.Create(portfolioRequest, userId, mediaTypeContent);
             if (mediaContent is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var publicationContent = _publicationRepository.Create(portfolioRequest, userId, mediaContent);
             if (publicationContent is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var portfolioContentDto = new PortfolioContentDto
             {
@@ -107,11 +119,15 @@ namespace ArtmaisBackend.Core.Portfolio.Service
         public bool UpdateDescription(PortfolioDescriptionRequest? portfolioDescriptionRequest, long userId)
         {
             if (portfolioDescriptionRequest.PublicationId is null || portfolioDescriptionRequest.PublicationDescription is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var portfolioInfo = _publicationRepository.GetPublicationByIdAndUserId(userId, portfolioDescriptionRequest.PublicationId);
             if (portfolioInfo is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             _mapper.Map(portfolioDescriptionRequest, portfolioInfo);
             _publicationRepository.Update(portfolioInfo);
@@ -122,12 +138,16 @@ namespace ArtmaisBackend.Core.Portfolio.Service
         public PortfolioContentDto GetPublicationByIdToDelete(int? publicationId, long userId)
         {
             if (publicationId == null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var portfolio = _publicationRepository.GetAllPublicationsByUserId(userId);
 
             if (portfolio == null)
+            {
                 throw new ArgumentNullException();
+            }
 
             var publication = portfolio.Where(p => p.PublicationID == publicationId).FirstOrDefault();
 
@@ -139,7 +159,9 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             var likesInfo = await _likeRepository.GetAllLikesByPublicationId(portfolioContentDto.MediaID);
 
             if (likesInfo is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             foreach (var likeInfo in likesInfo)
             {
@@ -152,7 +174,9 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             var commentsInfo = await _commentRepository.GetAllCommentsByPublicationId(portfolioContentDto.MediaID);
 
             if (commentsInfo is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             foreach (var commentInfo in commentsInfo)
             {
@@ -166,7 +190,9 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             var portfolioInfo = _publicationRepository.GetPublicationByIdAndUserId(userId, portfolioContentDto.PublicationID);
 
             if (portfolioInfo is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             _mapper.Map(portfolioContentDto, portfolioInfo);
 
@@ -178,7 +204,9 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             var mediaInfo = _mediaRepository.GetMediaByIdAndUserId(userId, portfolioContentDto.MediaID);
 
             if (mediaInfo is null)
+            {
                 throw new ArgumentNullException();
+            }
 
             _mapper.Map(portfolioContentDto, mediaInfo);
 

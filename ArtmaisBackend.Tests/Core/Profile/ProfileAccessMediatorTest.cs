@@ -20,7 +20,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
                 ProfileAcessId = 1,
                 VisitorUserId = 1,
                 VisitedUserId = 2,
-                VisitDate = DateTime.Now
+                VisitDate = DateTime.UtcNow
             };
 
             var userJwtData = new UserJwtData

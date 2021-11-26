@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ArtmaisBackend.Core.Entities
 {
     [Table("estadopagamento")]
-    public class PaymentStatus
+    public class PaymentsStatus
     {
         [Key]
         [Column("idestadopagamento")]

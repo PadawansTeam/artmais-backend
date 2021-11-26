@@ -22,7 +22,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
             {
                 VisitorUserId = visitorUserId,
                 VisitedUserId = visitedUserId,
-                VisitDate = DateTime.Now
+                VisitDate = DateTime.UtcNow
             };
 
             _context.ProfileAccess.Add(profileAcess);

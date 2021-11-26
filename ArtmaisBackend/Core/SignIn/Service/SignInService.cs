@@ -21,16 +21,22 @@ namespace ArtmaisBackend.Core.SignIn.Service
             var user = this._userRepository.GetUserByEmail(signInRequest.Email);
 
             if (user == null)
+            {
                 throw new Unauthorized("Usuário e/ou senha inválidos");
+            }
 
             if (signInRequest.Password.Equals("") || signInRequest.Password == null)
+            {
                 throw new Unauthorized("Usuário e/ou senha inválidos");
+            }
 
             var salt = user.Password.Substring(0, 24);
             var encryptedPassword = PasswordUtil.Encrypt(signInRequest.Password, salt);
 
             if (encryptedPassword.Equals(user.Password))
+            {
                 return this._jwtToken.GenerateToken(user);
+            }
 
             throw new Unauthorized("Usuário e/ou senha inválidos");
         }
