@@ -3,10 +3,12 @@ using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class SignatureRepository : ISignatureRepository
     {
         public SignatureRepository(ArtplusContext context)

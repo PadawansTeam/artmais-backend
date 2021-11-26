@@ -1,6 +1,7 @@
 ﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class PaymentHistoryRepository : IPaymentHistoryRepository
     {
         public PaymentHistoryRepository(ArtplusContext context)

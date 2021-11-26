@@ -3,10 +3,12 @@ using ArtmaisBackend.Core.Portfolio.Request;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class MediaRepository : IMediaRepository
     {
         public MediaRepository(ArtplusContext context)

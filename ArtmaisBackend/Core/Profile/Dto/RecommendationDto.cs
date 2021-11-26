@@ -1,6 +1,6 @@
 ﻿namespace ArtmaisBackend.Core.Profile.Dto
 {
-    public class RecomendationDto
+    public class RecommendationDto
     {
         public long UserId { get; set; }
         public string Name { get; set; }

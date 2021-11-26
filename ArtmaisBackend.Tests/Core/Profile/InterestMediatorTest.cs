@@ -43,7 +43,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
 
             var recomendationServiceMock = new Mock<IRecomendationService>();
 
-            var recomendationRepositoryMock = new Mock<IRecomendationRepository>();
+            var recomendationRepositoryMock = new Mock<IRecommendationRepository>();
 
             var loggerMock = new Mock<ILogger<InterestMediator>>();
 
@@ -62,13 +62,78 @@ namespace ArtmaisBackend.Tests.Core.Profile
         [Fact(DisplayName = "Create should be returns success message when InterestRequest it is save")]
         public async Task CreateReturnsSuccessMessage()
         {
-            var recomendation = new Recomendation
+            var recomendation = new Recommendation
             {
                 RecomendationID = 1,
                 InterestID = 1,
                 SubcategoryID = 1
             };
 
+            var recomendationResponse = new RecomendationResponse
+            {
+                RecommendedSubcategories = new List<int> { 1, 2 }
+            };
+
+            var interestList = new List<Interest>
+            {
+                new Interest
+                {
+                    InterestID = 1,
+                    UserID = 1,
+                    User = new User(),
+                    SubcategoryID = 1,
+                    Subcategory = new Subcategory(),
+                    UserSelected = false
+                }
+            };
+
+            var request = new InterestRequest
+            {
+                SubcategoryID = new List<int>
+                {
+                    1,
+                    2
+                },
+                RecommendedSubcategoryID = new List<int>()
+            };
+
+            var userJwtData = new UserJwtData
+            {
+                UserID = 1,
+                Role = "artist"
+            };
+
+            var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
+           
+            var interestRepositoryMock = new Mock<IInterestRepository>();
+            interestRepositoryMock.Setup(r => r.DeleteAllAndCreateAllAsync(request, 1)).ReturnsAsync(interestList);
+            
+            var jwtTokenMock = new Mock<IJwtTokenService>();
+            jwtTokenMock.Setup(j => j.ReadToken(null)).Returns(userJwtData);
+
+            var recomendationServiceMock = new Mock<IRecomendationService>();
+            recomendationServiceMock.Setup(r => r.GetAsync(It.IsAny<int>())).ReturnsAsync(recomendationResponse);
+
+            var recomendationRepositoryMock = new Mock<IRecommendationRepository>();
+            recomendationRepositoryMock.Setup(r => r.AddAsync(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(recomendation);
+
+            var loggerMock = new Mock<ILogger<InterestMediator>>();
+
+            var interestMediator = new InterestMediator(categorySubcategoryRepositoryMock.Object,
+                interestRepositoryMock.Object,
+                jwtTokenMock.Object,
+                recomendationServiceMock.Object,
+                recomendationRepositoryMock.Object,
+                loggerMock.Object);
+
+            var result = await interestMediator.Create(request, null);
+
+            result.Message.Should().Be("Os interesses foram salvos com sucesso.");
+        }
+
+        [Fact(DisplayName = "Create should return fail message when an exception occurs")]
+        public async Task CreateShouldReturnFailMessageWhenAnExceptionOccurs()
+        {
             var recomendationResponse = new RecomendationResponse
             {
                 RecommendedSubcategories = new List<int> { 1, 2 }
@@ -103,65 +168,6 @@ namespace ArtmaisBackend.Tests.Core.Profile
             };
 
             var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
-           
-            var interestRepositoryMock = new Mock<IInterestRepository>();
-            interestRepositoryMock.Setup(r => r.DeleteAllAndCreateAllAsync(request, 1)).ReturnsAsync(interestList);
-            
-            var jwtTokenMock = new Mock<IJwtTokenService>();
-            jwtTokenMock.Setup(j => j.ReadToken(null)).Returns(userJwtData);
-
-            var recomendationServiceMock = new Mock<IRecomendationService>();
-            recomendationServiceMock.Setup(r => r.GetAsync(It.IsAny<int>())).ReturnsAsync(recomendationResponse);
-
-            var recomendationRepositoryMock = new Mock<IRecomendationRepository>();
-            recomendationRepositoryMock.Setup(r => r.AddAsync(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(recomendation);
-
-            var loggerMock = new Mock<ILogger<InterestMediator>>();
-
-            var interestMediator = new InterestMediator(categorySubcategoryRepositoryMock.Object,
-                interestRepositoryMock.Object,
-                jwtTokenMock.Object,
-                recomendationServiceMock.Object,
-                recomendationRepositoryMock.Object,
-                loggerMock.Object);
-
-            var result = await interestMediator.Create(request, null);
-
-            result.Message.Should().Be("Os interesses foram salvos com sucesso.");
-        }
-
-        [Fact(DisplayName = "Create should return fail message when an exception occurs")]
-        public async Task CreateShouldReturnFailMessageWhenAnExceptionOccurs()
-        {
-            var interestList = new List<Interest>
-            {
-                new Interest
-                {
-                    InterestID = 1,
-                    UserID = 1,
-                    User = new User(),
-                    SubcategoryID = 1,
-                    Subcategory = new Subcategory(),
-                    UserSelected = false
-                }
-            };
-
-            var request = new InterestRequest
-            {
-                SubcategoryID = new List<int>
-                {
-                    1,
-                    2
-                }
-            };
-
-            var userJwtData = new UserJwtData
-            {
-                UserID = 1,
-                Role = "artist"
-            };
-
-            var categorySubcategoryRepositoryMock = new Mock<ICategorySubcategoryRepository>();
 
             var interestRepositoryMock = new Mock<IInterestRepository>();
             interestRepositoryMock.Setup(r => r.DeleteAllAndCreateAllAsync(request, 1)).ReturnsAsync(interestList);
@@ -171,7 +177,7 @@ namespace ArtmaisBackend.Tests.Core.Profile
 
             var recomendationServiceMock = new Mock<IRecomendationService>();
 
-            var recomendationRepositoryMock = new Mock<IRecomendationRepository>();
+            var recomendationRepositoryMock = new Mock<IRecommendationRepository>();
 
             var loggerMock = new Mock<ILogger<InterestMediator>>();
 

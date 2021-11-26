@@ -1,12 +1,14 @@
 ﻿using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class PaymentProductRepository : IPaymentProductRepository
     {
         public PaymentProductRepository(ArtplusContext context)

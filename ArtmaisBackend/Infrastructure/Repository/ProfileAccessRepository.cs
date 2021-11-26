@@ -2,9 +2,11 @@
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class ProfileAccessRepository : IProfileAccessRepository
     {
         public ProfileAccessRepository(ArtplusContext context)

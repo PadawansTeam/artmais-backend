@@ -4,11 +4,13 @@ using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class LikeRepository : ILikeRepository
     {
         public LikeRepository(ArtplusContext context)

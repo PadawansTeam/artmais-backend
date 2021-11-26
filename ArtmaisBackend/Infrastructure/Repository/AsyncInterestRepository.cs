@@ -3,10 +3,12 @@ using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Infrastructure.Data;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace ArtmaisBackend.Infrastructure.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class AsyncInterestRepository : IAsyncInterestRepository
     {
         public AsyncInterestRepository(IServiceScopeFactory serviceScopeFactory)

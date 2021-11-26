@@ -19,7 +19,7 @@ namespace ArtmaisBackend.Infrastructure.Data
         public DbSet<Publication> Publication { get; set; }
         public DbSet<Comment> Comment { get; set; }
         public DbSet<Like> Like { get; set; }
-        public DbSet<Recomendation> Recomendation { get; set; }
+        public DbSet<Recommendation> Recommendation { get; set; }
         public DbSet<Payments> Payment { get; set; }
         public DbSet<PaymentHistory> PaymentHistory { get; set; }
         public DbSet<PaymentsStatus> PaymentStatus { get; set; }
