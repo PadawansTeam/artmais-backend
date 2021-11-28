@@ -137,7 +137,6 @@ namespace ArtmaisBackend.Tests.Core.Payments
         {
             #region Mocks
             var userId = 113;
-            var date = DateTime.Now;
             var mockPaymentHistoryRepository = new Mock<IPaymentHistoryRepository>();
             var mockPaymentProductRepository = new Mock<IPaymentProductRepository>();
             var mockPaymentRepository = new Mock<IPaymentRepository>();
