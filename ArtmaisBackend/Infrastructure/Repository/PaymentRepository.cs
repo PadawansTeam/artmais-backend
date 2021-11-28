@@ -27,7 +27,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 UserID = userId,
                 PaymentTypeID = paymentTypeEnum,
                 CreateDate = date,
-                LastUpdateDate = date
+                LastUpdateDate = date,
+                ExternalPaymentID = 1
             };
 
             await _context.Payment.AddAsync(payment);
