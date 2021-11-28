@@ -20,7 +20,8 @@ namespace ArtmaisBackend.Core.Payments.Service
                               IPaymentStatusRepository paymentStatusRepository,
                               IPaymentTypeRepository paymentTypeRepository,
                               IProductRepository productRepository,
-                              ISignatureRepository signatureRepository)
+                              ISignatureRepository signatureRepository,
+                              IMercadoPagoPaymentClient mercadoPagoPaymentClient)
         {
             _paymentHistoryRepository = paymentHistoryRepository;
             _paymentProductRepository = paymentProductRepository;
@@ -29,6 +30,7 @@ namespace ArtmaisBackend.Core.Payments.Service
             _paymentTypeRepository = paymentTypeRepository;
             _productRepository = productRepository;
             _signatureRepository = signatureRepository;
+            _mercadoPagoPaymentClient = mercadoPagoPaymentClient;
         }
 
         private readonly IPaymentHistoryRepository _paymentHistoryRepository;
@@ -38,12 +40,13 @@ namespace ArtmaisBackend.Core.Payments.Service
         private readonly IPaymentTypeRepository _paymentTypeRepository;
         private readonly IProductRepository _productRepository;
         private readonly ISignatureRepository _signatureRepository;
+        private readonly IMercadoPagoPaymentClient _mercadoPagoPaymentClient;
         private readonly string tokenMercadoPago = "TEST-4734890284706792-101621-772162e631cd84775da9d50f2e0acb43-278907011";
 
         public async Task<Payment> PaymentCreateRequest(PaymentRequest paymentRequest, long userId)
         {
             var signatureByUserId = await _signatureRepository.GetSignatureByUserId(userId);
-            if(signatureByUserId != null)
+            if (signatureByUserId != null)
             {
                 throw new ArgumentException();
             }
@@ -84,9 +87,7 @@ namespace ArtmaisBackend.Core.Payments.Service
                 throw new ArgumentNullException();
             }
 
-            var client = new PaymentClient();
-            Payment payment = await client.CreateAsync(request, requestOptions);
-
+            Payment payment = await _mercadoPagoPaymentClient.CreateAsync(request, requestOptions);
             if (payment is null)
             {
                 throw new ArgumentNullException();

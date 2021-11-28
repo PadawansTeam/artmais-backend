@@ -30,6 +30,7 @@ using ArtmaisBackend.Core.Users.Service;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Services;
 using ArtmaisBackend.Services.Interface;
+using MercadoPago.Client.Payment;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
@@ -61,6 +62,7 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
             services.AddScoped<IRecomendationService, RecomendationService>();
             services.AddScoped<ISignatureService, SignatureService>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IMercadoPagoPaymentClient, MercadoPagoPaymentClient>();
 
             services.AddAWSService<IAmazonS3>(new AWSOptions { Region = RegionEndpoint.GetBySystemName(awsConfigRegion) });
 
