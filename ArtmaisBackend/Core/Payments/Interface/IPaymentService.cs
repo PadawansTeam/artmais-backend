@@ -1,8 +1,5 @@
-﻿using ArtmaisBackend.Core.Entities;
-using ArtmaisBackend.Core.Payments.Enums;
-using ArtmaisBackend.Core.Payments.Request;
+﻿using ArtmaisBackend.Core.Payments.Request;
 using MercadoPago.Resource.Payment;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ArtmaisBackend.Core.Payments.Interface
