@@ -55,7 +55,8 @@ namespace ArtmaisBackend.Core.Payments.Service
                 Payer = new PaymentPayerRequest
                 {
                     Email = paymentRequest.Email,
-                }
+                },
+                NotificationUrl = "https://artmais-backend.herokuapp.com/v1/payment/updatePaymentAsync"
             };
 
             var requestOptions = new RequestOptions
@@ -82,7 +83,7 @@ namespace ArtmaisBackend.Core.Payments.Service
 
             await UpdatePayment(paymentInfo).ConfigureAwait(false);
 
-            await InsertPaymentHistory(paymentInfo.PaymentID, PaymentStatusEnum.DONE).ConfigureAwait(false);
+            await InsertPaymentHistory(paymentInfo.PaymentID, PaymentStatusEnum.CREATED).ConfigureAwait(false);
 
             var userSignature = await _signatureRepository.GetSignatureByUserId(userId);
 
