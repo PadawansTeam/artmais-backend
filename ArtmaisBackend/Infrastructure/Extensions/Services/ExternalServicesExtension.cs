@@ -66,7 +66,6 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
 
             services.Configure<SocialMediaConfiguration>(configuration.GetSection("SocialMediaShareLink"));
             services.Configure<DbServiceConfiguration>(configuration.GetSection("DbServiceConfig"));
-            services.Configure<MercadoPagoConfiguration>(configuration.GetSection("MercadoPagoConfig"));
 
             services.AddHttpClient();
 

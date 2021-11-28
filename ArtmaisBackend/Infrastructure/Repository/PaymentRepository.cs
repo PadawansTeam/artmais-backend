@@ -19,7 +19,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         private readonly ArtplusContext _context;
 
-        public async Task<Payments?> Create(long userId, int paymentTypeEnum)
+        public async Task<Payments?> Create(long userId, int paymentTypeEnum, long? externalPaymentId)
         {
             var date = DateTime.UtcNow;
             var payment = new Payments
@@ -27,7 +27,8 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 UserID = userId,
                 PaymentTypeID = paymentTypeEnum,
                 CreateDate = date,
-                LastUpdateDate = date
+                LastUpdateDate = date,
+                ExternalPaymentID = externalPaymentId
             };
 
             await _context.Payment.AddAsync(payment);
