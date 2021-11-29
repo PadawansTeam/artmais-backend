@@ -12,7 +12,7 @@ namespace ArtmaisBackend.Core.Entities
         public int PaymentID { get; set; }
 
         [Column("idusuario")]
-        public long? UserID { get; set; }
+        public long UserID { get; set; }
 
         [ForeignKey("UserID")]
         public User? User { get; set; }
