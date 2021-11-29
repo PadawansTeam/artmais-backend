@@ -4,6 +4,7 @@ using ArtmaisBackend.Core.Payments.Request;
 using ArtmaisBackend.Core.SignIn.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
@@ -14,14 +15,16 @@ namespace ArtmaisBackend.Controllers
     [Route("v1/[controller]")]
     public class PaymentController : ControllerBase
     {
-        public PaymentController(IPaymentService paymentService, IJwtTokenService jwtToken)
+        public PaymentController(IPaymentService paymentService, IJwtTokenService jwtToken, ILogger<PaymentController> logger)
         {
             this._paymentService = paymentService;
             this._jwtToken = jwtToken;
+            _logger = logger;
         }
 
         private readonly IPaymentService _paymentService;
         private readonly IJwtTokenService _jwtToken;
+        private readonly ILogger _logger;
 
         [HttpPost("[Action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -59,7 +62,7 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdatePaymentAsync(PaymentNotification paymentNotification)
         {
-            Console.WriteLine(JsonConvert.SerializeObject(paymentNotification));
+            _logger.LogInformation(JsonConvert.SerializeObject(paymentNotification));
             return Ok();
         }
     }
