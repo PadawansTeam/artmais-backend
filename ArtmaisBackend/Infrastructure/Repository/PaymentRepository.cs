@@ -60,5 +60,12 @@ namespace ArtmaisBackend.Infrastructure.Repository
                 .OrderByDescending(payment => payment.LastUpdateDate)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<Payments> GetPaymentsByExternalPaymentId(long externalPaymentId)
+        {
+            return await _context.Payment
+                .Where(payment => payment.ExternalPaymentID == externalPaymentId)
+                .FirstOrDefaultAsync();
+        }
     }
 }
