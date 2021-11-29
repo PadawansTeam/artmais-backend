@@ -30,6 +30,6 @@ namespace ArtmaisBackend.Core.Entities
         public DateTime LastUpdateDate { get; set; }
 
         [Column("idpagamentoexterno")]
-        public long ExternalPaymentID { get; set; }
+        public long? ExternalPaymentID { get; set; }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using ArtmaisBackend.Core.Payments.Interface;
+using ArtmaisBackend.Core.Payments.Notifications;
 using ArtmaisBackend.Core.Payments.Request;
 using ArtmaisBackend.Core.SignIn.Interface;
-using MercadoPago.Resource.Payment;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -52,6 +53,14 @@ namespace ArtmaisBackend.Controllers
             {
                 return StatusCode(500, new { message = ex.Message });
             }
+        }
+
+        [HttpPost("[Action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdatePaymentAsync(PaymentNotification paymentNotification)
+        {
+            Console.WriteLine(JsonConvert.SerializeObject(paymentNotification));
+            return Ok();
         }
     }
 }

@@ -6,6 +6,7 @@ using ArtmaisBackend.Infrastructure.Repository.Interface;
 using MercadoPago.Client;
 using MercadoPago.Client.Payment;
 using MercadoPago.Resource.Payment;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace ArtmaisBackend.Core.Payments.Service
                               IPaymentTypeRepository paymentTypeRepository,
                               IProductRepository productRepository,
                               ISignatureRepository signatureRepository,
+                              IConfiguration configuration,
                               IMercadoPagoPaymentClient mercadoPagoPaymentClient)
         {
             _paymentHistoryRepository = paymentHistoryRepository;
@@ -30,6 +32,7 @@ namespace ArtmaisBackend.Core.Payments.Service
             _paymentTypeRepository = paymentTypeRepository;
             _productRepository = productRepository;
             _signatureRepository = signatureRepository;
+            _token = configuration["MERCADO_PAGO_TOKEN"];
             _mercadoPagoPaymentClient = mercadoPagoPaymentClient;
         }
 
@@ -40,17 +43,11 @@ namespace ArtmaisBackend.Core.Payments.Service
         private readonly IPaymentTypeRepository _paymentTypeRepository;
         private readonly IProductRepository _productRepository;
         private readonly ISignatureRepository _signatureRepository;
+        private readonly string _token;
         private readonly IMercadoPagoPaymentClient _mercadoPagoPaymentClient;
-        private readonly string tokenMercadoPago = "TEST-4734890284706792-101621-772162e631cd84775da9d50f2e0acb43-278907011";
 
         public async Task<Payment> PaymentCreateRequest(PaymentRequest paymentRequest, long userId)
         {
-            var signatureByUserId = await _signatureRepository.GetSignatureByUserId(userId);
-            if (signatureByUserId != null)
-            {
-                throw new ArgumentException();
-            }
-
             var request = new PaymentCreateRequest
             {
                 TransactionAmount = paymentRequest.TransactionAmount,
@@ -61,77 +58,47 @@ namespace ArtmaisBackend.Core.Payments.Service
                 Payer = new PaymentPayerRequest
                 {
                     Email = paymentRequest.Email,
-                }
+                },
+                NotificationUrl = PaymentDefaults.NOTIFICATION_URL
             };
 
             var requestOptions = new RequestOptions
             {
-                AccessToken = tokenMercadoPago
+                AccessToken = _token
             };
 
-            var insertPayment = await InsertPayment(userId, PaymentTypeEnum.CREDIT).ConfigureAwait(false);
-            if (!insertPayment)
-            {
-                throw new ArgumentNullException();
-            }
-
-            var paymentInfo = await GetPaymentByUserId(userId).ConfigureAwait(false);
-            if (paymentInfo is null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            var insertCreatedHistoryPayment = await InsertPaymentHistory(paymentInfo.PaymentID, PaymentStatusEnum.CREATED).ConfigureAwait(false);
-            if (!insertCreatedHistoryPayment)
-            {
-                throw new ArgumentNullException();
-            }
-
             Payment payment = await _mercadoPagoPaymentClient.CreateAsync(request, requestOptions);
-            if (payment is null)
-            {
-                throw new ArgumentNullException();
-            }
 
-            var product = await GetSignature().ConfigureAwait(false);
-            if (product is null)
-            {
-                throw new ArgumentNullException();
-            }
+            var paymentInfo = await InsertPayment(userId, PaymentTypeEnum.CREDIT, payment.Id).ConfigureAwait(false);
 
-            var paymentProduct = await InsertPaymentProduct(product.ProductID, paymentInfo.PaymentID).ConfigureAwait(false);
-            if (!paymentProduct)
+            await InsertPaymentHistory(paymentInfo.PaymentID, PaymentStatusEnum.CREATED).ConfigureAwait(false);
+
+            var userSignature = await _signatureRepository.GetSignatureByUserId(userId);
+
+            if (userSignature != null)
             {
-                throw new ArgumentNullException();
+                userSignature.EndDate.AddYears(1);
+                await _signatureRepository.Update(userSignature);
+
+                var signatureProduct = await GetSignature().ConfigureAwait(false);
+                await InsertPaymentProduct(signatureProduct.ProductID, paymentInfo.PaymentID).ConfigureAwait(false);
+
+                return payment;
             }
 
             await _signatureRepository.Create(userId);
 
-            var updatePayment = await UpdatePayment(paymentInfo).ConfigureAwait(false);
-            if (!updatePayment)
-            {
-                throw new ArgumentNullException();
-            }
-
-            var insertDoneHistoryPayment = await InsertPaymentHistory(paymentInfo.PaymentID, PaymentStatusEnum.DONE).ConfigureAwait(false);
-            if (!insertDoneHistoryPayment)
-            {
-                throw new ArgumentNullException();
-            }
+            var product = await GetSignature().ConfigureAwait(false);
+            await InsertPaymentProduct(product.ProductID, paymentInfo.PaymentID).ConfigureAwait(false);
 
             return payment;
         }
 
-        private async Task<bool> InsertPayment(long userId, PaymentTypeEnum paymentTypeEnum)
+        private async Task<Entities.Payments?> InsertPayment(long userId, PaymentTypeEnum paymentTypeEnum, long? externalPaymentId)
         {
-            var payment = await _paymentRepository.Create(userId, (int)paymentTypeEnum);
+            var payment = await _paymentRepository.Create(userId, (int)paymentTypeEnum, externalPaymentId);
 
-            if (payment is null)
-            {
-                return false;
-            }
-
-            return true;
+            return payment;
         }
 
         private async Task<bool> UpdatePayment(Entities.Payments paymentRequest)
@@ -150,11 +117,6 @@ namespace ArtmaisBackend.Core.Payments.Service
         private async Task<Entities.Payments?> GetPaymentByUserId(long userId)
         {
             return await _paymentRepository.GetPaymentByUserId(userId);
-        }
-
-        private async Task<Entities.Payments?> GetPaymentByIdAndUserId(int paymentId, long userId)
-        {
-            return await _paymentRepository.GetPaymentByIdAndUserId(paymentId, userId);
         }
 
         private async Task<bool> InsertPaymentHistory(int paymentId, PaymentStatusEnum paymentStatusEnum)
