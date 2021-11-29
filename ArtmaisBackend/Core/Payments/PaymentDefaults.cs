@@ -2,6 +2,6 @@
 {
     public static class PaymentDefaults
     {
-        public const string NOTIFICATION_URL = "https://artmais-backend.herokuapp.com/v1/payment/updatePaymentAsync";
+        public const string NOTIFICATION_URL = "https://artmais-backend.herokuapp.com/v1/payment/updatePayment";
     }
 }
