@@ -12,5 +12,6 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
         Task<Payments?> GetPaymentByUserId(long userId);
 
         Task<Payments?> GetPaymentByIdAndUserId(int paymentId, long userId);
+        Task<Payments> GetPaymentsByExternalPaymentId(long externalPaymentId);
     }
 }
