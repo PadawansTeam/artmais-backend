@@ -94,6 +94,37 @@ namespace ArtmaisBackend.Core.Payments.Service
             return payment;
         }
 
+        public async Task UpdatePaymentAsync(long id)
+        {
+            var requestOptions = new RequestOptions
+            {
+                AccessToken = _token    
+            };
+
+            Payment payment = await _mercadoPagoPaymentClient.GetAsync(id, requestOptions);
+
+            var userPayment = await _paymentRepository.GetPaymentsByExternalPaymentId(id);
+
+            await UpdatePayment(userPayment);
+
+            if (payment.Status == "approved")
+            {
+                await InsertPaymentHistory(userPayment.PaymentID, PaymentStatusEnum.DONE);
+            }
+
+            if (payment.Status == "in_process")
+            {
+                await InsertPaymentHistory(userPayment.PaymentID, PaymentStatusEnum.PROCESSING);
+            }
+
+            if (payment.Status == "rejected")
+            {
+                await InsertPaymentHistory(userPayment.PaymentID, PaymentStatusEnum.UNDONE);
+            }
+
+            return;
+        }
+
         private async Task<Entities.Payments?> InsertPayment(long userId, PaymentTypeEnum paymentTypeEnum, long? externalPaymentId)
         {
             var payment = await _paymentRepository.Create(userId, (int)paymentTypeEnum, externalPaymentId);
