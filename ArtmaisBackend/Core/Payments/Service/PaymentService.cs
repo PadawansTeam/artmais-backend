@@ -77,7 +77,7 @@ namespace ArtmaisBackend.Core.Payments.Service
 
             if (userSignature != null)
             {
-                userSignature.EndDate.AddYears(1);
+                userSignature.EndDate = userSignature.EndDate.AddYears(1);
                 await _signatureRepository.Update(userSignature);
 
                 var signatureProduct = await GetSignature().ConfigureAwait(false);
