@@ -1,8 +1,10 @@
 ﻿using ArtmaisBackend.Core.Payments.Interface;
+using ArtmaisBackend.Core.Payments.Notifications;
 using ArtmaisBackend.Core.Payments.Request;
 using ArtmaisBackend.Core.SignIn.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -55,8 +57,9 @@ namespace ArtmaisBackend.Controllers
 
         [HttpPost("[Action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdatePaymentAsync()
+        public async Task<ActionResult> UpdatePaymentAsync(PaymentNotification paymentNotification)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(paymentNotification));
             return Ok();
         }
     }

@@ -59,7 +59,7 @@ namespace ArtmaisBackend.Core.Payments.Service
                 {
                     Email = paymentRequest.Email,
                 },
-                NotificationUrl = "https://artmais-backend.herokuapp.com/v1/payment/updatePaymentAsync"
+                NotificationUrl = PaymentDefaults.NOTIFICATION_URL
             };
 
             var requestOptions = new RequestOptions
