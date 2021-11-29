@@ -94,7 +94,7 @@ namespace ArtmaisBackend.Core.Payments.Service
             return payment;
         }
 
-        public async Task UpdatePaymentAsync(long id)
+        public async Task<Payment> UpdatePaymentAsync(long id)
         {
             var requestOptions = new RequestOptions
             {
@@ -105,24 +105,24 @@ namespace ArtmaisBackend.Core.Payments.Service
 
             var userPayment = await _paymentRepository.GetPaymentsByExternalPaymentId(id);
 
-            await UpdatePayment(userPayment);
+            await UpdatePayment(userPayment).ConfigureAwait(false);
 
             if (payment.Status == "approved")
             {
-                await InsertPaymentHistory(userPayment.PaymentID, PaymentStatusEnum.DONE);
+                await InsertPaymentHistory(userPayment.PaymentID, PaymentStatusEnum.DONE).ConfigureAwait(false);
             }
 
             if (payment.Status == "in_process")
             {
-                await InsertPaymentHistory(userPayment.PaymentID, PaymentStatusEnum.PROCESSING);
+                await InsertPaymentHistory(userPayment.PaymentID, PaymentStatusEnum.PROCESSING).ConfigureAwait(false);
             }
 
             if (payment.Status == "rejected")
             {
-                await InsertPaymentHistory(userPayment.PaymentID, PaymentStatusEnum.UNDONE);
+                await InsertPaymentHistory(userPayment.PaymentID, PaymentStatusEnum.UNDONE).ConfigureAwait(false);
             }
 
-            return;
+            return payment;
         }
 
         private async Task<Entities.Payments?> InsertPayment(long userId, PaymentTypeEnum paymentTypeEnum, long? externalPaymentId)
