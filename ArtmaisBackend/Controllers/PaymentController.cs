@@ -1,4 +1,5 @@
 ﻿using ArtmaisBackend.Core.Payments.Interface;
+using ArtmaisBackend.Core.Payments.Notifications;
 using ArtmaisBackend.Core.Payments.Request;
 using ArtmaisBackend.Core.SignIn.Interface;
 using Microsoft.AspNetCore.Http;
@@ -55,11 +56,11 @@ namespace ArtmaisBackend.Controllers
 
         [HttpPost("[Action]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdatePaymentAsync([FromRoute] long id, [FromRoute] string type)
+        public async Task<ActionResult> UpdatePaymentAsync([FromQuery] Data data, [FromQuery] string type)
         {
             if (type == "payment")
             {
-                await _paymentService.UpdatePaymentAsync(id);
+                await _paymentService.UpdatePaymentAsync(data.Id);
             }
 
             return Ok();
