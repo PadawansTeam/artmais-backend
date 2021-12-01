@@ -8,6 +8,7 @@ using ArtmaisBackend.Core.Aws.Service;
 using ArtmaisBackend.Core.Contact.Service;
 using ArtmaisBackend.Core.Contacts.Interface;
 using ArtmaisBackend.Core.Dashboard.Services;
+using ArtmaisBackend.Core.Mail.Services;
 using ArtmaisBackend.Core.OAuth.Google.Interface;
 using ArtmaisBackend.Core.OAuth.Google.Mediator;
 using ArtmaisBackend.Core.Payments.Interface;
@@ -30,7 +31,6 @@ using ArtmaisBackend.Core.Users.Service;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Services;
 using ArtmaisBackend.Services.Interface;
-using MercadoPago.Client.Payment;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
@@ -63,11 +63,13 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
             services.AddScoped<ISignatureService, SignatureService>();
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IMercadoPagoPaymentClient, MercadoPagoPaymentClient>();
+            services.AddScoped<IMailService, MailService>();
 
             services.AddAWSService<IAmazonS3>(new AWSOptions { Region = RegionEndpoint.GetBySystemName(awsConfigRegion) });
 
             services.Configure<SocialMediaConfiguration>(configuration.GetSection("SocialMediaShareLink"));
             services.Configure<DbServiceConfiguration>(configuration.GetSection("DbServiceConfig"));
+            services.Configure<EmailConfiguration>(configuration.GetSection("EmailConfiguration"));
 
             services.AddHttpClient();
 

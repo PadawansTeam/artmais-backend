@@ -113,9 +113,9 @@ namespace ArtmaisBackend.Tests.Core.Users
 
             var result = userService.GetShareLinkByUserId(3);
 
-            result.Twitter.Should().BeEquivalentTo("https://twitter.com/intent/tweet?text=https://artmais-frontend.herokuapp.com/artista/3%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
-            result.Facebook.Should().BeEquivalentTo("https://www.facebook.com/sharer/sharer.php?u=https://artmais-frontend.herokuapp.com/artista/3%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
-            result.Whatsapp.Should().BeEquivalentTo("https://wa.me/?text=https://artmais-frontend.herokuapp.com/artista/3%20Olhá%20só%20que%20perfil%20incrivel%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
+            result.Twitter.Should().BeEquivalentTo("https://twitter.com/intent/tweet?text=https://artmais-frontend.herokuapp.com/artista/3%20Olha%20só%20que%20perfil%20incrível%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
+            result.Facebook.Should().BeEquivalentTo("https://www.facebook.com/sharer/sharer.php?u=https://artmais-frontend.herokuapp.com/artista/3%20Olha%20só%20que%20perfil%20incrível%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
+            result.Whatsapp.Should().BeEquivalentTo("https://wa.me/?text=https://artmais-frontend.herokuapp.com/artista/3%20Olha%20só%20que%20perfil%20incrível%20que%20eu%20achei%20na%20plataforma%20Art%2B.");
             result.WhatsappContact.Should().BeEquivalentTo("https://wa.me/?phone=5511984439282&text=+Olá,+gostaria+de+conversar+sobre+a+sua+arte+disponível+na+plataforma+Art%2B.");
             result.Instagram.Should().BeNullOrEmpty();
         }
