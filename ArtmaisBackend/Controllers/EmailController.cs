@@ -18,7 +18,7 @@ namespace ArtmaisBackend.Controllers
             this.mailService = mailService;
         }
         [HttpPost("Action")]
-        public async Task<IActionResult> SendEmailAsync([FromBody] string email)
+        public async Task<IActionResult> SendEmailAsync([FromForm] string email)
         {
             try
             {
