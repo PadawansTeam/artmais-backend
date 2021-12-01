@@ -1,4 +1,5 @@
 ﻿using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.Mail.Requests;
 using ArtmaisBackend.Core.Mail.Services;
 using ArtmaisBackend.Core.Payments.Enums;
 using ArtmaisBackend.Core.Payments.Interface;
@@ -64,7 +65,11 @@ namespace ArtmaisBackend.Tests.Core.Payments
             var PaymentMercadPago = new Payment
             {
                 Status = "CREATED",
-                Id = 1
+                Id = 1,
+                Payer = new PaymentPayer
+                {
+                    Email = "test@gmail.com"
+                }
             };
             var product = new Product
             {
@@ -108,6 +113,7 @@ namespace ArtmaisBackend.Tests.Core.Payments
             mockSignatureRepository.Setup(x => x.Create(userId));
             mockPaymentRepository.Setup(x => x.Update(payment)).ReturnsAsync(paymentUpdate);
             mockPaymentHistoryRepository.Setup(x => x.Create(payment.PaymentID, (int)PaymentStatusEnum.DONE)).ReturnsAsync(paymentHistoryUpdate);
+            mockMailService.Setup(x => x.SendEmailAsync(It.IsAny<EmailRequest>()));
             #endregion
 
             var paymentService = new PaymentService(mockPaymentHistoryRepository.Object, mockPaymentProductRepository.Object, mockPaymentRepository.Object, mockPaymentStatusRepository.Object, mockPaymentTypeRepository.Object, mockProductRepository.Object, mockSignatureRepository.Object, configuration, mockMercadoPagoPaymentClient.Object, mockMailService.Object);
