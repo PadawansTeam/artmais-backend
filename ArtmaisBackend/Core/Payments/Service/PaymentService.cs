@@ -1,4 +1,7 @@
 ﻿using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.Mail.Factories;
+using ArtmaisBackend.Core.Mail.Requests;
+using ArtmaisBackend.Core.Mail.Services;
 using ArtmaisBackend.Core.Payments.Enums;
 using ArtmaisBackend.Core.Payments.Interface;
 using ArtmaisBackend.Core.Payments.Request;
@@ -23,7 +26,8 @@ namespace ArtmaisBackend.Core.Payments.Service
                               IProductRepository productRepository,
                               ISignatureRepository signatureRepository,
                               IConfiguration configuration,
-                              IMercadoPagoPaymentClient mercadoPagoPaymentClient)
+                              IMercadoPagoPaymentClient mercadoPagoPaymentClient,
+                              IMailService mailService)
         {
             _paymentHistoryRepository = paymentHistoryRepository;
             _paymentProductRepository = paymentProductRepository;
@@ -34,6 +38,7 @@ namespace ArtmaisBackend.Core.Payments.Service
             _signatureRepository = signatureRepository;
             _token = configuration["MERCADO_PAGO_TOKEN"];
             _mercadoPagoPaymentClient = mercadoPagoPaymentClient;
+            _mailService = mailService;
         }
 
         private readonly IPaymentHistoryRepository _paymentHistoryRepository;
@@ -45,6 +50,7 @@ namespace ArtmaisBackend.Core.Payments.Service
         private readonly ISignatureRepository _signatureRepository;
         private readonly string _token;
         private readonly IMercadoPagoPaymentClient _mercadoPagoPaymentClient;
+        private readonly IMailService _mailService;
 
         public async Task<Payment> PaymentCreateRequest(PaymentRequest paymentRequest, long userId)
         {
@@ -73,6 +79,15 @@ namespace ArtmaisBackend.Core.Payments.Service
 
             await InsertPaymentHistory(paymentInfo.PaymentID, PaymentStatusEnum.CREATED).ConfigureAwait(false);
 
+            var emailRequest = new EmailRequest
+            {
+                ToEmail = payment.Payer.Email,
+                Subject = PaymentDefaults.PAYMENT_CREATED_SUBJECT,
+                Body = BodyFactory.PaymentBody(PaymentDefaults.PAYMENT_CREATED_MESSAGE)
+            };
+
+            await _mailService.SendEmailAsync(emailRequest);
+
             var userSignature = await _signatureRepository.GetSignatureByUserId(userId);
 
             if (userSignature != null)
@@ -96,12 +111,17 @@ namespace ArtmaisBackend.Core.Payments.Service
 
         public async Task<Payment> UpdatePaymentAsync(long id)
         {
-            var requestOptions = new RequestOptions
+            var requestOptions = new RequestOptions 
             {
                 AccessToken = _token    
             };
 
             Payment payment = await _mercadoPagoPaymentClient.GetAsync(id, requestOptions);
+
+            var emailRequest = new EmailRequest
+            {
+                ToEmail = payment.Payer.Email
+            };    
 
             var userPayment = await _paymentRepository.GetPaymentsByExternalPaymentId(id);
 
@@ -110,16 +130,31 @@ namespace ArtmaisBackend.Core.Payments.Service
             if (payment.Status == "approved")
             {
                 await InsertPaymentHistory(userPayment.PaymentID, PaymentStatusEnum.DONE).ConfigureAwait(false);
+
+                emailRequest.Subject = PaymentDefaults.PAYMENT_DONE_SUBJECT;
+                emailRequest.Body = BodyFactory.PaymentBody(PaymentDefaults.PAYMENT_DONE_MESSAGE);
+
+                await _mailService.SendEmailAsync(emailRequest);
             }
 
             if (payment.Status == "in_process")
             {
                 await InsertPaymentHistory(userPayment.PaymentID, PaymentStatusEnum.PROCESSING).ConfigureAwait(false);
+
+                emailRequest.Subject = PaymentDefaults.PAYMENT_PROCESSING_SUBJECT;
+                emailRequest.Body = BodyFactory.PaymentBody(PaymentDefaults.PAYMENT_PROCESSING_MESSAGE);
+
+                await _mailService.SendEmailAsync(emailRequest);
             }
 
             if (payment.Status == "rejected")
             {
                 await InsertPaymentHistory(userPayment.PaymentID, PaymentStatusEnum.UNDONE).ConfigureAwait(false);
+
+                emailRequest.Subject = PaymentDefaults.PAYMENT_UNDONE_SUBJECT;
+                emailRequest.Body = BodyFactory.PaymentBody(PaymentDefaults.PAYMENT_UNDONE_MESSAGE);
+
+                await _mailService.SendEmailAsync(emailRequest);
             }
 
             return payment;

@@ -1,4 +1,5 @@
 ﻿using ArtmaisBackend.Core.Entities;
+using ArtmaisBackend.Core.Mail.Services;
 using ArtmaisBackend.Core.Payments.Enums;
 using ArtmaisBackend.Core.Payments.Interface;
 using ArtmaisBackend.Core.Payments.Request;
@@ -34,6 +35,7 @@ namespace ArtmaisBackend.Tests.Core.Payments
             var mockProductRepository = new Mock<IProductRepository>();
             var mockSignatureRepository = new Mock<ISignatureRepository>();
             var mockMercadoPagoPaymentClient = new Mock<IMercadoPagoPaymentClient>();
+            var mockMailService = new Mock<IMailService>();
 
             Signature signature = null;
             var paymentRequest = new PaymentRequest
@@ -108,7 +110,7 @@ namespace ArtmaisBackend.Tests.Core.Payments
             mockPaymentHistoryRepository.Setup(x => x.Create(payment.PaymentID, (int)PaymentStatusEnum.DONE)).ReturnsAsync(paymentHistoryUpdate);
             #endregion
 
-            var paymentService = new PaymentService(mockPaymentHistoryRepository.Object, mockPaymentProductRepository.Object, mockPaymentRepository.Object, mockPaymentStatusRepository.Object, mockPaymentTypeRepository.Object, mockProductRepository.Object, mockSignatureRepository.Object, configuration, mockMercadoPagoPaymentClient.Object);
+            var paymentService = new PaymentService(mockPaymentHistoryRepository.Object, mockPaymentProductRepository.Object, mockPaymentRepository.Object, mockPaymentStatusRepository.Object, mockPaymentTypeRepository.Object, mockProductRepository.Object, mockSignatureRepository.Object, configuration, mockMercadoPagoPaymentClient.Object, mockMailService.Object);
             var result = await paymentService.PaymentCreateRequest(paymentRequest, userId);
 
             result.Should().BeEquivalentTo(result);
