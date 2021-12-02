@@ -104,7 +104,7 @@ namespace ArtmaisBackend.Tests.Core.Payments
                 .Build();
 
             mockSignatureRepository.Setup(x => x.GetSignatureByUserId(userId)).ReturnsAsync(signature);
-            mockPaymentRepository.Setup(x => x.Create(userId, (int)PaymentTypeEnum.CREDIT, 1)).ReturnsAsync(payment);
+            mockPaymentRepository.Setup(x => x.Create(userId, (int)PaymentTypeEnum.CREDIT, 1, "emailtest@aluno.ifsp.edu.br")).ReturnsAsync(payment);
             mockPaymentRepository.Setup(x => x.GetPaymentByUserId(userId)).ReturnsAsync(payment);
             mockPaymentHistoryRepository.Setup(x => x.Create(payment.PaymentID, (int)PaymentStatusEnum.CREATED)).ReturnsAsync(paymentHistory);
             mockMercadoPagoPaymentClient.Setup(x => x.CreateAsync(It.IsAny<PaymentCreateRequest>(), It.IsAny<RequestOptions>(), It.IsAny<CancellationToken>())).ReturnsAsync(PaymentMercadPago);

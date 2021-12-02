@@ -5,7 +5,7 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
 {
     public interface IPaymentRepository
     {
-        Task<Payments?> Create(long userId, int paymentTypeEnum, long? externalPaymentId);
+        Task<Payments?> Create(long userId, int paymentTypeEnum, long? externalPaymentId, string paymentEmail);
 
         Task<Payments?> Update(Payments paymentRequest);
 

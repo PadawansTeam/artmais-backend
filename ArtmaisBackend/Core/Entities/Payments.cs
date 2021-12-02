@@ -31,5 +31,8 @@ namespace ArtmaisBackend.Core.Entities
 
         [Column("idpagamentoexterno")]
         public long? ExternalPaymentID { get; set; }
+
+        [Column("emailpagamento")]
+        public string PaymentEmail { get; set; }
     }
 }
