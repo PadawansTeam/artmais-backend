@@ -63,7 +63,7 @@ namespace ArtmaisBackend.Core.Payments.Service
                 PaymentMethodId = paymentRequest.PaymentMethodId,
                 Payer = new PaymentPayerRequest
                 {
-                    Email = paymentRequest.Email,
+                    Email = paymentRequest.Email
                 },
                 NotificationUrl = PaymentDefaults.NOTIFICATION_URL
             };
@@ -75,7 +75,7 @@ namespace ArtmaisBackend.Core.Payments.Service
 
             Payment payment = await _mercadoPagoPaymentClient.CreateAsync(request, requestOptions);
 
-            var paymentInfo = await InsertPayment(userId, PaymentTypeEnum.CREDIT, payment.Id).ConfigureAwait(false);
+            var paymentInfo = await InsertPayment(userId, PaymentTypeEnum.CREDIT, payment.Id, paymentRequest.Email).ConfigureAwait(false);
 
             await InsertPaymentHistory(paymentInfo.PaymentID, PaymentStatusEnum.CREATED).ConfigureAwait(false);
 
@@ -118,12 +118,12 @@ namespace ArtmaisBackend.Core.Payments.Service
 
             Payment payment = await _mercadoPagoPaymentClient.GetAsync(id, requestOptions);
 
+            var userPayment = await _paymentRepository.GetPaymentsByExternalPaymentId(id);
+
             var emailRequest = new EmailRequest
             {
-                ToEmail = payment.Payer.Email
-            };    
-
-            var userPayment = await _paymentRepository.GetPaymentsByExternalPaymentId(id);
+                ToEmail = userPayment.PaymentEmail
+            };
 
             await UpdatePayment(userPayment).ConfigureAwait(false);
 
@@ -160,9 +160,9 @@ namespace ArtmaisBackend.Core.Payments.Service
             return payment;
         }
 
-        private async Task<Entities.Payments?> InsertPayment(long userId, PaymentTypeEnum paymentTypeEnum, long? externalPaymentId)
+        private async Task<Entities.Payments?> InsertPayment(long userId, PaymentTypeEnum paymentTypeEnum, long? externalPaymentId, string paymentEmail)
         {
-            var payment = await _paymentRepository.Create(userId, (int)paymentTypeEnum, externalPaymentId);
+            var payment = await _paymentRepository.Create(userId, (int)paymentTypeEnum, externalPaymentId, paymentEmail);
 
             return payment;
         }
