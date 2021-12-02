@@ -81,7 +81,7 @@ namespace ArtmaisBackend.Core.Payments.Service
 
             var emailRequest = new EmailRequest
             {
-                ToEmail = payment.Payer.Email,
+                ToEmail = paymentRequest.Email,
                 Subject = PaymentDefaults.PAYMENT_CREATED_SUBJECT,
                 Body = BodyFactory.PaymentBody(PaymentDefaults.PAYMENT_CREATED_MESSAGE)
             };
