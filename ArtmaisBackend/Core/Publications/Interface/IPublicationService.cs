@@ -16,5 +16,7 @@ namespace ArtmaisBackend.Core.Publications.Interface
         Task<PublicationDto> GetPublicationByIdAndLoggedUser(int? publicationId, long? publicationOwnerUserId, UserJwtData visitorUser);
 
         Task<PublicationDto> GetPublicationById(int? publicationId, long? publicationOwnerUserId);
+
+        bool DeleteComment(int? commentId, long? userId);
     }
 }

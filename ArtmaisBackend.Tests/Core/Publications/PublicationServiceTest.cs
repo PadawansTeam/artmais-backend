@@ -515,5 +515,64 @@ namespace ArtmaisBackend.Tests.Core.Publications
             };
             await result.Should().ThrowAsync<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
+
+        [Fact(DisplayName = "Delete Like should be true")]
+        public void DeleteCommentShouldBeReturnsTrue()
+        {
+            #region Mocks
+            var userId = 10;
+            var publicationId = 122;
+            var commentId = 48;
+            var comment = new Comment
+            {
+                CommentID = 1,
+                UserID = userId,
+                PublicationID = publicationId,
+                CommentDate = DateTime.UtcNow
+            };
+            var publication = new Publication
+            {
+                PublicationID = publicationId,
+                UserID = userId,
+                Description = "publication",
+                PublicationDate = DateTime.UtcNow
+            };
+            var mockUserService = new Mock<IUserService>();
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
+            var mockPublicationRepository = new Mock<IPublicationRepository>();
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockLikeRepository = new Mock<ILikeRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+
+            mockCommentRepository.Setup(x => x.GetCommentById(commentId)).Returns(comment);
+            mockPublicationRepository.Setup(x => x.GetPublicationByIdAndUserId(userId, comment.PublicationID)).Returns(publication);
+            mockCommentRepository.Setup(x => x.Delete(comment));
+            #endregion
+
+            var publicationService = new PublicationService(mockSignatureService.Object, mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+            var result = publicationService.DeleteComment(commentId, userId);
+
+            result.Should().BeTrue();
+        }
+
+        [Fact(DisplayName = "Delete Like should be returns throw when publication id is null")]
+        public void DeleteCommentShouldBeThrowWhenPublicationIdIsNull()
+        {
+            var mockUserService = new Mock<IUserService>();
+            var mockUserRepository = new Mock<IUserRepository>();
+            var mockMediaTypeRepository = new Mock<IMediaTypeRepository>();
+            var mockPublicationRepository = new Mock<IPublicationRepository>();
+            var mockCommentRepository = new Mock<ICommentRepository>();
+            var mockLikeRepository = new Mock<ILikeRepository>();
+            var mockSignatureService = new Mock<ISignatureService>();
+            var mockOptions = new Mock<IOptions<SocialMediaConfiguration>>();
+
+            var publicationService = new PublicationService(mockSignatureService.Object, mockUserService.Object, mockUserRepository.Object, mockMediaTypeRepository.Object, mockPublicationRepository.Object, mockCommentRepository.Object, mockLikeRepository.Object, mockOptions.Object);
+
+            Action act = () => publicationService.DeleteComment(null, It.IsAny<long>());
+            act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
+        }
     }
 }

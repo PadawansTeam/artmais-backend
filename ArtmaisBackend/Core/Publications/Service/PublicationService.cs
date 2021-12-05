@@ -50,6 +50,23 @@ namespace ArtmaisBackend.Core.Publications.Service
             return true;
         }
 
+        public bool DeleteComment(int? commentId, long? userId)
+        {
+            var comment = _commentRepository.GetCommentById(commentId);
+            if (comment is null)
+            {
+                throw new ArgumentNullException();
+            }
+            var publicationInfo = _publicationRepository.GetPublicationByIdAndUserId(userId, comment.PublicationID);
+            if (publicationInfo is null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            _commentRepository.Delete(comment);
+            return true;
+        }
+
         private async Task<PublicationCommentsDto?> GetAllCommentsByPublicationId(int? publicationId)
         {
             if (publicationId is null)

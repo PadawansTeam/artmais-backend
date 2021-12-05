@@ -15,5 +15,7 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
         void Create(CommentRequest commentRequest, long userId);
 
         void Delete(Comment comment);
+
+        Comment GetCommentById(int? commentId);
     }
 }
