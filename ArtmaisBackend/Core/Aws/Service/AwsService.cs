@@ -87,16 +87,20 @@ namespace ArtmaisBackend.Core.Aws.Service
                     throw new ArgumentNullException();
                 }
 
-                var keyName = portfolioContent.S3UrlMedia.Contains("https") ?
+                if (portfolioContent.MediaTypeID != 4)
+                {
+                    var keyName = portfolioContent.S3UrlMedia.Contains("https") ?
                     portfolioContent.S3UrlMedia.Substring(40) : portfolioContent.S3UrlMedia.Substring(39);
 
-                var deleteObjectRequest = new DeleteObjectRequest
-                {
-                    BucketName = deleteObjectCommand.BucketName,
-                    Key = keyName,
-                };
+                    var deleteObjectRequest = new DeleteObjectRequest
+                    {
+                        BucketName = deleteObjectCommand.BucketName,
+                        Key = keyName,
+                    };
 
-                await _client.DeleteObjectAsync(deleteObjectRequest);
+
+                    await _client.DeleteObjectAsync(deleteObjectRequest);
+                }
 
                 await DeletePortfolioContent(portfolioContent, deleteObjectCommand.UserId).ConfigureAwait(false);
 
