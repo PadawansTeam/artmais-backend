@@ -62,12 +62,12 @@ namespace ArtmaisBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<PortfolioContentDto> InsertPortfolioContent(PortfolioRequest? portfolioRequest)
+        public ActionResult<PortfolioContentDto> InsertPortfolioExternalMediaContent(PortfolioRequest? portfolioRequest)
         {
             try
             {
                 var user = _jwtToken.ReadToken(User);
-                var result = _portfolioService.InsertPortfolioContent(portfolioRequest, user.UserID, 1);
+                var result = _portfolioService.InsertPortfolioContent(portfolioRequest, user.UserID, 4);
                 return Ok(result);
             }
             catch (ArgumentNullException ex)

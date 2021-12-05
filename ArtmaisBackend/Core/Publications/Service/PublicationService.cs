@@ -231,6 +231,7 @@ namespace ArtmaisBackend.Core.Publications.Service
 
             return publicationDto;
         }
+       
         public async Task<PublicationDto> GetPublicationById(int? publicationId, long? publicationOwnerUserId)
         {
             if (publicationId is null || publicationOwnerUserId is null)

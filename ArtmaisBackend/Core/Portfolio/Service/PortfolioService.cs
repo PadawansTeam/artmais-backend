@@ -42,11 +42,14 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.VIDEO).ToList();
             var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.AUDIO).ToList();
 
+            var externalMediaList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.EXTERNALMEDIA).ToList();
+
             var publicationList = new PortfolioContentListDto
             {
                 Image = imageList,
                 Video = videoList,
-                Audio = audioList
+                Audio = audioList,
+                ExternalMedia = externalMediaList
             };
 
 
@@ -65,12 +68,14 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             var imageList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.IMAGE).ToList();
             var videoList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.VIDEO).ToList();
             var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.AUDIO).ToList();
+            var externalMediaList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.EXTERNALMEDIA).ToList();
 
             var publicationList = new PortfolioContentListDto
             {
                 Image = imageList,
                 Video = videoList,
-                Audio = audioList
+                Audio = audioList,
+                ExternalMedia = externalMediaList
             };
 
 
