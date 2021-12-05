@@ -63,5 +63,10 @@ namespace ArtmaisBackend.Infrastructure.Repository
             _context.Comment.Remove(comment);
             _context.SaveChanges();
         }
+
+        public Comment GetCommentById(int? commentId)
+        {
+            return _context.Comment.FirstOrDefault(comment => comment.CommentID == commentId);
+        }
     }
 }

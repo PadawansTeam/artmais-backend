@@ -89,6 +89,28 @@ namespace ArtmaisBackend.Controllers
             }
         }
 
+        [HttpDelete("[Action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult DeleteComment(int commentId)
+        {
+            try
+            {
+                var user = _jwtToken.ReadToken(User);
+                _publicationService.DeleteComment(commentId, user.UserID);
+                return Ok();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
         [HttpGet("[Action]/{publicationId}/{publicationOwnerUserId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
