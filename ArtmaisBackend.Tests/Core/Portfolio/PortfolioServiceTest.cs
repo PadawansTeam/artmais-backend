@@ -100,6 +100,26 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                     S3UrlMedia = "S3UrlMedia3",
                     Description = "Description3",
                     PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 1,
+                    PublicationID = 1,
+                    MediaID = 1,
+                    MediaTypeID = 4,
+                    S3UrlMedia = "S3UrlMedia1",
+                    Description = "Description1",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 4,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
                 }
             };
             var image = new List<PortfolioContentDto>
@@ -191,11 +211,35 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                     PublicationDate = new DateTime()
                 }
             };
+            var externalMedia = new List<PortfolioContentDto> 
+            {
+                new PortfolioContentDto
+                {
+                UserID = 1,
+                PublicationID = 1,
+                MediaID = 1,
+                MediaTypeID = 4,
+                S3UrlMedia = "S3UrlMedia1",
+                Description = "Description1",
+                PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 4,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
+                }
+            };
             var expectedList = new PortfolioContentListDto
             {
                 Image = image,
                 Audio = audio,
-                Video = video
+                Video = video,
+                ExternalMedia = externalMedia
             };
 
             var mockLikeRepository = new Mock<ILikeRepository>();
@@ -222,11 +266,13 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var image = new List<PortfolioContentDto> { };
             var video = new List<PortfolioContentDto> { };
             var audio = new List<PortfolioContentDto> { };
+            var externalMedia = new List<PortfolioContentDto> { };
             var expectedList = new PortfolioContentListDto
             {
                 Image = image,
                 Audio = audio,
-                Video = video
+                Video = video,
+                ExternalMedia = externalMedia
             };
 
             var mockLikeRepository = new Mock<ILikeRepository>();
@@ -351,6 +397,26 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                     S3UrlMedia = "S3UrlMedia3",
                     Description = "Description3",
                     PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 1,
+                    PublicationID = 1,
+                    MediaID = 1,
+                    MediaTypeID = 4,
+                    S3UrlMedia = "S3UrlMedia1",
+                    Description = "Description1",
+                    PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 4,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
                 }
             };
             var image = new List<PortfolioContentDto>
@@ -442,11 +508,35 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                     PublicationDate = new DateTime()
                 }
             };
+            var externalMedia = new List<PortfolioContentDto>
+            {
+                new PortfolioContentDto
+                {
+                UserID = 1,
+                PublicationID = 1,
+                MediaID = 1,
+                MediaTypeID = 4,
+                S3UrlMedia = "S3UrlMedia1",
+                Description = "Description1",
+                PublicationDate = new DateTime()
+                },
+                new PortfolioContentDto
+                {
+                    UserID = 2,
+                    PublicationID = 2,
+                    MediaID = 2,
+                    MediaTypeID = 4,
+                    S3UrlMedia = "S3UrlMedia2",
+                    Description = "Description2",
+                    PublicationDate = new DateTime()
+                }
+            };
             var expectedList = new PortfolioContentListDto
             {
                 Image = image,
                 Audio = audio,
-                Video = video
+                Video = video,
+                ExternalMedia = externalMedia
             };
 
             var mockLikeRepository = new Mock<ILikeRepository>();
@@ -473,11 +563,13 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
             var image = new List<PortfolioContentDto> { };
             var video = new List<PortfolioContentDto> { };
             var audio = new List<PortfolioContentDto> { };
+            var externalMedia = new List<PortfolioContentDto> { };
             var expectedList = new PortfolioContentListDto
             {
                 Image = image,
                 Audio = audio,
-                Video = video
+                Video = video,
+                ExternalMedia = externalMedia
             };
 
             var mockLikeRepository = new Mock<ILikeRepository>();

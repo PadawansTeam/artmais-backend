@@ -7,5 +7,6 @@ namespace ArtmaisBackend.Core.Portfolio.Dto
         public List<PortfolioContentDto> Image { get; set; }
         public List<PortfolioContentDto> Video { get; set; }
         public List<PortfolioContentDto> Audio { get; set; }
+        public List<PortfolioContentDto> ExternalMedia { get; set; }
     }
 }

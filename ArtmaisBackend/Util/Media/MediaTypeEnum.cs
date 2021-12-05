@@ -4,6 +4,7 @@
     {
         IMAGE = 1,
         VIDEO = 2,
-        AUDIO = 3
+        AUDIO = 3,
+        EXTERNALMEDIA = 4
     }
 }

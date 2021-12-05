@@ -24,16 +24,17 @@ namespace ArtmaisBackend.Infrastructure.Repository
 
         public async Task<List<CommentDto?>> GetAllCommentsDtoByPublicationId(int? publicationId)
         {
-            var listComments = await (from comments in _context.Comment
-                                      join user in _context.User on comments.UserID equals user.UserID
-                                      where comments.PublicationID.Equals(publicationId)
+            var listComments = await (from comment in _context.Comment
+                                      join user in _context.User on comment.UserID equals user.UserID
+                                      where comment.PublicationID.Equals(publicationId)
                                       select new CommentDto
                                       {
+                                          CommentID = comment.CommentID,
                                           Name = user.Name,
                                           Username = user.Username,
                                           UserPicture = user.UserPicture,
-                                          Description = comments.Description,
-                                          CommentDate = comments.CommentDate
+                                          Description = comment.Description,
+                                          CommentDate = comment.CommentDate
                                       }).OrderByDescending(x => x.CommentDate).ToListAsync();
 
             return listComments;
