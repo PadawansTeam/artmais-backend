@@ -34,7 +34,7 @@ namespace ArtmaisBackend.Infrastructure.Repository
                                           UserPicture = user.UserPicture,
                                           Description = comments.Description,
                                           CommentDate = comments.CommentDate
-                                      }).ToListAsync();
+                                      }).OrderByDescending(x => x.CommentDate).ToListAsync();
 
             return listComments;
         }
