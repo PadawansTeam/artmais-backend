@@ -89,6 +89,16 @@ namespace ArtmaisBackend.Core.Portfolio.Service
                 throw new ArgumentNullException();
             }
 
+            if(mediaTypeId == 4)
+            {
+                string host = new Uri(portfolioRequest.PortfolioImageUrl).Host;
+
+                if (!host.Contains("youtube") && !host.Contains("youtu.be") && !host.Contains("vimeo") && !host.Contains("instagram"))
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+
             var mediaTypeContent = _mediaTypeRepository.GetMediaTypeById(mediaTypeId);
             if (mediaTypeContent is null)
             {
