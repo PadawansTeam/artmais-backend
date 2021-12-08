@@ -52,7 +52,7 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var passwordRecovery = await _passwordRecoveryService.ValidateCodeAsync(userId, code);
+                await _passwordRecoveryService.ValidateCodeAsync(userId, code);
 
                 return Ok();
             }
