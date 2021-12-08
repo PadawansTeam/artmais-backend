@@ -93,7 +93,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             {
                 string host = new Uri(portfolioRequest.PortfolioImageUrl).Host;
 
-                if (!host.Contains("youtube") && !host.Contains("youtu.be") && !host.Contains("vimeo") && !host.Contains("instagram"))
+                if (!host.Contains("youtube") && !host.Contains("youtu.be") && !host.Contains("vimeo"))
                 {
                     throw new ArgumentNullException();
                 }
