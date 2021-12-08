@@ -21,5 +21,12 @@ namespace ArtmaisBackend.Util
 
             return $"{convertedSalt}{convertedHash}";
         }
+
+        public static int GenerateRandomCode()
+        {
+            var randomCode = new Random().Next(100000, 999999);
+
+            return randomCode;
+        }
     }
 }

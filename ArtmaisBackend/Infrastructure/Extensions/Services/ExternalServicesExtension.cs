@@ -11,6 +11,7 @@ using ArtmaisBackend.Core.Dashboard.Services;
 using ArtmaisBackend.Core.Mail.Services;
 using ArtmaisBackend.Core.OAuth.Google.Interface;
 using ArtmaisBackend.Core.OAuth.Google.Mediator;
+using ArtmaisBackend.Core.PasswordRecovery.Services;
 using ArtmaisBackend.Core.Payments.Interface;
 using ArtmaisBackend.Core.Payments.Service;
 using ArtmaisBackend.Core.Portfolio.Interface;
@@ -64,6 +65,7 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IMercadoPagoPaymentClient, MercadoPagoPaymentClient>();
             services.AddScoped<IMailService, MailService>();
+            services.AddScoped<IPasswordRecoveryService, PasswordRecoveryService>();
 
             services.AddAWSService<IAmazonS3>(new AWSOptions { Region = RegionEndpoint.GetBySystemName(awsConfigRegion) });
 

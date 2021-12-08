@@ -27,6 +27,7 @@ namespace ArtmaisBackend.Infrastructure.Data
         public DbSet<PaymentProduct> PaymentProduct { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<Signature> Signature { get; set; }
+        public DbSet<PasswordRecovery> PasswordRecovery { get; set; }
     }
 }
 
