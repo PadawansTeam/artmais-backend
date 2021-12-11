@@ -15,5 +15,11 @@ namespace ArtmaisBackend.Core.Dashboard.Responses
         public int SumLikes { get; set; }
         public int SumVisits { get; set; }
         public bool IsPremium { get; set; }
+        public IEnumerable<GrowthData> AudioCommentsGrowth { get; set; }
+        public IEnumerable<GrowthData> AudioLikesGrowth { get; set; }
+        public IEnumerable<GrowthData> PicturesCommentsGrowth { get; set; }
+        public IEnumerable<GrowthData> PicturesLikesGrowth { get; set; }
+        public IEnumerable<GrowthData> VideoCommentsGrowth { get; set; }
+        public IEnumerable<GrowthData> VideoLikesGrowth { get; set; }
     }
 }
