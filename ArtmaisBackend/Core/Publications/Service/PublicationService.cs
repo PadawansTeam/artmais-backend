@@ -17,7 +17,7 @@ namespace ArtmaisBackend.Core.Publications.Service
 {
     public class PublicationService : IPublicationService
     {
-        public PublicationService(ISignatureService signatureService, IUserService userService, IUserRepository userRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, ICommentRepository commentRepository, ILikeRepository likeRepository, IOptions<SocialMediaConfiguration> options)
+        public PublicationService(ISignatureService signatureService, IUserService userService, IUserRepository userRepository, IMediaTypeRepository mediaTypeRepository, IPublicationRepository publicationRepository, ICommentRepository commentRepository, ILikeRepository likeRepository, IOptions<SocialMediaConfiguration> options, IAnswerRepository answerRepository)
         {
             _userService = userService;
             _userRepository = userRepository;
@@ -27,6 +27,7 @@ namespace ArtmaisBackend.Core.Publications.Service
             _likeRepository = likeRepository;
             _socialMediaConfiguration = options.Value;
             _signatureService = signatureService;
+            _answerRepository = answerRepository;
         }
 
         private readonly IUserService _userService;
@@ -37,6 +38,7 @@ namespace ArtmaisBackend.Core.Publications.Service
         private readonly ICommentRepository _commentRepository;
         private readonly ISignatureService _signatureService;
         private readonly SocialMediaConfiguration _socialMediaConfiguration;
+        private readonly IAnswerRepository _answerRepository;
 
         public bool InsertComment(CommentRequest? commentRequest, long userId)
         {
@@ -78,6 +80,16 @@ namespace ArtmaisBackend.Core.Publications.Service
             var commentsAmount = comments.Count();
 
             var publicationCommentsDto = new PublicationCommentsDto(comments, commentsAmount);
+
+            return publicationCommentsDto;
+        }
+
+        private async Task<PublicationCommentsDto?> GetAllAnswersByCommentId(PublicationCommentsDto publicationCommentsDto)
+        {
+            foreach (var comment in publicationCommentsDto.Comments)
+            {
+                comment.Answers = await _answerRepository.GetAnswerDtoByCommentId(comment.CommentID);
+            }
 
             return publicationCommentsDto;
         }
@@ -197,7 +209,8 @@ namespace ArtmaisBackend.Core.Publications.Service
             var userCategory = _userRepository.GetSubcategoryByUserId(publicationOwnerUser.UserID);
             var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(publicationOwnerUser.UserID, publication.PublicationID);
             var isLiked = GetIsLikedPublication(publication.PublicationID, visitorUser.UserID);
-            var comments = await GetAllCommentsByPublicationId(publication.PublicationID).ConfigureAwait(false);
+            var publicationCommentsDto = await GetAllCommentsByPublicationId(publication.PublicationID).ConfigureAwait(false);
+            var comments = await GetAllAnswersByCommentId(publicationCommentsDto).ConfigureAwait(false);
             var contactProfile = _userService.GetShareProfile(publicationOwnerUser.UserID);
             var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID).ConfigureAwait(false);
             var mediaType = _mediaTypeRepository.GetMediaTypeById(publication.MediaTypeID);
