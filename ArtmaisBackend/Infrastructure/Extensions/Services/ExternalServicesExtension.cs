@@ -3,6 +3,7 @@ using Amazon.Extensions.NETCore.Setup;
 using Amazon.S3;
 using ArtmaisBackend.Core.Adresses.Interface;
 using ArtmaisBackend.Core.Adresses.Service;
+using ArtmaisBackend.Core.Answer.Services;
 using ArtmaisBackend.Core.Aws.Interface;
 using ArtmaisBackend.Core.Aws.Service;
 using ArtmaisBackend.Core.Contact.Service;
@@ -66,6 +67,7 @@ namespace ArtmaisBackend.Infrastructure.Extensions.Services
             services.AddScoped<IMercadoPagoPaymentClient, MercadoPagoPaymentClient>();
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<IPasswordRecoveryService, PasswordRecoveryService>();
+            services.AddScoped<IAnswerService, AnswerService>();
 
             services.AddAWSService<IAmazonS3>(new AWSOptions { Region = RegionEndpoint.GetBySystemName(awsConfigRegion) });
 
