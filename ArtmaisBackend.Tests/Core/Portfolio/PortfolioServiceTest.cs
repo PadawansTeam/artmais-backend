@@ -107,7 +107,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                     PublicationID = 1,
                     MediaID = 1,
                     MediaTypeID = 4,
-                    S3UrlMedia = "S3UrlMedia1",
+                    S3UrlMedia = "https://youtu.be/S3UrlMedia1",
                     Description = "Description1",
                     PublicationDate = new DateTime()
                 },
@@ -117,7 +117,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                     PublicationID = 2,
                     MediaID = 2,
                     MediaTypeID = 4,
-                    S3UrlMedia = "S3UrlMedia2",
+                    S3UrlMedia = "https://youtu.be/S3UrlMedia2",
                     Description = "Description2",
                     PublicationDate = new DateTime()
                 }
@@ -404,7 +404,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                     PublicationID = 1,
                     MediaID = 1,
                     MediaTypeID = 4,
-                    S3UrlMedia = "S3UrlMedia1",
+                    S3UrlMedia = "https://youtu.be/S3UrlMedia1",
                     Description = "Description1",
                     PublicationDate = new DateTime()
                 },
@@ -414,7 +414,7 @@ namespace ArtmaisBackend.Tests.Core.Portfolio
                     PublicationID = 2,
                     MediaID = 2,
                     MediaTypeID = 4,
-                    S3UrlMedia = "S3UrlMedia2",
+                    S3UrlMedia = "https://youtu.be/S3UrlMedia2",
                     Description = "Description2",
                     PublicationDate = new DateTime()
                 }
