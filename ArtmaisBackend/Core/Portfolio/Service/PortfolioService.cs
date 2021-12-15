@@ -7,6 +7,7 @@ using AutoMapper;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace ArtmaisBackend.Core.Portfolio.Service
 {
@@ -44,6 +45,22 @@ namespace ArtmaisBackend.Core.Portfolio.Service
 
             var externalMediaList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.EXTERNALMEDIA).ToList();
 
+            externalMediaList.ForEach(externalMedia =>
+            {
+                var uri = new Uri(externalMedia?.S3UrlMedia);
+
+                var query = HttpUtility.ParseQueryString(uri.Query);
+
+                if (query.AllKeys.Contains("v"))
+                {
+                    externalMedia.S3UrlMedia = query["v"];
+                }
+                else
+                {
+                    externalMedia.S3UrlMedia = uri.Segments.Last();
+                }
+            });
+
             var publicationList = new PortfolioContentListDto
             {
                 Image = imageList,
@@ -70,6 +87,22 @@ namespace ArtmaisBackend.Core.Portfolio.Service
             var audioList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.AUDIO).ToList();
             var externalMediaList = publicationContent.Where(x => x.MediaTypeID == (int)MediaTypeEnum.EXTERNALMEDIA).ToList();
 
+            externalMediaList.ForEach(externalMedia =>
+            {
+                var uri = new Uri(externalMedia?.S3UrlMedia);
+
+                var query = HttpUtility.ParseQueryString(uri.Query);
+
+                if (query.AllKeys.Contains("v"))
+                {
+                    externalMedia.S3UrlMedia = query["v"];
+                }
+                else
+                {
+                    externalMedia.S3UrlMedia = uri.Segments.Last();
+                }
+            });
+
             var publicationList = new PortfolioContentListDto
             {
                 Image = imageList,
@@ -89,7 +122,7 @@ namespace ArtmaisBackend.Core.Portfolio.Service
                 throw new ArgumentNullException();
             }
 
-            if(mediaTypeId == 4)
+            if (mediaTypeId == 4)
             {
                 string host = new Uri(portfolioRequest.PortfolioImageUrl).Host;
 

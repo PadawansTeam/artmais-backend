@@ -301,6 +301,22 @@ namespace ArtmaisBackend.Core.Publications.Service
             var mediaType = _mediaTypeRepository.GetMediaTypeById(publication.MediaTypeID);
             var isPremium = await _signatureService.GetSignatureByUserId(publicationOwnerUser.UserID);
 
+            if (mediaType.MediaTypeId == (int)MediaTypeEnum.EXTERNALMEDIA)
+            {
+                var uri = new Uri(publication?.S3UrlMedia);
+
+                var query = HttpUtility.ParseQueryString(uri.Query);
+
+                if (query.AllKeys.Contains("v"))
+                {
+                    publication.S3UrlMedia = query["v"];
+                }
+                else
+                {
+                    publication.S3UrlMedia = uri.Segments.Last();
+                }
+            }
+
             var publicationDto = new PublicationDto
             {
                 UserId = publicationOwnerUser?.UserID,
