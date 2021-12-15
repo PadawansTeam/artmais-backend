@@ -8,10 +8,12 @@ using ArtmaisBackend.Core.Users.Interface;
 using ArtmaisBackend.Infrastructure;
 using ArtmaisBackend.Infrastructure.Options;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
+using ArtmaisBackend.Util.File;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace ArtmaisBackend.Core.Publications.Service
 {
@@ -215,6 +217,22 @@ namespace ArtmaisBackend.Core.Publications.Service
             var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID).ConfigureAwait(false);
             var mediaType = _mediaTypeRepository.GetMediaTypeById(publication.MediaTypeID);
             var isPremium = await _signatureService.GetSignatureByUserId(publicationOwnerUser.UserID);
+
+            if (mediaType.MediaTypeId == (int)MediaTypeEnum.EXTERNALMEDIA)
+            {
+                var uri = new Uri(publication?.S3UrlMedia);
+
+                var query = HttpUtility.ParseQueryString(uri.Query);
+
+                if (query.AllKeys.Contains("v"))
+                {
+                    publication.S3UrlMedia = query["v"];
+                }
+                else
+                {
+                    publication.S3UrlMedia = uri.Segments.Last();
+                }
+            }
 
             var publicationDto = new PublicationDto
             {
