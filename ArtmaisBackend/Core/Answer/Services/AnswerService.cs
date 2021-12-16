@@ -22,7 +22,7 @@ namespace ArtmaisBackend.Core.Answer.Services
         {
             var answer = await _answerRepository.GetAnswerByAnswerId(answerId);
 
-            _answerRepository.Delete(answer);
+            await _answerRepository.Delete(answer);
 
             return answer;
         }

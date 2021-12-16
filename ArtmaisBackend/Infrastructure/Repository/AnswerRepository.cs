@@ -40,9 +40,10 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return await _context.Answer.Where(answer => answer.CommentID == commentId).ToListAsync();
         }
 
-        public void Delete(Answer answer)
+        public async Task Delete(Answer answer)
         {
             _context.Answer.Remove(answer);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Answer> GetAnswerByAnswerId(long answerId)
