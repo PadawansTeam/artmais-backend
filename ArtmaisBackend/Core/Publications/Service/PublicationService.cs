@@ -67,7 +67,18 @@ namespace ArtmaisBackend.Core.Publications.Service
                 throw new ArgumentNullException();
             }
 
+            var answers = _answerRepository.GetAnswerByCommentId(comment.CommentID);
+
+            if (answers.Any())
+            {
+                foreach (var answer in answers)
+                {
+                    _answerRepository.Delete(answer);
+                }
+            }
+
             _commentRepository.Delete(comment);
+
             return true;
         }
 

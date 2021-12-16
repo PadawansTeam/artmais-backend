@@ -40,15 +40,34 @@ namespace ArtmaisBackend.Infrastructure.Repository
             return await _context.Answer.Where(answer => answer.CommentID == commentId).ToListAsync();
         }
 
-        public async Task Delete(Answer answer)
+        public IEnumerable<Answer> GetAnswerByCommentId(int commentId)
+        {
+            return _context.Answer.Where(answer => answer.CommentID == commentId).ToList();
+        }
+
+        public async Task DeleteAsync(Answer answer)
         {
             _context.Answer.Remove(answer);
             await _context.SaveChangesAsync();
         }
 
+        public void Delete(Answer answer)
+        {
+            _context.Answer.Remove(answer);
+            _context.SaveChanges();
+        }
+
         public async Task<Answer> GetAnswerByAnswerId(long answerId)
         {
-            return await _context.Answer.FirstOrDefaultAsync(answer => answer.AnswerID == answerId);
+            var answer = await _context.Answer.FirstOrDefaultAsync(answer => answer.AnswerID == answerId);
+
+            _context.Entry(answer).Reference(a => a.Comment).Load();
+
+            var comment = answer.Comment;
+
+            _context.Entry(comment).Reference(c => c.Publication).Load();
+
+            return answer;
         }
 
         public async Task<List<AnswerDto?>> GetAnswerDtoByCommentId(int commentId)

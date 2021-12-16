@@ -9,8 +9,10 @@ namespace ArtmaisBackend.Infrastructure.Repository.Interface
     {
         Task<Answer> CreateAsync(string description, int commentId, long userId);
         Task<IEnumerable<Answer>> GetAnswerByCommentIdAsync(int commentId);
-        Task Delete(Answer answer);
+        Task DeleteAsync(Answer answer);
         Task<Answer> GetAnswerByAnswerId(long answerId);
         Task<List<AnswerDto?>> GetAnswerDtoByCommentId(int commentId);
+        void Delete(Answer answer);
+        IEnumerable<Answer> GetAnswerByCommentId(int commentId);
     }
 }

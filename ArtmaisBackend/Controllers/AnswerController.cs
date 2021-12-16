@@ -3,6 +3,7 @@ using ArtmaisBackend.Core.Answer.Services;
 using ArtmaisBackend.Core.Entities;
 using ArtmaisBackend.Core.Profile.Dto;
 using ArtmaisBackend.Core.SignIn.Interface;
+using ArtmaisBackend.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -48,9 +49,14 @@ namespace ArtmaisBackend.Controllers
         {
             try
             {
-                var answer = await _answerService.DeleteAsync(answerId);
+                var user = _jwtTokenService.ReadToken(User);
+                var answer = await _answerService.DeleteAsync(answerId, user.UserID);
 
                 return Ok(answer);
+            }
+            catch (Unauthorized ex)
+            {
+                return Unauthorized(new MessageDto { Message = ex.Message });
             }
             catch (Exception ex)
             {
