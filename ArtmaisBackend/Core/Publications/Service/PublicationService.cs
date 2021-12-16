@@ -295,7 +295,8 @@ namespace ArtmaisBackend.Core.Publications.Service
 
             var userCategory = _userRepository.GetSubcategoryByUserId(publicationOwnerUser.UserID);
             var publicationShareLink = GetPublicationShareLinkByPublicationIdAndUserId(publicationOwnerUser.UserID, publication.PublicationID);
-            var comments = await GetAllCommentsByPublicationId(publication.PublicationID).ConfigureAwait(false);
+            var publicationCommentsDto = await GetAllCommentsByPublicationId(publication.PublicationID).ConfigureAwait(false);
+            var comments = await GetAllAnswersByCommentId(publicationCommentsDto).ConfigureAwait(false);
             var contactProfile = _userService.GetShareProfile(publicationOwnerUser.UserID);
             var likesAmount = await GetAllLikesByPublicationId(publication.PublicationID).ConfigureAwait(false);
             var mediaType = _mediaTypeRepository.GetMediaTypeById(publication.MediaTypeID);
