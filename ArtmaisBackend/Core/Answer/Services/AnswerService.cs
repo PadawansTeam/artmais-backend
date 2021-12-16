@@ -1,4 +1,5 @@
 ﻿using ArtmaisBackend.Core.Answer.Requests;
+using ArtmaisBackend.Exceptions;
 using ArtmaisBackend.Infrastructure.Repository.Interface;
 using System.Threading.Tasks;
 
@@ -18,11 +19,16 @@ namespace ArtmaisBackend.Core.Answer.Services
             return await _answerRepository.CreateAsync(answerRequest.Description, answerRequest.CommentId, userId);
         }
 
-        public async Task<Entities.Answer> DeleteAsync(long answerId)
+        public async Task<Entities.Answer> DeleteAsync(long answerId, long userId)
         {
             var answer = await _answerRepository.GetAnswerByAnswerId(answerId);
 
-            await _answerRepository.Delete(answer);
+            if (answer.UserID != userId && answer.Comment.Publication.UserID != userId)
+            {
+                throw new Unauthorized();
+            }
+            
+            await _answerRepository.DeleteAsync(answer);
 
             return answer;
         }
